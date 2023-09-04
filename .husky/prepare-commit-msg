@@ -1,0 +1,127 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx --no -- commitlint --edit
+
+# git prepare-commit-msg hook for emojified commit message prefix
+# source: https://gist.github.com/negokaz/27a39274061a728ebd09f847ea4e93b4
+
+readonly COMMIT_MSG_FILE=$1
+readonly COMMIT_SOURCE=$2
+readonly SHA1=$3
+
+to_emoji () {
+  echo $1 | perl -CO -pE 's/\\u(\p{Hex}+)/chr(hex($1))/xieg'
+}
+
+readonly emoji_feat="$(to_emoji      '\U2728')"
+readonly emoji_fix="$(to_emoji       '\U1f41e')"
+readonly emoji_docs="$(to_emoji       '\U1f4da')"
+readonly emoji_style="$(to_emoji     '\U1F308')"
+readonly emoji_refactor="$(to_emoji  '\U1f528')"
+readonly emoji_perf="$(to_emoji      '\U1f680')"
+readonly emoji_test="$(to_emoji      '\U2705')"
+readonly emoji_chore="$(to_emoji     '\U1f477')"
+readonly emoji_build="$(to_emoji     '\U1F4E6')"
+readonly emoji_ci="$(to_emoji         '\U1F6E0')"
+readonly emoji_merge="$(to_emoji     '\U1f500')"
+
+create_full_template() {
+  local msg_temp_file="$(mktemp)"
+  {
+    echo "# Overview (Uncomment one of the following templates)"
+    echo "#${emoji_feat} feat: "
+    echo "#  └ A new feature"
+    echo "#${emoji_fix} fix: "
+    echo "#  └ A bug fix"
+    echo "#${emoji_docs} docs: "
+    echo "#  └ Documentation only changes"
+    echo "#${emoji_style} style: "
+    echo "#  └ Changes that do not affect the meaning of the code"
+    echo "#    (white-space, formatting, missing semi-colons, etc)"
+    echo "#${emoji_refactor} refactor: "
+    echo "#  └ A code change that neither fixes a bug nor adds a feature"
+    echo "#${emoji_perf} perf: "
+    echo "#  └ A code change that improves performance"
+    echo "#${emoji_test} test: "
+    echo "#  └ Adding missing or correcting existing tests"
+    echo "#${emoji_chore} chore: "
+    echo "#  └ Changes to the build process or auxiliary tools and libraries "
+    echo "#    such as documentation generation"
+    echo "#${emoji_build} build: "
+    echo "#  └ Changes that affect the build system or external dependencies"
+    echo "#    (example scopes: gulp, broccoli, npm)"
+    echo "#${emoji_ci} ci: "
+    echo "#  └ Changes to our CI configuration files and scripts"
+    echo "#   (example scopes: Travis, Circle, BrowserStack, SauceLabs)"
+    echo ""
+    echo "# Details"
+    echo ""
+    cat "${COMMIT_MSG_FILE}"
+  } > "${msg_temp_file}"
+
+  cat "${msg_temp_file}" > "${COMMIT_MSG_FILE}"
+  rm  "${msg_temp_file}"
+}
+
+add_emoji_by_message_prefix() {
+  local msg_temp_file="$(mktemp)"
+
+  {
+    if grep --silent '^\s*feat:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_feat} $(cat ${COMMIT_MSG_FILE})"
+    elif grep --silent '^\s*fix:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_fix} $(cat ${COMMIT_MSG_FILE})"
+    elif grep --silent '^\s*doc:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_docs} $(cat ${COMMIT_MSG_FILE})"
+    elif grep --silent '^\s*style:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_style} $(cat ${COMMIT_MSG_FILE})"
+    elif grep --silent '^\s*refactor:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_refactor} $(cat ${COMMIT_MSG_FILE})"
+    elif grep --silent '^\s*perf:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_perf} $(cat ${COMMIT_MSG_FILE})"
+    elif grep --silent '^\s*test:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_test} $(cat ${COMMIT_MSG_FILE})"
+    elif grep --silent '^\s*build:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_build} $(cat ${COMMIT_MSG_FILE})"
+    elif grep --silent '^\s*ci:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_ci} $(cat ${COMMIT_MSG_FILE})"
+    elif grep --silent '^\s*chore:' "${COMMIT_MSG_FILE}"; then
+      echo "${emoji_chore} $(cat ${COMMIT_MSG_FILE})"
+    else
+      cat "${COMMIT_MSG_FILE}"
+    fi
+  } > "${msg_temp_file}"
+
+  cat "${msg_temp_file}" > "${COMMIT_MSG_FILE}"
+  rm  "${msg_temp_file}"
+}
+
+add_merge_emoji() {
+  local msg_temp_file="$(mktemp)"
+  echo "${emoji_merge}$(cat ${COMMIT_MSG_FILE})" > "${msg_temp_file}"
+  cat "${msg_temp_file}" > "${COMMIT_MSG_FILE}"
+  rm  "${msg_temp_file}"
+}
+
+case "${COMMIT_SOURCE}" in
+  message) # use -m/-F
+    add_emoji_by_message_prefix
+  ;;
+  template) # use template (ex: -t option)
+    : # do nothing
+  ;;
+  merge) # merge commit
+    add_merge_emoji
+  ;;
+  squash) # squash commits in a branch with --squash
+    : # do nothing
+  ;;
+  commit) # use -c/-C/--amend
+    : # do nothing
+  ;;
+  *) # no option
+    create_full_template
+  ;;
+esac
+
