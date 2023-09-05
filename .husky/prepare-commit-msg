@@ -68,25 +68,25 @@ add_emoji_by_message_prefix() {
   local msg_temp_file="$(mktemp)"
 
   {
-    if grep --silent '^\s*feat:' "${COMMIT_MSG_FILE}"; then
+    if grep --silent '^feat:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_feat} $(cat ${COMMIT_MSG_FILE})"
-    elif grep --silent '^\s*fix:' "${COMMIT_MSG_FILE}"; then
+    elif grep --silent '^fix:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_fix} $(cat ${COMMIT_MSG_FILE})"
-    elif grep --silent '^\s*doc:' "${COMMIT_MSG_FILE}"; then
+    elif grep --silent '^doc:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_docs} $(cat ${COMMIT_MSG_FILE})"
-    elif grep --silent '^\s*style:' "${COMMIT_MSG_FILE}"; then
+    elif grep --silent '^style:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_style} $(cat ${COMMIT_MSG_FILE})"
-    elif grep --silent '^\s*refactor:' "${COMMIT_MSG_FILE}"; then
+    elif grep --silent '^refactor:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_refactor} $(cat ${COMMIT_MSG_FILE})"
-    elif grep --silent '^\s*perf:' "${COMMIT_MSG_FILE}"; then
+    elif grep --silent '^perf:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_perf} $(cat ${COMMIT_MSG_FILE})"
-    elif grep --silent '^\s*test:' "${COMMIT_MSG_FILE}"; then
+    elif grep --silent '^test:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_test} $(cat ${COMMIT_MSG_FILE})"
-    elif grep --silent '^\s*build:' "${COMMIT_MSG_FILE}"; then
+    elif grep --silent '^build:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_build} $(cat ${COMMIT_MSG_FILE})"
-    elif grep --silent '^\s*ci:' "${COMMIT_MSG_FILE}"; then
+    elif grep --silent '^ci:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_ci} $(cat ${COMMIT_MSG_FILE})"
-    elif grep --silent '^\s*chore:' "${COMMIT_MSG_FILE}"; then
+    elif grep --silent '^chore:' "${COMMIT_MSG_FILE}"; then
       echo "${emoji_chore} $(cat ${COMMIT_MSG_FILE})"
     else
       cat "${COMMIT_MSG_FILE}"
