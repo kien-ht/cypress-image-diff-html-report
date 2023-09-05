@@ -14,11 +14,11 @@ to_emoji () {
   echo $1 | perl -CO -pE 's/\\u(\p{Hex}+)/chr(hex($1))/xieg'
 }
 
-readonly emoji_feat="$(to_emoji      '\U2728')"
+readonly emoji_feat="$(to_emoji      '\U2B50')"
 readonly emoji_fix="$(to_emoji       '\U1f41e')"
 readonly emoji_docs="$(to_emoji       '\U1f4da')"
 readonly emoji_style="$(to_emoji     '\U1F308')"
-readonly emoji_refactor="$(to_emoji  '\U1f528')"
+readonly emoji_refactor="$(to_emoji  '\U2728')"
 readonly emoji_perf="$(to_emoji      '\U1f680')"
 readonly emoji_test="$(to_emoji      '\U2705')"
 readonly emoji_chore="$(to_emoji     '\U1f477')"
