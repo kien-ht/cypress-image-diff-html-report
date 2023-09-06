@@ -4,7 +4,6 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import svgLoader from 'vite-svg-loader'
 // import { viteSingleFile } from 'vite-plugin-singlefile'
 import { inputJson } from '../config'
 
@@ -17,9 +16,6 @@ export default defineConfig({
     }),
     Components({
       resolvers: [ElementPlusResolver()]
-    }),
-    svgLoader({
-      defaultImport: 'raw'
     }),
     // viteSingleFile(),
     {
