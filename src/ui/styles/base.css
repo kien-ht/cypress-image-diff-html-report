@@ -1,0 +1,103 @@
+:root {
+  --r-white: #ffffff;
+  --r-white-soft: #f8f8f8;
+  --r-white-mute: #f2f2f2;
+
+  --r-black: #181818;
+  --r-black-soft: #222222;
+  --r-black-mute: #282828;
+  --r-black-mute-2: #303133;
+  --r-black-mute-3: #95a8ac;
+
+  --r-indigo: #2c3e50;
+
+  --r-divider-light-1: rgba(60, 60, 60, 0.29);
+  --r-divider-light-2: rgba(60, 60, 60, 0.12);
+  --r-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --r-divider-dark-2: rgba(84, 84, 84, 0.48);
+
+  --r-text-light-1: var(--r-indigo);
+  --r-text-light-2: rgba(60, 60, 60, 0.66);
+  --r-text-dark-1: var(--r-white);
+  --r-text-dark-2: rgba(235, 235, 235, 0.64);
+
+  /* semantic color variables for this project */
+
+  /* light-theme */
+  --color-background: var(--r-white);
+  --color-background-soft: var(--r-white-soft);
+  --color-background-mute: var(--r-white-mute);
+
+  --color-border: var(--r-divider-light-2);
+  --color-border-hover: var(--r-divider-light-1);
+
+  --color-heading: var(--r-text-light-1);
+  --color-text: var(--r-black-mute-2);
+  --color-text-muted: var(--r-black-mute-3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--r-black);
+    --color-background-soft: var(--r-black-soft);
+    --color-background-mute: var(--r-black-mute);
+
+    --color-border: var(--r-divider-dark-2);
+    --color-border-hover: var(--r-divider-dark-1);
+
+    --color-heading: var(--r-text-dark-1);
+    --color-text: var(--r-text-dark-2);
+    /* --color-text-muted: var(--r-black-mute-3); */
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+html {
+  /* Reset 1rem = 10px */
+  font-size: 10px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 1.4rem;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}

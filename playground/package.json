@@ -1,0 +1,10 @@
+{
+  "name": "playground",
+  "scripts": {
+    "start": "nodemon index.ts"
+  },
+  "dependencies": {
+    "cypress-image-diff-html-report": "file:.."
+  },
+  "type": "module"
+}

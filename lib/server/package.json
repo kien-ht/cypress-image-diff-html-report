@@ -1,9 +1,0 @@
-{
-  "name": "server",
-  "scripts": {
-    "test": ""
-  },
-  "dependencies": {
-    "express": "^4.18.2"
-  }
-}

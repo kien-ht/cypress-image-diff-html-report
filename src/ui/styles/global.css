@@ -1,0 +1,30 @@
+.preview-bg {
+  background-color: #fff;
+  opacity: 0.8;
+  background-image: repeating-linear-gradient(
+      45deg,
+      #f0f0f0 25%,
+      transparent 25%,
+      transparent 75%,
+      #f0f0f0 75%,
+      #f0f0f0
+    ),
+    repeating-linear-gradient(
+      45deg,
+      #f0f0f0 25%,
+      #fff 25%,
+      #fff 75%,
+      #f0f0f0 75%,
+      #f0f0f0
+    );
+  background-position:
+    0 0,
+    10px 10px;
+  background-size: 20px 20px;
+}
+
+.preview-shadow {
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}

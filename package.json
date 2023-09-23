@@ -1,16 +1,17 @@
 {
   "name": "cypress-image-diff-html-report",
-  "version": "1.0.0",
   "description": "A HTML reporting module for Cypress-Image-Diff to parse the JSON output to a beautiful report",
-  "main": "./lib/dist",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "prepare": "husky install",
-    "install:server": "cd lib/server && npm i",
-    "install:ui": "cd lib/ui && npm i",
-    "postinstall": "run-p install:*",
-    "start": "nodemon lib/server/src/index.js",
     "format": "prettier . --write --list-different",
     "lint": "eslint . --fix --max-warnings=0",
+    "start": "nodemon -w src/server -w src/common src/server/dev.ts",
+    "dev:ui": "vite dev --config src/ui/vite.config.js",
+    "build:ui": "vue-tsc --noEmit --project src/ui/tsconfig.json && vite build --config src/ui/vite.config.js",
+    "build": "npm run build:ui && tsc",
     "test": ""
   },
   "bin": "./bin/index.js",
@@ -32,19 +33,56 @@
       "@commitlint/config-conventional"
     ]
   },
+  "dependencies": {
+    "arg": "^5.0.2",
+    "chalk": "^4.1.2",
+    "express": "^4.18.2",
+    "fs-extra": "^11.1.1",
+    "lodash": "^4.17.21",
+    "open": "^9.1.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
-    "eslint": "^8.48.0",
+    "@types/express": "^4.17.17",
+    "@types/fs-extra": "^11.0.2",
+    "@types/lodash": "^4.14.198",
+    "@types/node": "^20.6.3",
+    "@types/nodemon": "^1.19.2",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "@vue/eslint-config-typescript": "^11.0.3",
+    "element-plus": "^2.3.12",
+    "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "husky": "^8.0.3",
     "nodemon": "^3.0.1",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "unplugin-auto-import": "^0.16.6",
+    "unplugin-vue-components": "^0.25.2",
+    "vite": "^4.4.5",
+    "vite-plugin-singlefile": "^0.13.5",
+    "vue": "^3.3.4",
+    "vue-tsc": "^1.8.5"
   },
-  "dependencies": {
-    "chalk": "^4.1.2",
-    "lodash": "^4.17.21"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kien-ht/cypress-image-diff-html-report.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kien-ht/cypress-image-diff-html-report/issues"
+  },
+  "homepage": "https://github.com/kien-ht/cypress-image-diff-html-report#readme",
+  "type": "module",
+  "files": [
+    "dist",
+    "package.json",
+    "package-lock.json",
+    "README.md"
+  ]
 }

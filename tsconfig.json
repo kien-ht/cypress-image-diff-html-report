@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "declaration": true
+  },
+  "include": ["src/index.ts"],
+  "ts-node": {
+    "esm": true
+  }
+}
