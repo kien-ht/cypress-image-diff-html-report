@@ -1,7 +1,6 @@
 import arg from 'arg'
 import chalk from 'chalk'
-import { generate } from './common/utils.js'
-import { startServer } from './server/index.js'
+import { generate, startServer } from './core.js'
 
 export async function cli(args: string[]) {
   const options = parseArgumentsIntoOptions(args)

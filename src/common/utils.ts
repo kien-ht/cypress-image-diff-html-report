@@ -2,29 +2,36 @@ import fs from 'fs-extra'
 import path from 'path'
 import chalk from 'chalk'
 import merge from 'lodash/merge.js'
-import { UserConfig, ResolvedUserConfig, Report } from './types.js'
+import {
+  UserConfig,
+  ResolvedUserConfig,
+  Report,
+  InlineConfig
+} from './types.js'
 import { DEFAULT_CONFIG, DEFAULT_CONFIG_PATH } from './constants.js'
 import { __dirname } from './utils-cjs.js'
 
-export async function getUserConfigFile(
-  filePath: string = DEFAULT_CONFIG_PATH
-): Promise<ResolvedUserConfig> {
+export function defineConfig(config: UserConfig): UserConfig {
+  return config
+}
+
+export async function getResolvedConfig({
+  configFile,
+  ...config
+}: InlineConfig = {}): Promise<ResolvedUserConfig> {
   try {
     const userConfig: { default: UserConfig } = await import(
-      path.join(process.cwd(), filePath)
+      path.join(process.cwd(), configFile ?? DEFAULT_CONFIG_PATH)
     )
-    return merge(DEFAULT_CONFIG, userConfig.default)
+
+    return merge(DEFAULT_CONFIG, userConfig.default, config)
   } catch (e) {
-    return DEFAULT_CONFIG
+    return merge(DEFAULT_CONFIG, config)
   }
 }
 
-export async function getInputJson(filePath: string = ''): Promise<Report> {
-  const userConfig = await getUserConfigFile()
-  const sourcePath = path.join(
-    process.cwd(),
-    filePath || userConfig.inputJsonPath
-  )
+export async function getInputJson(filePath: string): Promise<Report> {
+  const sourcePath = path.join(process.cwd(), filePath)
   try {
     const report = await fs.readFile(sourcePath, { encoding: 'utf8' })
     return JSON.parse(report)
@@ -39,34 +46,9 @@ export async function getInputJson(filePath: string = ''): Promise<Report> {
   }
 }
 
-export function defineConfig(config: UserConfig): UserConfig {
-  return config
-}
-
-export function changeCwdToPlayground() {
-  try {
-    const target = path.resolve('playground')
-    process.chdir(target)
-  } catch (err) {
-    console.log(chalk.magenta(err))
-  }
-}
-
-export async function generate(): Promise<void> {
-  const html = await getReportHtmlAfterPopulatingInput()
-  const config = await getUserConfigFile()
-
-  try {
-    const target = path.join(process.cwd(), config.outputDir, 'index.html')
-    await writeFileSafe(target, html)
-  } catch (err) {
-    console.log(chalk.red(`[cypress-image-diff-html-report]: ${err}`))
-  }
-}
-
-async function getReportHtmlAfterPopulatingInput(): Promise<string> {
-  const json = await getInputJson()
-
+export async function getReportHtmlAfterPopulatingInput(
+  json: Report
+): Promise<string> {
   try {
     const htmlFilePath = path.join(
       __dirname(import.meta.url),
@@ -83,7 +65,10 @@ async function getReportHtmlAfterPopulatingInput(): Promise<string> {
   }
 }
 
-async function writeFileSafe(pathname: string, data: string): Promise<void> {
+export async function writeFileSafe(
+  pathname: string,
+  data: string
+): Promise<void> {
   const dir = path.dirname(pathname)
 
   try {
@@ -95,5 +80,14 @@ async function writeFileSafe(pathname: string, data: string): Promise<void> {
     await fs.writeFile(pathname, data)
   } catch (err) {
     throw Error((err as Error).message)
+  }
+}
+
+export function changeCwdToPlayground() {
+  try {
+    const target = path.resolve('playground')
+    process.chdir(target)
+  } catch (err) {
+    console.log(chalk.magenta(err))
   }
 }

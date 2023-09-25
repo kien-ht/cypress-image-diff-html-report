@@ -1,3 +1,2 @@
-export { startServer } from './server/index.js'
+export { generate, startServer } from './core.js'
 export { cli } from './cli.js'
-export { generate, defineConfig } from './common/utils.js'

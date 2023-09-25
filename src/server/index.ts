@@ -1,29 +1,36 @@
 import express from 'express'
 import path from 'path'
-import open from 'open'
-import chalk from 'chalk'
 import { __dirname } from '../common/utils-cjs.js'
-import { getUserConfigFile } from '../common/utils.js'
 import router from './router.js'
+import { ResolvedUserConfig } from '../common/types.js'
+import chalk from 'chalk'
+import open from 'open'
+import type { Express } from 'express'
 
-const app = express()
+export class App {
+  private server: Express
 
-app.use(express.static(path.join(__dirname(import.meta.url), '../ui')))
-app.use(express.json())
-app.use(router)
+  constructor(private config: ResolvedUserConfig) {
+    const server = express()
 
-export async function startServer(): Promise<void> {
-  const { serverPort, autoOpen } = await getUserConfigFile()
+    server.use(express.static(path.join(__dirname(import.meta.url), '../ui')))
+    server.use(express.json())
+    server.use(router(this.config))
 
-  app.listen(serverPort, async () => {
-    const link = `http://127.0.0.1:${serverPort}`
-    console.log(
-      '[cypress-image-diff-html-report]: 🚀 Server running on',
-      chalk.cyan.underline(link)
-    )
+    this.server = server
+  }
 
-    if (autoOpen) {
-      await open(link)
-    }
-  })
+  listen() {
+    return this.server.listen(this.config.serverPort, async () => {
+      const link = `http://127.0.0.1:${this.config.serverPort}`
+      console.log(
+        '[cypress-image-diff-html-report]: 🚀 Server running on',
+        chalk.cyan.underline(link)
+      )
+
+      if (this.config.autoOpen) {
+        await open(link)
+      }
+    })
+  }
 }

@@ -1,5 +1,5 @@
 import { changeCwdToPlayground } from '../common/utils.js'
-import { startServer } from './index.js'
+import { startServer } from '../core.js'
 
 changeCwdToPlayground()
 startServer()
