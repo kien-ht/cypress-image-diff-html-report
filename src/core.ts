@@ -1,5 +1,5 @@
 import path from 'path'
-import { InlineConfig } from './common/types.js'
+import { GenerateInlineConfig, StartInlineConfig } from './common/types.js'
 import {
   getResolvedConfig,
   getReportHtmlAfterPopulatingInput,
@@ -8,7 +8,9 @@ import {
 } from './common/utils.js'
 import { App } from './server/index.js'
 
-export async function generate(inlineConfig?: InlineConfig): Promise<void> {
+export async function generate(
+  inlineConfig?: GenerateInlineConfig
+): Promise<void> {
   const config = await getResolvedConfig(inlineConfig)
   const json = await getInputJson(config.inputJsonPath)
   const html = await getReportHtmlAfterPopulatingInput(json)
@@ -21,7 +23,7 @@ export async function generate(inlineConfig?: InlineConfig): Promise<void> {
   }
 }
 
-export async function startServer(inlineConfig?: InlineConfig) {
+export async function startServer(inlineConfig?: StartInlineConfig) {
   const config = await getResolvedConfig(inlineConfig)
   const app = new App(config)
 
