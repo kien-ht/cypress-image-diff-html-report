@@ -2,7 +2,7 @@ import express from 'express'
 import path from 'path'
 import open from 'open'
 import chalk from 'chalk'
-import { __dirname } from '../common/paths.js'
+import { __dirname } from '../common/utils-cjs.js'
 import { getUserConfigFile } from '../common/utils.js'
 import router from './router.js'
 

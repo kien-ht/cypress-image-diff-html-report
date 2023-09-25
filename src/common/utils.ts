@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import merge from 'lodash/merge.js'
 import { UserConfig, ResolvedUserConfig, Report } from './types.js'
 import { DEFAULT_CONFIG, DEFAULT_CONFIG_PATH } from './constants.js'
-import { __dirname } from './paths.js'
+import { __dirname } from './utils-cjs.js'
 
 export async function getUserConfigFile(
   filePath: string = DEFAULT_CONFIG_PATH

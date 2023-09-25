@@ -6,7 +6,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { changeCwdToPlayground } from '../common/utils'
-import { __dirname } from '../common/paths'
+import { __dirname } from '../common/utils-cjs'
 import { DEFAULT_CONFIG } from '../common/constants'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 
