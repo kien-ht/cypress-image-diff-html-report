@@ -94,6 +94,6 @@ async function writeFileSafe(pathname: string, data: string): Promise<void> {
 
     await fs.writeFile(pathname, data)
   } catch (err) {
-    console.log(chalk.magenta(err))
+    throw Error((err as Error).message)
   }
 }
