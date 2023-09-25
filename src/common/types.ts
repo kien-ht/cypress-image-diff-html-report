@@ -30,13 +30,16 @@ export interface Test {
   comparisonPath: string
 }
 
-export interface ResolvedUserConfig {
-  inputJsonPath: string
-  // assetsDir: string
-  outputDir: string
-  inlineAssets: boolean
-  autoOpen: boolean
-  serverPort: number
+export interface UserConfig {
+  inputJsonPath?: string
+  outputDir?: string
+  inlineAssets?: boolean
+  autoOpen?: boolean
+  serverPort?: number
 }
 
-export interface UserConfig extends Partial<ResolvedUserConfig> {}
+export interface ResolvedUserConfig extends Required<UserConfig> {}
+
+export interface InlineConfig extends UserConfig {
+  configFile?: string
+}
