@@ -1,2 +1,2 @@
 export { generate, startServer } from './core.js'
-export { cli } from './cli.js'
+export { run } from './cli.js'
