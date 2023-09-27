@@ -24,9 +24,9 @@ export async function getResolvedConfig({
       path.join(process.cwd(), configFile ?? DEFAULT_CONFIG_PATH)
     )
 
-    return merge(DEFAULT_CONFIG, userConfig.default, config)
+    return merge({}, DEFAULT_CONFIG, userConfig.default, config)
   } catch (e) {
-    return merge(DEFAULT_CONFIG, config)
+    return merge({}, DEFAULT_CONFIG, config)
   }
 }
 
