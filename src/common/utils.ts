@@ -58,7 +58,9 @@ export async function getReportHtmlAfterPopulatingInput(
 
     return html.replace(
       '<script id="input-json"></script>',
-      `<script>window.__input_json__ = ${JSON.stringify(json)}</script>`
+      `<script id="input-json">window.__input_json__ = ${JSON.stringify(
+        json
+      )}</script>`
     )
   } catch (err) {
     throw Error((err as Error).message)
