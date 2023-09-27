@@ -6,7 +6,8 @@ import {
   UserConfig,
   ResolvedUserConfig,
   Report,
-  InlineConfig
+  GenerateInlineConfig,
+  StartInlineConfig
 } from './types.js'
 import { DEFAULT_CONFIG, DEFAULT_CONFIG_PATH } from './constants.js'
 import { __dirname } from './utils-cjs.js'
@@ -18,7 +19,7 @@ export function defineConfig(config: UserConfig): UserConfig {
 export async function getResolvedConfig({
   configFile,
   ...config
-}: InlineConfig = {}): Promise<ResolvedUserConfig> {
+}: GenerateInlineConfig | StartInlineConfig = {}): Promise<ResolvedUserConfig> {
   try {
     const userConfig: { default: UserConfig } = await import(
       path.join(process.cwd(), configFile ?? DEFAULT_CONFIG_PATH)

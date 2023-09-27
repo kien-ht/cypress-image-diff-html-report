@@ -30,7 +30,7 @@ export interface Test {
   comparisonPath: string
 }
 
-export interface InlineConfig {
+interface InlineConfig {
   /**
    * Specify config file, will be overwritten by other config options if provided, relative to the process.cwd()
    */
