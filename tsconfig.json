@@ -5,7 +5,8 @@
     "moduleResolution": "bundler",
     "outDir": "./dist",
     "declaration": true,
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true
   },
   "include": ["src/index.ts"],
   "ts-node": {

@@ -1,0 +1,19 @@
+{
+  "total": 6,
+  "totalPassed": 3,
+  "totalFailed": 3,
+  "totalSuites": 3,
+  "suites": [
+    {
+      "name": "image-diff.cy.js",
+      "path": "cypress/specs/image-diff.cy.js",
+      "tests": []
+    }
+  ],
+  "startedAt": "2023-09-19T13:15:11.806Z",
+  "endedAt": "2023-09-19T13:15:31.112Z",
+  "duration": 15239,
+  "browserName": "chrome",
+  "browserVersion": "116.0.5845.187",
+  "cypressVersion": "10.8.0"
+}
