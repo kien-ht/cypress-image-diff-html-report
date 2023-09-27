@@ -68,24 +68,6 @@ export async function getReportHtmlAfterPopulatingInput(
   }
 }
 
-export async function writeFileSafe(
-  pathname: string,
-  data: string
-): Promise<void> {
-  const dir = path.dirname(pathname)
-
-  try {
-    const exists = await fs.exists(dir)
-    if (exists === false) {
-      await fs.mkdir(dir, { recursive: true })
-    }
-
-    await fs.writeFile(pathname, data)
-  } catch (err) {
-    throw Error((err as Error).message)
-  }
-}
-
 export function changeCwdToPlayground() {
   try {
     const target = path.resolve('playground')

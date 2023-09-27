@@ -1,10 +1,10 @@
+import fs from 'fs-extra'
 import path from 'path'
 import { GenerateInlineConfig, StartInlineConfig } from './common/types.js'
 import {
   getResolvedConfig,
   getReportHtmlAfterPopulatingInput,
-  getInputJson,
-  writeFileSafe
+  getInputJson
 } from './common/utils.js'
 import { App } from './server/index.js'
 
@@ -17,7 +17,8 @@ export async function generate(
 
   try {
     const target = path.join(process.cwd(), config.outputDir, 'index.html')
-    await writeFileSafe(target, html)
+    await fs.ensureFile(target)
+    await fs.writeFile(target, html)
   } catch (err) {
     throw Error((err as Error).message)
   }
