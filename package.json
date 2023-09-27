@@ -12,7 +12,7 @@
     "dev:ui": "vite dev --config src/ui/vite.config.js",
     "build:ui": "vue-tsc --noEmit --project src/ui/tsconfig.json && vite build --config src/ui/vite.config.js",
     "build": "npm run build:ui && tsc",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --detectOpenHandles"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand"
   },
   "bin": "./bin/index.js",
   "author": {
