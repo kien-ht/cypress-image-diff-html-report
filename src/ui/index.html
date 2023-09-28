@@ -678,11 +678,6 @@
     </template>
 
     <script type="text/javascript">
-      function normalizeInput(input) {
-        return input?.suites.flatMap((s) => s.tests)
-      }
-      const testData = normalizeInput(window.__input_json__)
-
       const ITEM_STATUS = {
         PASS: 'pass',
         FAIL: 'fail',
@@ -756,7 +751,7 @@
           })
         },
 
-        patchHeader() {
+        patchHeader(testData) {
           const passes = testData.filter(
             (t) => t.status === ITEM_STATUS.PASS
           ).length
@@ -1081,17 +1076,45 @@
         }
       }
 
-      const reportTree = new TreeBuilder(testData)
-      DOMBuilder.insertChildren({
-        selector: '#report-container',
-        children: reportTree.DOM
-      })
+      function normalizeInput(input) {
+        return input?.suites.flatMap((s) => s.tests)
+      }
 
-      HeaderHelpers.patchHeader()
-      HeaderHelpers.addFilterSelectionEventListener()
-      HeaderHelpers.addGlobalToggleVisibilityEventListener()
+      ;(async () => {
+        try {
+          const response = await fetch('/api/reports')
+          const report = await response.json()
+          window.__input_json__ = report
+        } catch {
+          window.__input_json__ = {
+            total: 0,
+            totalPassed: 0,
+            totalFailed: 0,
+            totalSuites: 0,
+            suites: [],
+            startedAt: '',
+            endedAt: '',
+            duration: 0,
+            browserName: '',
+            browserVersion: '',
+            cypressVersion: ''
+          }
+        }
 
-      ModalHelpers.setupModalEventListener()
+        const testData = normalizeInput(window.__input_json__)
+
+        const reportTree = new TreeBuilder(testData)
+        DOMBuilder.insertChildren({
+          selector: '#report-container',
+          children: reportTree.DOM
+        })
+
+        HeaderHelpers.patchHeader(testData)
+        HeaderHelpers.addFilterSelectionEventListener()
+        HeaderHelpers.addGlobalToggleVisibilityEventListener()
+
+        ModalHelpers.setupModalEventListener()
+      })()
     </script>
   </body>
 </html>
