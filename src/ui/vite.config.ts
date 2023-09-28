@@ -39,7 +39,7 @@ export default defineConfig(async ({ mode }) => {
             })
             return html.replace(
               '<script id="input-json"></script>',
-              `<script>window.__input_json__ = ${json}</script>`
+              `<script id="input-json">window.__input_json__ = ${json}</script>`
             )
           }
 
