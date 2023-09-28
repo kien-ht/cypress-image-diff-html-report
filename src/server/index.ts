@@ -14,6 +14,7 @@ export class App {
     const server = express()
 
     server.use(express.static(path.join(__dirname(import.meta.url), '../ui')))
+    server.use(express.static(process.cwd()))
     server.use(express.json())
     server.use(router(this.config))
 
