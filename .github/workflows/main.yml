@@ -14,4 +14,4 @@ jobs:
           node-version: 16.x
 
       - run: npm i
-      - run: npm run lint && npm run test && npm run build
+      - run: npm run build && npm run lint && npm run test
