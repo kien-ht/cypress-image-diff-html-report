@@ -678,427 +678,417 @@
     </template>
 
     <script type="text/javascript">
-      const ITEM_STATUS = {
-        PASS: 'pass',
-        FAIL: 'fail',
-        NULL: null
-      }
-
-      const BUILD_MAP = {
-        [ITEM_STATUS.PASS]: 'createPassedLeaf',
-        [ITEM_STATUS.FAIL]: 'createFailedLeaf',
-        [ITEM_STATUS.NULL]: 'createBranch'
-      }
-
-      const SNAPSHOT_SLIDES = ['baseline', 'diff', 'comparison']
-
-      const HeaderHelpers = {
-        updateVisibilityByFilter(type, children = reportTree.tree) {
-          children.forEach(({ children, id, total }) => {
-            const visibilityMap = {
-              total: 'block',
-              pass: total.passes ? 'block' : 'none',
-              fail: total.fails ? 'block' : 'none'
-            }
-
-            const element = document.getElementById(id)
-            element.style.display = visibilityMap[type]
-
-            if (children.length) {
-              element.dataset.currentFilter = type
-              this.updateVisibilityByFilter(type, children)
-            }
-          })
-        },
-
-        addFilterSelectionEventListener() {
-          const header = document.querySelector('.header__content')
-          header.addEventListener('click', function ({ target }) {
-            const selectedFilter = target.dataset.filterType
-            if (selectedFilter === undefined) return
-
-            header.dataset.currentFilter = selectedFilter
-            HeaderHelpers.updateVisibilityByFilter(selectedFilter)
-          })
-        },
-
-        updateToggleState(type, children = reportTree.tree) {
-          children.forEach(({ children, id, total }) => {
-            const element = document.getElementById(id)
-
-            const toggleMap = {
-              expanded: () =>
-                element.classList.contains('expanded') ||
-                element.classList.add('expanded'),
-              collapsed: () => element.classList.remove('expanded')
-            }
-            toggleMap[type]()
-
-            if (children.length) {
-              this.updateToggleState(type, children)
-            }
-          })
-        },
-
-        addGlobalToggleVisibilityEventListener() {
-          const header = document.querySelector('.header__content')
-          header.addEventListener('click', function ({ target }) {
-            const state = target.dataset.toggleState
-            if (state === undefined) return
-
-            header.dataset.currentToggleState = state
-            HeaderHelpers.updateToggleState(state)
-          })
-        },
-
-        patchHeader(testData) {
-          const passes = testData.filter(
-            (t) => t.status === ITEM_STATUS.PASS
-          ).length
-          const fails = testData.filter(
-            (t) => t.status === ITEM_STATUS.FAIL
-          ).length
-          const totalTests = passes + fails
-          document.querySelector('#test-total').textContent = totalTests
-          document.querySelector('#test-passes').textContent = passes
-          document.querySelector('#test-fails').textContent = fails
-          document.querySelector('.header__progress--success').style.width = `${
-            (passes * 100) / totalTests
-          }%`
-        }
-      }
-
-      const ModalHelpers = {
-        show() {
-          const modal = document.querySelector('#modal-container')
-          modal.style.visibility = 'visible'
-          document.body.style.overflow = 'hidden'
-        },
-
-        hide() {
-          const modal = document.querySelector('#modal-container')
-          modal.style.visibility = 'hidden'
-          document.body.style.overflow = 'auto'
-        },
-
-        addShowSnapshotsModalEventListener(target, snapshotName) {
-          // expect selectors to be: ['.baseline-container', '.diff-container', '.comparison-container']
-          const selectors = SNAPSHOT_SLIDES.map((s) => `.${s}-container`)
-          selectors.forEach((selector, index) => {
-            const element = target.querySelector(selector)
-            element.addEventListener('click', function () {
-              ModalHelpers.show()
-              ModalHelpers.setDisplaySnapshot(index, snapshotName)
-            })
-          })
-        },
-
-        addHideEventListener() {
-          const modal = document.querySelector('#modal-container')
-          modal.addEventListener('click', function ({ target }) {
-            if (target.id === 'modal-container') {
-              ModalHelpers.hide()
-            }
-          })
-          document.addEventListener('keyup', function (e) {
-            if (e.key === 'Escape') {
-              ModalHelpers.hide()
-            }
-          })
-        },
-
-        setDisplaySnapshot(slideIndex, snapshotName) {
-          const displaySnapshot = document.querySelector('#display-snapshot')
-          displaySnapshot.src = this.getDisplaySnapshotSrc({
-            slideIndex,
-            snapshotName,
-            currentSrc: displaySnapshot.src
-          })
-
-          const indicator = document.querySelector('#snapshot-indicators')
-          indicator.dataset.currentSlide = slideIndex
-
-          const title = document.querySelector('.snapshot-title')
-          title.textContent = SNAPSHOT_SLIDES[slideIndex]
-        },
-
-        getDisplaySnapshotSrc({ slideIndex, snapshotName, currentSrc }) {
-          const isDisplaySnapshotEmpty = snapshotName !== undefined
-          return isDisplaySnapshotEmpty
-            ? `../cypress-visual-screenshots/${SNAPSHOT_SLIDES[slideIndex]}/${snapshotName}.png`
-            : currentSrc.replace(
-                /\/cypress-visual-screenshots\/(baseline|diff|comparison)\//,
-                `/cypress-visual-screenshots/${SNAPSHOT_SLIDES[slideIndex]}/`
-              )
-        },
-
-        getNextSlideIndex(step) {
-          const snapshotIndicators = document.querySelector(
-            '#snapshot-indicators'
-          )
-          const currentSlide = Number(snapshotIndicators.dataset.currentSlide)
-          const nextSlide = (currentSlide + step + 3) % 3
-          return nextSlide
-        },
-
-        addIndicatorEventListener() {
-          const snapshotIndicators = document.querySelector(
-            '#snapshot-indicators'
-          )
-          snapshotIndicators.addEventListener('click', function ({ target }) {
-            const nextSlide = target.dataset.slideTo
-            if (SNAPSHOT_SLIDES[nextSlide] === undefined) return
-
-            ModalHelpers.setDisplaySnapshot(nextSlide)
-          })
-        },
-
-        addChangeSlideClickEventListener() {
-          const iconSelectors = ['#modal-prev-icon', '#modal-next-icon']
-          iconSelectors.forEach((selector) => {
-            const element = document.querySelector(selector)
-            element.addEventListener('click', function () {
-              const step = selector === '#modal-prev-icon' ? -1 : 1
-              const nextSlide = ModalHelpers.getNextSlideIndex(step)
-              ModalHelpers.setDisplaySnapshot(nextSlide)
-            })
-          })
-        },
-
-        addChangeSlideKeypressEventListener() {
-          const modal = document.querySelector('#modal-container')
-          document.addEventListener('keyup', function (e) {
-            if (modal.style.visibility === 'hidden') return
-
-            const keyMap = ['ArrowLeft', 'ArrowRight']
-            if (!keyMap.includes(e.key)) return
-
-            const step = e.key === 'ArrowLeft' ? -1 : 1
-            const nextSlide = ModalHelpers.getNextSlideIndex(step)
-            ModalHelpers.setDisplaySnapshot(nextSlide)
-          })
-        },
-
-        setupModalEventListener() {
-          this.addHideEventListener()
-          this.addIndicatorEventListener()
-          this.addChangeSlideClickEventListener()
-          this.addChangeSlideKeypressEventListener()
-        }
-      }
-
-      const DOMBuilder = {
-        cloneTemplate(templateId, props = {}) {
-          let templateClone = document
-            .getElementById(templateId)
-            .content.cloneNode(true)
-            .querySelector('.pseudo-wrapper')
-
-          templateClone.innerHTML = Object.entries(props).reduce(
-            (template, [key, value]) => {
-              // our templates use convention pattern of $__key__ to mark and represent variables that need to change dynamically
-              // find and replace all matched combinations of $__key__ with value
-              const pattern = new RegExp(`\\$__${key}__`, 'g')
-              return template.replace(pattern, value)
-            },
-            templateClone.innerHTML
-          )
-
-          // .pseudo-wrapper should only contain one root element
-          return templateClone.firstElementChild
-        },
-
-        addExpansionEventListener(target) {
-          const header = target.querySelector('.collapse-item__header')
-
-          header.addEventListener('click', function () {
-            target.classList.contains('expanded')
-              ? target.classList.remove('expanded')
-              : target.classList.add('expanded')
-          })
-        },
-
-        insertChildren({ target = document, selector, children }) {
-          const container = target.querySelector(selector)
-          container.append(...children)
-        }
-      }
-
-      const CollapseItemBuilder = {
-        createPassedLeaf({ title, percentage, failureThreshold, id }) {
-          const leaf = DOMBuilder.cloneTemplate('passed-leaf-template', {
-            title,
-            percentage,
-            failureThreshold,
-            id
-          })
-          return leaf
-        },
-
-        createFailedLeaf({ title, percentage, failureThreshold, id }) {
-          const leaf = DOMBuilder.cloneTemplate('failed-leaf-template', {
-            title,
-            percentage,
-            failureThreshold,
-            id
-          })
-          DOMBuilder.addExpansionEventListener(leaf)
-          ModalHelpers.addShowSnapshotsModalEventListener(leaf, id)
-          return leaf
-        },
-
-        createBranch({ title, passes, fails, children, id }) {
-          const branch = DOMBuilder.cloneTemplate('branch-template', {
-            title,
-            passes,
-            fails,
-            id
-          })
-          DOMBuilder.insertChildren({
-            target: branch,
-            selector: '.collapse-item__content',
-            children
-          })
-          DOMBuilder.addExpansionEventListener(branch)
-          return branch
-        }
-      }
-
-      class FamilyLine {
-        constructor(str) {
-          this.line = str.split('/')
+      ;(async () => {
+        const ITEM_STATUS = {
+          PASS: 'pass',
+          FAIL: 'fail',
+          NULL: null
         }
 
-        getId(index) {
-          return this.line.slice(0, index + 1).join('/')
+        const BUILD_MAP = {
+          [ITEM_STATUS.PASS]: 'createPassedLeaf',
+          [ITEM_STATUS.FAIL]: 'createFailedLeaf',
+          [ITEM_STATUS.NULL]: 'createBranch'
         }
 
-        getParentId(index) {
-          return this.line.slice(0, index).join('/')
-        }
-      }
+        const SNAPSHOT_SLIDES = ['baseline', 'diff', 'comparison']
 
-      class TreeBuilder {
-        constructor(rawData) {
-          const normalizedData = this.normalizeInput(rawData)
-          this.tree = this.createTreeFrom(normalizedData)
-          this.DOM = this.buildDOMFromTree()
-        }
+        const HeaderHelpers = {
+          updateVisibilityByFilter(type, children = reportTree.tree) {
+            children.forEach(({ children, id, total }) => {
+              const visibilityMap = {
+                total: 'block',
+                pass: total.passes ? 'block' : 'none',
+                fail: total.fails ? 'block' : 'none'
+              }
 
-        normalizeInput(rawData) {
-          const itemMap = rawData.reduce((map, item) => {
-            const familyLine = new FamilyLine(item.name)
+              const element = document.getElementById(id)
+              element.style.display = visibilityMap[type]
 
-            familyLine.line.forEach((memberName, index) => {
-              const id = familyLine.getId(index)
-              if (map[id]) return
-              if (!id) return
-
-              map[id] = {
-                status: item.status,
-                title: memberName,
-                percentage: item.percentage,
-                failureThreshold: item.failureThreshold,
-                id,
-                parentId: familyLine.getParentId(index),
-                children: [],
-                total: {
-                  passes: 0,
-                  fails: 0
-                }
+              if (children.length) {
+                element.dataset.currentFilter = type
+                this.updateVisibilityByFilter(type, children)
               }
             })
-            return map
-          }, {})
+          },
 
-          return Object.values(itemMap).map((v) => v)
-        }
+          addFilterSelectionEventListener() {
+            const header = document.querySelector('.header__content')
+            header.addEventListener('click', function ({ target }) {
+              const selectedFilter = target.dataset.filterType
+              if (selectedFilter === undefined) return
 
-        countTotal(children, status) {
-          return {
-            passes: children.length
-              ? children.reduce((acc, i) => acc + i.total.passes, 0)
-              : status === ITEM_STATUS.PASS
-              ? 1
-              : 0,
-            fails: children.length
-              ? children.reduce((acc, i) => acc + i.total.fails, 0)
-              : status === ITEM_STATUS.FAIL
-              ? 1
-              : 0
+              header.dataset.currentFilter = selectedFilter
+              HeaderHelpers.updateVisibilityByFilter(selectedFilter)
+            })
+          },
+
+          updateToggleState(type, children = reportTree.tree) {
+            children.forEach(({ children, id, total }) => {
+              const element = document.getElementById(id)
+
+              const toggleMap = {
+                expanded: () =>
+                  element.classList.contains('expanded') ||
+                  element.classList.add('expanded'),
+                collapsed: () => element.classList.remove('expanded')
+              }
+              toggleMap[type]()
+
+              if (children.length) {
+                this.updateToggleState(type, children)
+              }
+            })
+          },
+
+          addGlobalToggleVisibilityEventListener() {
+            const header = document.querySelector('.header__content')
+            header.addEventListener('click', function ({ target }) {
+              const state = target.dataset.toggleState
+              if (state === undefined) return
+
+              header.dataset.currentToggleState = state
+              HeaderHelpers.updateToggleState(state)
+            })
+          },
+
+          patchHeader(testData) {
+            const passes = testData.filter(
+              (t) => t.status === ITEM_STATUS.PASS
+            ).length
+            const fails = testData.filter(
+              (t) => t.status === ITEM_STATUS.FAIL
+            ).length
+            const totalTests = passes + fails
+            document.querySelector('#test-total').textContent = totalTests
+            document.querySelector('#test-passes').textContent = passes
+            document.querySelector('#test-fails').textContent = fails
+            document.querySelector(
+              '.header__progress--success'
+            ).style.width = `${(passes * 100) / totalTests}%`
           }
         }
 
-        createTreeFrom(items, parentId = '') {
-          return items
-            .filter((item) => item.parentId === parentId)
-            .map(
-              ({
-                id,
-                parentId,
-                title,
-                status,
-                percentage,
-                failureThreshold
-              }) => {
-                const children = this.createTreeFrom(items, id)
+        const ModalHelpers = {
+          show() {
+            const modal = document.querySelector('#modal-container')
+            modal.style.visibility = 'visible'
+            document.body.style.overflow = 'hidden'
+          },
 
-                return {
+          hide() {
+            const modal = document.querySelector('#modal-container')
+            modal.style.visibility = 'hidden'
+            document.body.style.overflow = 'auto'
+          },
+
+          addShowSnapshotsModalEventListener(target, snapshotName) {
+            // expect selectors to be: ['.baseline-container', '.diff-container', '.comparison-container']
+            const selectors = SNAPSHOT_SLIDES.map((s) => `.${s}-container`)
+            selectors.forEach((selector, index) => {
+              const element = target.querySelector(selector)
+              element.addEventListener('click', function () {
+                ModalHelpers.show()
+                ModalHelpers.setDisplaySnapshot(index, snapshotName)
+              })
+            })
+          },
+
+          addHideEventListener() {
+            const modal = document.querySelector('#modal-container')
+            modal.addEventListener('click', function ({ target }) {
+              if (target.id === 'modal-container') {
+                ModalHelpers.hide()
+              }
+            })
+            document.addEventListener('keyup', function (e) {
+              if (e.key === 'Escape') {
+                ModalHelpers.hide()
+              }
+            })
+          },
+
+          setDisplaySnapshot(slideIndex, snapshotName) {
+            const displaySnapshot = document.querySelector('#display-snapshot')
+            displaySnapshot.src = this.getDisplaySnapshotSrc({
+              slideIndex,
+              snapshotName,
+              currentSrc: displaySnapshot.src
+            })
+
+            const indicator = document.querySelector('#snapshot-indicators')
+            indicator.dataset.currentSlide = slideIndex
+
+            const title = document.querySelector('.snapshot-title')
+            title.textContent = SNAPSHOT_SLIDES[slideIndex]
+          },
+
+          getDisplaySnapshotSrc({ slideIndex, snapshotName, currentSrc }) {
+            const isDisplaySnapshotEmpty = snapshotName !== undefined
+            return isDisplaySnapshotEmpty
+              ? `../cypress-visual-screenshots/${SNAPSHOT_SLIDES[slideIndex]}/${snapshotName}.png`
+              : currentSrc.replace(
+                  /\/cypress-visual-screenshots\/(baseline|diff|comparison)\//,
+                  `/cypress-visual-screenshots/${SNAPSHOT_SLIDES[slideIndex]}/`
+                )
+          },
+
+          getNextSlideIndex(step) {
+            const snapshotIndicators = document.querySelector(
+              '#snapshot-indicators'
+            )
+            const currentSlide = Number(snapshotIndicators.dataset.currentSlide)
+            const nextSlide = (currentSlide + step + 3) % 3
+            return nextSlide
+          },
+
+          addIndicatorEventListener() {
+            const snapshotIndicators = document.querySelector(
+              '#snapshot-indicators'
+            )
+            snapshotIndicators.addEventListener('click', function ({ target }) {
+              const nextSlide = target.dataset.slideTo
+              if (SNAPSHOT_SLIDES[nextSlide] === undefined) return
+
+              ModalHelpers.setDisplaySnapshot(nextSlide)
+            })
+          },
+
+          addChangeSlideClickEventListener() {
+            const iconSelectors = ['#modal-prev-icon', '#modal-next-icon']
+            iconSelectors.forEach((selector) => {
+              const element = document.querySelector(selector)
+              element.addEventListener('click', function () {
+                const step = selector === '#modal-prev-icon' ? -1 : 1
+                const nextSlide = ModalHelpers.getNextSlideIndex(step)
+                ModalHelpers.setDisplaySnapshot(nextSlide)
+              })
+            })
+          },
+
+          addChangeSlideKeypressEventListener() {
+            const modal = document.querySelector('#modal-container')
+            document.addEventListener('keyup', function (e) {
+              if (modal.style.visibility === 'hidden') return
+
+              const keyMap = ['ArrowLeft', 'ArrowRight']
+              if (!keyMap.includes(e.key)) return
+
+              const step = e.key === 'ArrowLeft' ? -1 : 1
+              const nextSlide = ModalHelpers.getNextSlideIndex(step)
+              ModalHelpers.setDisplaySnapshot(nextSlide)
+            })
+          },
+
+          setupModalEventListener() {
+            this.addHideEventListener()
+            this.addIndicatorEventListener()
+            this.addChangeSlideClickEventListener()
+            this.addChangeSlideKeypressEventListener()
+          }
+        }
+
+        const DOMBuilder = {
+          cloneTemplate(templateId, props = {}) {
+            let templateClone = document
+              .getElementById(templateId)
+              .content.cloneNode(true)
+              .querySelector('.pseudo-wrapper')
+
+            templateClone.innerHTML = Object.entries(props).reduce(
+              (template, [key, value]) => {
+                // our templates use convention pattern of $__key__ to mark and represent variables that need to change dynamically
+                // find and replace all matched combinations of $__key__ with value
+                const pattern = new RegExp(`\\$__${key}__`, 'g')
+                return template.replace(pattern, value)
+              },
+              templateClone.innerHTML
+            )
+
+            // .pseudo-wrapper should only contain one root element
+            return templateClone.firstElementChild
+          },
+
+          addExpansionEventListener(target) {
+            const header = target.querySelector('.collapse-item__header')
+
+            header.addEventListener('click', function () {
+              target.classList.contains('expanded')
+                ? target.classList.remove('expanded')
+                : target.classList.add('expanded')
+            })
+          },
+
+          insertChildren({ target = document, selector, children }) {
+            const container = target.querySelector(selector)
+            container.append(...children)
+          }
+        }
+
+        const CollapseItemBuilder = {
+          createPassedLeaf({ title, percentage, failureThreshold, id }) {
+            const leaf = DOMBuilder.cloneTemplate('passed-leaf-template', {
+              title,
+              percentage,
+              failureThreshold,
+              id
+            })
+            return leaf
+          },
+
+          createFailedLeaf({ title, percentage, failureThreshold, id }) {
+            const leaf = DOMBuilder.cloneTemplate('failed-leaf-template', {
+              title,
+              percentage,
+              failureThreshold,
+              id
+            })
+            DOMBuilder.addExpansionEventListener(leaf)
+            ModalHelpers.addShowSnapshotsModalEventListener(leaf, id)
+            return leaf
+          },
+
+          createBranch({ title, passes, fails, children, id }) {
+            const branch = DOMBuilder.cloneTemplate('branch-template', {
+              title,
+              passes,
+              fails,
+              id
+            })
+            DOMBuilder.insertChildren({
+              target: branch,
+              selector: '.collapse-item__content',
+              children
+            })
+            DOMBuilder.addExpansionEventListener(branch)
+            return branch
+          }
+        }
+
+        class FamilyLine {
+          constructor(str) {
+            this.line = str.split('/')
+          }
+
+          getId(index) {
+            return this.line.slice(0, index + 1).join('/')
+          }
+
+          getParentId(index) {
+            return this.line.slice(0, index).join('/')
+          }
+        }
+
+        class TreeBuilder {
+          constructor(rawData) {
+            const normalizedData = this.normalizeInput(rawData)
+            this.tree = this.createTreeFrom(normalizedData)
+            this.DOM = this.buildDOMFromTree()
+          }
+
+          normalizeInput(rawData) {
+            const itemMap = rawData.reduce((map, item) => {
+              const familyLine = new FamilyLine(item.name)
+
+              familyLine.line.forEach((memberName, index) => {
+                const id = familyLine.getId(index)
+                if (map[id]) return
+                if (!id) return
+
+                map[id] = {
+                  status: item.status,
+                  title: memberName,
+                  percentage: item.percentage,
+                  failureThreshold: item.failureThreshold,
+                  id,
+                  parentId: familyLine.getParentId(index),
+                  children: [],
+                  total: {
+                    passes: 0,
+                    fails: 0
+                  }
+                }
+              })
+              return map
+            }, {})
+
+            return Object.values(itemMap).map((v) => v)
+          }
+
+          countTotal(children, status) {
+            return {
+              passes: children.length
+                ? children.reduce((acc, i) => acc + i.total.passes, 0)
+                : status === ITEM_STATUS.PASS
+                ? 1
+                : 0,
+              fails: children.length
+                ? children.reduce((acc, i) => acc + i.total.fails, 0)
+                : status === ITEM_STATUS.FAIL
+                ? 1
+                : 0
+            }
+          }
+
+          createTreeFrom(items, parentId = '') {
+            return items
+              .filter((item) => item.parentId === parentId)
+              .map(
+                ({
                   id,
                   parentId,
                   title,
-                  children,
-                  ...(children.length
-                    ? {}
-                    : { status, percentage, failureThreshold }),
-                  total: this.countTotal(children, status)
+                  status,
+                  percentage,
+                  failureThreshold
+                }) => {
+                  const children = this.createTreeFrom(items, id)
+
+                  return {
+                    id,
+                    parentId,
+                    title,
+                    children,
+                    ...(children.length
+                      ? {}
+                      : { status, percentage, failureThreshold }),
+                    total: this.countTotal(children, status)
+                  }
                 }
-              }
-            )
-        }
+              )
+          }
 
-        buildDOMFromTree(items = this.tree) {
-          return items.map((item) => {
-            const children = item.children.length
-              ? this.buildDOMFromTree(item.children)
-              : ''
-            const buildType = BUILD_MAP[item.status || ITEM_STATUS.NULL]
-            return CollapseItemBuilder[buildType]({
-              title: item.title,
-              passes: item.total.passes,
-              fails: item.total.fails,
-              percentage: (item.percentage * 100).toFixed(1),
-              failureThreshold: (item.failureThreshold * 100).toFixed(1),
-              id: item.id,
-              children
+          buildDOMFromTree(items = this.tree) {
+            return items.map((item) => {
+              const children = item.children.length
+                ? this.buildDOMFromTree(item.children)
+                : ''
+              const buildType = BUILD_MAP[item.status || ITEM_STATUS.NULL]
+              return CollapseItemBuilder[buildType]({
+                title: item.title,
+                passes: item.total.passes,
+                fails: item.total.fails,
+                percentage: (item.percentage * 100).toFixed(1),
+                failureThreshold: (item.failureThreshold * 100).toFixed(1),
+                id: item.id,
+                children
+              })
             })
-          })
+          }
         }
-      }
 
-      function normalizeInput(input) {
-        return input?.suites.flatMap((s) => s.tests)
-      }
+        function normalizeInput(input) {
+          return input?.suites.flatMap((s) => s.tests)
+        }
 
-      ;(async () => {
         try {
           const response = await fetch('/api/reports')
           const report = await response.json()
           window.__input_json__ = report
         } catch {
-          window.__input_json__ = {
-            total: 0,
-            totalPassed: 0,
-            totalFailed: 0,
-            totalSuites: 0,
-            suites: [],
-            startedAt: '',
-            endedAt: '',
-            duration: 0,
-            browserName: '',
-            browserVersion: '',
-            cypressVersion: ''
-          }
+          console.log(
+            '[cypress-image-diff-html-report]: Cannot fetch input json from the local server. Injected json is being used instead.'
+          )
         }
 
         const testData = normalizeInput(window.__input_json__)
