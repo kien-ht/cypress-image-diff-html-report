@@ -65,7 +65,6 @@ See all available CLI options [here](https://github.com/kien-ht/cypress-image-di
   ;(async () => {
     await generate({
       configFile: 'custom.config.js',
-      outputDir: '/my-visual-html-report'
       // ...
     })
   })()
@@ -110,14 +109,14 @@ cypress-image-diff-html-report start --configFile my-visual-html-report.config.j
 
 ### Config file options
 
-| Options         | Type      | Description                                                                            | Default value                               |
-| --------------- | --------- | -------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `inputJsonPath` | `string`  | Specify the input json file, relative to the `process.cwd()`                           | `cypress-image-diff-html-report.input.json` |
-| `outputDir`     | `string`  | Set the output directory of the generated HTML report, relative to the `process.cwd()` | `cypress-image-diff-html-report`            |
-| `inlineAssets`  | `boolean` | ~~Development stage, available soon.~~                                                 | `false`                                     |
-| `autoOpen`      | `boolean` | Open the HTML report in the default browser as soon as the server starts               | `false`                                     |
-| `serverPort`    | `number`  | Set the port of the local server                                                       | `6868`                                      |
-| `strictPort`    | `boolean` | ~~Development stage, available soon.~~                                                 | `false`                                     |
+| Options         | Type      | Description                                                              | Default value                               |
+| --------------- | --------- | ------------------------------------------------------------------------ | ------------------------------------------- |
+| `inputJsonPath` | `string`  | Specify the input json file, relative to the `process.cwd()`             | `cypress-image-diff-html-report.input.json` |
+| `outputDir`     | `string`  | ~~Development stage, available soon.~~                                   | `cypress-image-diff-html-report`            |
+| `inlineAssets`  | `boolean` | ~~Development stage, available soon.~~                                   | `false`                                     |
+| `autoOpen`      | `boolean` | Open the HTML report in the default browser as soon as the server starts | `false`                                     |
+| `serverPort`    | `number`  | Set the port of the local server                                         | `6868`                                      |
+| `strictPort`    | `boolean` | ~~Development stage, available soon.~~                                   | `false`                                     |
 
 ### Generate options
 
@@ -125,7 +124,7 @@ cypress-image-diff-html-report start --configFile my-visual-html-report.config.j
 | ---------------------------- | --------------- | --------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `-c, --configFile`           | `configFile`    | `string`  | Specify config file, will be overwritten by other config options if provided, relative to the `process.cwd()` | `cypress-image-diff-html-report.config.js`  |
 | `-i, --inputJsonPath <file>` | `inputJsonPath` | `string`  | Specify the input json file, relative to the `process.cwd()`                                                  | `cypress-image-diff-html-report.input.json` |
-| `-o, --outputDir <dir>`      | `outputDir`     | `string`  | Set the output directory of the generated HTML report, relative to the `process.cwd()`                        | `cypress-image-diff-html-report`            |
+| `-o, --outputDir <dir>`      | `outputDir`     | `string`  | ~~Development stage, available soon.~~                                                                        | `cypress-image-diff-html-report`            |
 | `--inlineAssets`             | `inlineAssets`  | `boolean` | ~~Development stage, available soon.~~                                                                        | `false`                                     |
 
 ### Start options

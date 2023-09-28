@@ -20,10 +20,10 @@ cli
 
 cli
   .command('generate', 'Generate HTML report')
-  .option(
-    '-o, --outputDir <dir>',
-    'Set the output directory of the generated HTML report, relative to the process.cwd()'
-  )
+  // .option(
+  //   '-o, --outputDir <dir>',
+  //   'Set the output directory of the generated HTML report, relative to the process.cwd()'
+  // )
   .action(async (options: GenerateInlineConfig) => {
     try {
       await generate(options)

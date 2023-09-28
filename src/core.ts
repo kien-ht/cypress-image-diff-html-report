@@ -16,7 +16,13 @@ export async function generate(
   const html = await getReportHtmlAfterPopulatingInput(json)
 
   try {
-    const target = path.join(process.cwd(), config.outputDir, 'index.html')
+    // hardcode config.outputDir for the time being, will be available after new UI migration
+    // const target = path.join(process.cwd(), config.outputDir, 'index.html')
+    const target = path.join(
+      process.cwd(),
+      'cypress-image-diff-html-report',
+      'index.html'
+    )
     await fs.ensureFile(target)
     await fs.writeFile(target, html)
   } catch (err) {

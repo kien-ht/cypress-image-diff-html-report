@@ -54,16 +54,16 @@ describe('Core', () => {
       )
     })
 
-    it('should create HTML report with given outputDir', async () => {
-      try {
-        await generate({ outputDir: 'my-html-report' })
-      } catch {
-        /* empty */
-      }
+    // it('should create HTML report with given outputDir', async () => {
+    //   try {
+    //     await generate({ outputDir: 'my-html-report' })
+    //   } catch {
+    //     /* empty */
+    //   }
 
-      const expectedPath = path.join(process.cwd(), 'my-html-report/index.html')
-      expect(fs.existsSync(expectedPath)).toBe(true)
-    })
+    //   const expectedPath = path.join(process.cwd(), 'my-html-report/index.html')
+    //   expect(fs.existsSync(expectedPath)).toBe(true)
+    // })
   })
 
   describe('Start the local server', () => {
