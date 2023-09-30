@@ -10,7 +10,7 @@ import {
   StartInlineConfig
 } from './types.js'
 import { DEFAULT_CONFIG, DEFAULT_CONFIG_PATH } from './constants.js'
-import { __dirname } from './utils-cjs.js'
+import { __dirname, dynamicImport } from './utils-cjs.js'
 
 export function defineConfig(config: UserConfig): UserConfig {
   return config
@@ -21,7 +21,7 @@ export async function getResolvedConfig({
   ...config
 }: GenerateInlineConfig | StartInlineConfig = {}): Promise<ResolvedUserConfig> {
   try {
-    const userConfig: { default: UserConfig } = await import(
+    const userConfig: { default: UserConfig } = await dynamicImport(
       path.join(process.cwd(), configFile ?? DEFAULT_CONFIG_PATH)
     )
 
