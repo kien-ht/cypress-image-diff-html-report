@@ -10,9 +10,13 @@
     "lint": "eslint . --fix --max-warnings=0",
     "start": "nodemon -w src/server -w src/common src/server/dev.ts",
     "dev:ui": "vite dev --config src/ui/vite.config.js",
-    "build:ui": "vue-tsc --noEmit --project src/ui/tsconfig.json && vite build --config src/ui/vite.config.js",
-    "build": "npm run build:ui && tsc",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand"
+    "build:ui": "vite build --config src/ui/vite.config.js",
+    "build:server": "tsc",
+    "build": "run-s build:*",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
+    "type-check:ui": "vue-tsc --noEmit --project src/ui/tsconfig.json",
+    "type-check:rest": "tsc --noEmit",
+    "type-check": "run-s -c type-check:*"
   },
   "bin": "./bin/index.js",
   "author": {
@@ -66,6 +70,7 @@
     "jest": "^29.7.0",
     "mock-fs": "^5.2.0",
     "nodemon": "^3.0.1",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.0.3",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
