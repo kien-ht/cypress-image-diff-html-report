@@ -55,7 +55,7 @@ create_full_template() {
 }
 
 insert_emoji () {
-  sed "s/^$1.*: /&"$(to_emoji $2)"/" $COMMIT_MSG_FILE
+  sed "s/^$1.*: /&"$(to_emoji $2)" /" $COMMIT_MSG_FILE
 }
 
 add_emoji_by_message_prefix() {

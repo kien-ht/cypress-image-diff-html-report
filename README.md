@@ -32,7 +32,7 @@ export default defineConfig({
 
 If you’d like to specify a different config filename than the default, use the --configFile command line option.
 
-See all available configurations [here](https://github.com/kien-ht/cypress-image-diff-html-report#all-available-options-in-the-cli-api-and-config-files).
+See all available configurations [here](#all-available-options-in-the-cli-api-and-config-files).
 
 ## CLI
 
@@ -51,7 +51,7 @@ It supports two commands: `generate` and `start`.
   cypress-image-diff-html-report start [options]
   ```
 
-See all available CLI options [here](https://github.com/kien-ht/cypress-image-diff-html-report#all-available-options-in-the-cli-api-and-config-files).
+See all available CLI options [here](#all-available-options-in-the-cli-api-and-config-files).
 
 ## API
 
@@ -84,7 +84,7 @@ See all available CLI options [here](https://github.com/kien-ht/cypress-image-di
   })()
   ```
 
-See all available API options [here](https://github.com/kien-ht/cypress-image-diff-html-report#all-available-options-in-the-cli-api-and-config-files).
+See all available API options [here](#all-available-options-in-the-cli-api-and-config-files).
 
 ## Example integration
 
