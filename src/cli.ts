@@ -17,13 +17,17 @@ cli
     '-i, --inputJsonPath <file>',
     'Specify the input json file, relative to the process.cwd()'
   )
+  .option(
+    '--baseDir <dir>',
+    'Specify the base directory for all the interal paths in the input json, relative to the process.cwd()'
+  )
 
 cli
   .command('generate', 'Generate HTML report')
-  // .option(
-  //   '-o, --outputDir <dir>',
-  //   'Set the output directory of the generated HTML report, relative to the process.cwd()'
-  // )
+  .option(
+    '-o, --outputDir <dir>',
+    'Set the output directory of the generated HTML report, relative to the process.cwd()'
+  )
   .action(async (options: GenerateInlineConfig) => {
     try {
       await generate(options)

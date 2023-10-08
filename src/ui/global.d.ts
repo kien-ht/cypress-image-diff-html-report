@@ -1,8 +1,8 @@
-import { Report } from '@commonTypes'
+import { InjectedData } from '@commonTypes'
 
 export {}
 declare global {
   interface Window {
-    __input_json__: Report
+    __injectedData__: InjectedData
   }
 }

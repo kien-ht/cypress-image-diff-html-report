@@ -34,36 +34,29 @@ describe('Core', () => {
         /* empty */
       }
 
-      const inputJson = JSON.parse(
-        await fs.readFile(path.join(process.cwd(), 'test.json'), {
-          encoding: 'utf8'
-        })
+      const expectedPath = path.join(
+        process.cwd(),
+        'cypress-image-diff-html-report/index.html'
       )
+      expect(fs.existsSync(expectedPath)).toBe(true)
 
-      const expectedHtml = await fs.readFile(
-        path.join(process.cwd(), 'cypress-image-diff-html-report/index.html'),
-        { encoding: 'utf8' }
-      )
-
-      expect(expectedHtml).toEqual(
-        expect.stringContaining(
-          `<script id="input-json">window.__input_json__ = ${JSON.stringify(
-            inputJson
-          )}</script>`
-        )
-      )
+      const expectedHtml = await fs.readFile(expectedPath, { encoding: 'utf8' })
+      expect(expectedHtml).toMatchSnapshot()
     })
 
-    // it('should create HTML report with given outputDir', async () => {
-    //   try {
-    //     await generate({ outputDir: 'my-html-report' })
-    //   } catch {
-    //     /* empty */
-    //   }
+    it('should create HTML report with given outputDir', async () => {
+      try {
+        await generate({ outputDir: 'my-report/html' })
+      } catch {
+        /* empty */
+      }
 
-    //   const expectedPath = path.join(process.cwd(), 'my-html-report/index.html')
-    //   expect(fs.existsSync(expectedPath)).toBe(true)
-    // })
+      const expectedPath = path.join(process.cwd(), 'my-report/html/index.html')
+      expect(fs.existsSync(expectedPath)).toBe(true)
+
+      const expectedHtml = await fs.readFile(expectedPath, { encoding: 'utf8' })
+      expect(expectedHtml).toMatchSnapshot()
+    })
   })
 
   describe('Start the local server', () => {
@@ -100,16 +93,11 @@ describe('Core', () => {
         /* empty */
       }
 
-      const expectedJson = JSON.parse(
-        await fs.readFile(path.join(process.cwd(), 'test.json'), {
-          encoding: 'utf8'
-        })
-      )
       const response = await request(server).get('/api/reports')
 
       expect(response.statusCode).toBe(200)
       expect(response.type).toBe('application/json')
-      expect(JSON.stringify(response.body)).toBe(JSON.stringify(expectedJson))
+      expect(response.body).toMatchSnapshot()
     })
 
     it('should start local server with given autoOpen', async () => {

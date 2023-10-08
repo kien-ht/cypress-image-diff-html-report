@@ -1,5 +1,5 @@
 <p align="center">
-	<a href="https://rollupjs.org/"><img src="./cypress-image-diff-logo.png" width="150" /></a>
+	<a href="#"><img src="./src/ui/assets/images/cypress-image-diff-logo.png" width="150" /></a>
 </p>
 
 <h1 align="center">cypress-image-diff-html-report</h1>
@@ -109,14 +109,15 @@ cypress-image-diff-html-report start --configFile my-visual-html-report.config.j
 
 ### Config file options
 
-| Options         | Type      | Description                                                              | Default value                               |
-| --------------- | --------- | ------------------------------------------------------------------------ | ------------------------------------------- |
-| `inputJsonPath` | `string`  | Specify the input json file, relative to the `process.cwd()`             | `cypress-image-diff-html-report.input.json` |
-| `outputDir`     | `string`  | ~~Development stage, available soon.~~                                   | `cypress-image-diff-html-report`            |
-| `inlineAssets`  | `boolean` | ~~Development stage, available soon.~~                                   | `false`                                     |
-| `autoOpen`      | `boolean` | Open the HTML report in the default browser as soon as the server starts | `false`                                     |
-| `serverPort`    | `number`  | Set the port of the local server                                         | `6868`                                      |
-| `strictPort`    | `boolean` | ~~Development stage, available soon.~~                                   | `false`                                     |
+| Options         | Type      | Description                                                                                             | Default value                               |
+| --------------- | --------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `inputJsonPath` | `string`  | Specify the input json file, relative to the `process.cwd()`                                            | `cypress-image-diff-html-report.input.json` |
+| `outputDir`     | `string`  | Set the output directory of the generated HTML report, relative to the `process.cwd()`                  | `cypress-image-diff-html-report`            |
+| `baseDir`       | `string`  | Specify the base directory for all the interal paths in the input json, relative to the `process.cwd()` | `''`                                        |
+| `inlineAssets`  | `boolean` | ~~Development stage, available soon.~~                                                                  | `false`                                     |
+| `autoOpen`      | `boolean` | Open the HTML report in the default browser as soon as the server starts                                | `false`                                     |
+| `serverPort`    | `number`  | Set the port of the local server                                                                        | `6868`                                      |
+| `strictPort`    | `boolean` | ~~Development stage, available soon.~~                                                                  | `false`                                     |
 
 ### Generate options
 
@@ -124,7 +125,8 @@ cypress-image-diff-html-report start --configFile my-visual-html-report.config.j
 | ---------------------------- | --------------- | --------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `-c, --configFile`           | `configFile`    | `string`  | Specify config file, will be overwritten by other config options if provided, relative to the `process.cwd()` | `cypress-image-diff-html-report.config.js`  |
 | `-i, --inputJsonPath <file>` | `inputJsonPath` | `string`  | Specify the input json file, relative to the `process.cwd()`                                                  | `cypress-image-diff-html-report.input.json` |
-| `-o, --outputDir <dir>`      | `outputDir`     | `string`  | ~~Development stage, available soon.~~                                                                        | `cypress-image-diff-html-report`            |
+| `-o, --outputDir <dir>`      | `outputDir`     | `string`  | Set the output directory of the generated HTML report, relative to the `process.cwd()`                        | `cypress-image-diff-html-report`            |
+| `--baseDir <dir>`            | `baseDir`       | `string`  | Specify the base directory for all the interal paths in the input json, relative to the `process.cwd()`       | `''`                                        |
 | `--inlineAssets`             | `inlineAssets`  | `boolean` | ~~Development stage, available soon.~~                                                                        | `false`                                     |
 
 ### Start options
@@ -133,6 +135,7 @@ cypress-image-diff-html-report start --configFile my-visual-html-report.config.j
 | ---------------------------- | --------------- | --------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `-c, --configFile`           | `configFile`    | `string`  | Specify config file, will be overwritten by other config options if provided, relative to the `process.cwd()` | `cypress-image-diff-html-report.config.js`  |
 | `-i, --inputJsonPath <file>` | `inputJsonPath` | `string`  | Specify the input json file, relative to the `process.cwd()`                                                  | `cypress-image-diff-html-report.input.json` |
+| `--baseDir <dir>`            | `baseDir`       | `string`  | Specify the base directory for all the interal paths in the input json, relative to the `process.cwd()`       | `''`                                        |
 | `--autoOpen`                 | `autoOpen`      | `boolean` | Open the HTML report in the default browser as soon as the server starts                                      | `false`                                     |
 | `--serverPort`               | `serverPort`    | `number`  | Set the port of the local server                                                                              | `6868`                                      |
 | `--strictPort`               | `strictPort`    | `boolean` | ~~Development stage, available soon.~~                                                                        | `false`                                     |

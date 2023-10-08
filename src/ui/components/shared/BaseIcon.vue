@@ -22,7 +22,15 @@ const vInline = {
 
     const [svg] = [...el.children]
     Object.entries<string>(attrs).forEach(([key, value]) => {
-      svg.setAttribute(key, value)
+      // in case of style, convert object to css string
+      const attributeValue =
+        key === 'style'
+          ? Object.entries(value)
+              .map(([k, v]) => `${k}:${v}`)
+              .join(';')
+          : value
+
+      svg.setAttribute(key, attributeValue)
     })
 
     el.replaceWith(svg)

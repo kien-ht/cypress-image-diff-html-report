@@ -1,4 +1,3 @@
-import fs from 'fs/promises'
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -28,24 +27,7 @@ export default defineConfig(async ({ mode }) => {
         dts: './components.d.ts',
         resolvers: [ElementPlusResolver()]
       }),
-      viteSingleFile(),
-
-      // TODO: Inject __input_json__ for old version of the report in development only, will be removed when new report version comes out
-      {
-        async transformIndexHtml(html) {
-          if (mode === 'development') {
-            const json = await fs.readFile('./example.json', {
-              encoding: 'utf8'
-            })
-            return html.replace(
-              '<script id="input-json"></script>',
-              `<script id="input-json">window.__input_json__ = ${json}</script>`
-            )
-          }
-
-          return html
-        }
-      }
+      viteSingleFile()
     ],
 
     root: __dirname(import.meta.url),

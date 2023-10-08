@@ -4,7 +4,8 @@ import merge from 'lodash/merge.js'
 import {
   getResolvedConfig,
   getInputJson,
-  getReportHtmlAfterPopulatingInput
+  getResolvedInputJson,
+  getReportHtmlAfterPopulatingData
 } from '../../dist/common/utils.js'
 import { DEFAULT_CONFIG } from '../../dist/common/constants.js'
 import { Report } from '../../dist/common/types.js'
@@ -99,9 +100,26 @@ describe('Utils', () => {
     })
   })
 
-  describe('getReportHtmlAfterPopulatingInput', () => {
-    it('should return output html from given json', async () => {
-      const json = {
+  describe('getResolvedInputJson', () => {
+    it('should return resolved input json in served mode with default config', async () => {
+      let json!: Report
+      try {
+        json = await getResolvedInputJson(
+          {
+            inputJsonPath: 'cypress-image-diff-html-report.input.json',
+            outputDir: 'cypress-image-diff-html-report',
+            baseDir: '',
+            inlineAssets: false,
+            autoOpen: false,
+            serverPort: 6868
+          },
+          'served'
+        )
+      } catch {
+        /* empty */
+      }
+
+      const expectedJson = {
         total: 6,
         totalPassed: 3,
         totalFailed: 3,
@@ -110,6 +128,9 @@ describe('Utils', () => {
           {
             name: 'image-diff.cy.js',
             path: 'cypress/specs/image-diff.cy.js',
+            id: 'cypress/specs/image-diff.cy.js',
+            passed: 0,
+            failed: 0,
             tests: []
           }
         ],
@@ -120,16 +141,177 @@ describe('Utils', () => {
         browserVersion: '116.0.5845.187',
         cypressVersion: '10.8.0'
       }
-      let html!: string
 
+      expect(json).toStrictEqual(expectedJson)
+    })
+
+    it('should return resolved input json in served mode with custom config', async () => {
+      let json!: Report
       try {
-        html = await getReportHtmlAfterPopulatingInput(json)
+        json = await getResolvedInputJson(
+          {
+            inputJsonPath: 'cypress-image-diff-html-report.input.json',
+            outputDir: 'my-report/html',
+            baseDir: 'visual-test',
+            inlineAssets: false,
+            autoOpen: false,
+            serverPort: 6868
+          },
+          'served'
+        )
       } catch {
         /* empty */
       }
 
-      const expectedHtml = `<script id="input-json">window.__input_json__ = ${JSON.stringify(
-        json
+      const expectedJson = {
+        total: 6,
+        totalPassed: 3,
+        totalFailed: 3,
+        totalSuites: 3,
+        suites: [
+          {
+            name: 'image-diff.cy.js',
+            path: 'visual-test/cypress/specs/image-diff.cy.js',
+            id: 'cypress/specs/image-diff.cy.js',
+            passed: 0,
+            failed: 0,
+            tests: []
+          }
+        ],
+        startedAt: '2023-09-19T13:15:11.806Z',
+        endedAt: '2023-09-19T13:15:31.112Z',
+        duration: 15239,
+        browserName: 'chrome',
+        browserVersion: '116.0.5845.187',
+        cypressVersion: '10.8.0'
+      }
+
+      expect(json).toStrictEqual(expectedJson)
+    })
+
+    it('should return resolved input json in static mode with default config', async () => {
+      let json!: Report
+      try {
+        json = await getResolvedInputJson(
+          {
+            inputJsonPath: 'cypress-image-diff-html-report.input.json',
+            outputDir: 'cypress-image-diff-html-report',
+            baseDir: '',
+            inlineAssets: false,
+            autoOpen: false,
+            serverPort: 6868
+          },
+          'static'
+        )
+      } catch {
+        /* empty */
+      }
+
+      const expectedJson = {
+        total: 6,
+        totalPassed: 3,
+        totalFailed: 3,
+        totalSuites: 3,
+        suites: [
+          {
+            name: 'image-diff.cy.js',
+            path: '../cypress/specs/image-diff.cy.js',
+            id: 'cypress/specs/image-diff.cy.js',
+            passed: 0,
+            failed: 0,
+            tests: []
+          }
+        ],
+        startedAt: '2023-09-19T13:15:11.806Z',
+        endedAt: '2023-09-19T13:15:31.112Z',
+        duration: 15239,
+        browserName: 'chrome',
+        browserVersion: '116.0.5845.187',
+        cypressVersion: '10.8.0'
+      }
+
+      expect(json).toStrictEqual(expectedJson)
+    })
+
+    it('should return resolved input json in static mode with custom config', async () => {
+      let json!: Report
+      try {
+        json = await getResolvedInputJson(
+          {
+            inputJsonPath: 'cypress-image-diff-html-report.input.json',
+            outputDir: 'my-report/html',
+            baseDir: 'visual-test',
+            inlineAssets: false,
+            autoOpen: false,
+            serverPort: 6868
+          },
+          'static'
+        )
+      } catch {
+        /* empty */
+      }
+
+      const expectedJson = {
+        total: 6,
+        totalPassed: 3,
+        totalFailed: 3,
+        totalSuites: 3,
+        suites: [
+          {
+            name: 'image-diff.cy.js',
+            path: '../../visual-test/cypress/specs/image-diff.cy.js',
+            id: 'cypress/specs/image-diff.cy.js',
+            passed: 0,
+            failed: 0,
+            tests: []
+          }
+        ],
+        startedAt: '2023-09-19T13:15:11.806Z',
+        endedAt: '2023-09-19T13:15:31.112Z',
+        duration: 15239,
+        browserName: 'chrome',
+        browserVersion: '116.0.5845.187',
+        cypressVersion: '10.8.0'
+      }
+
+      expect(json).toStrictEqual(expectedJson)
+    })
+  })
+
+  describe('getReportHtmlAfterPopulatingData', () => {
+    it('should return output html from given json', async () => {
+      const json = {
+        total: 6,
+        totalPassed: 3,
+        totalFailed: 3,
+        totalSuites: 3,
+        suites: [
+          {
+            name: 'image-diff.cy.js',
+            path: 'cypress/specs/image-diff.cy.js',
+            id: 'cypress/specs/image-diff.cy.js',
+            failed: 0,
+            passed: 0,
+            tests: []
+          }
+        ],
+        startedAt: '2023-09-19T13:15:11.806Z',
+        endedAt: '2023-09-19T13:15:31.112Z',
+        duration: 15239,
+        browserName: 'chrome',
+        browserVersion: '116.0.5845.187',
+        cypressVersion: '10.8.0'
+      }
+
+      let html: string
+      try {
+        html = await getReportHtmlAfterPopulatingData(json)
+      } catch {
+        html = ''
+      }
+
+      const expectedHtml = `<script id="injected-data">window.__injectedData__ = ${JSON.stringify(
+        { report: json, mode: 'static' }
       )}</script>`
 
       expect(html).toEqual(expect.stringContaining(expectedHtml))

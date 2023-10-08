@@ -3,8 +3,8 @@ import path from 'path'
 import { GenerateInlineConfig, StartInlineConfig } from './common/types.js'
 import {
   getResolvedConfig,
-  getReportHtmlAfterPopulatingInput,
-  getInputJson
+  getReportHtmlAfterPopulatingData,
+  getResolvedInputJson
 } from './common/utils.js'
 import { App } from './server/index.js'
 
@@ -12,17 +12,12 @@ export async function generate(
   inlineConfig?: GenerateInlineConfig
 ): Promise<void> {
   const config = await getResolvedConfig(inlineConfig)
-  const json = await getInputJson(config.inputJsonPath)
-  const html = await getReportHtmlAfterPopulatingInput(json)
+  const json = await getResolvedInputJson(config, 'static')
+  const html = await getReportHtmlAfterPopulatingData(json)
 
   try {
-    // hardcode config.outputDir for the time being, will be available after new UI migration
-    // const target = path.join(process.cwd(), config.outputDir, 'index.html')
-    const target = path.join(
-      process.cwd(),
-      'cypress-image-diff-html-report',
-      'index.html'
-    )
+    const target = path.join(process.cwd(), config.outputDir, 'index.html')
+
     await fs.ensureFile(target)
     await fs.writeFile(target, html)
   } catch (err) {

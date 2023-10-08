@@ -19,7 +19,7 @@ export interface Suite {
 }
 
 export interface Test {
-  status: string
+  status: TestStatus
   name: string
   percentage: number
   failureThreshold: number
@@ -28,6 +28,31 @@ export interface Test {
   baselinePath: string
   diffPath: string
   comparisonPath: string
+}
+
+export type TestStatus = 'pass' | 'fail'
+
+export interface ResolvedReport extends Report {
+  suites: ResolvedSuite[]
+}
+
+export interface ResolvedSuite extends Suite {
+  tests: ResolvedTest[]
+  passed: number
+  failed: number
+  id: string
+}
+
+export interface ResolvedTest extends Test {
+  passed: number
+  failed: number
+}
+
+export type RunMode = 'static' | 'served'
+
+export interface InjectedData {
+  report: ResolvedReport
+  mode?: RunMode
 }
 
 interface InlineConfig {
@@ -42,6 +67,10 @@ interface SharedConfig {
    * Specify the input json file, relative to the process.cwd()
    */
   inputJsonPath?: string
+  /**
+   * Specify the base directory for all the interal paths in the input json, relative to the process.cwd()
+   */
+  baseDir?: string
 }
 
 interface GenerateConfig extends SharedConfig {

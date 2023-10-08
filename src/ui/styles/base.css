@@ -1,27 +1,33 @@
 :root {
   --r-white: #ffffff;
-  --r-white-soft: #f8f8f8;
-  --r-white-mute: #f2f2f2;
+  --r-white-soft: #f5f6e6;
+  --r-white-mute: #ebeef5;
 
   --r-black: #181818;
   --r-black-soft: #222222;
   --r-black-mute: #282828;
-  --r-black-mute-2: #303133;
+  --r-black-mute-2: #606266;
   --r-black-mute-3: #95a8ac;
 
   --r-indigo: #2c3e50;
 
   --r-divider-light-1: rgba(60, 60, 60, 0.29);
-  --r-divider-light-2: rgba(60, 60, 60, 0.12);
+  --r-divider-light-2: #3c3c3c1f;
   --r-divider-dark-1: rgba(84, 84, 84, 0.65);
   --r-divider-dark-2: rgba(84, 84, 84, 0.48);
 
   --r-text-light-1: var(--r-indigo);
   --r-text-light-2: rgba(60, 60, 60, 0.66);
   --r-text-dark-1: var(--r-white);
-  --r-text-dark-2: rgba(235, 235, 235, 0.64);
+  --r-text-dark-2: #cfd3dc;
+
+  --r-green: #67c23a;
+
+  --r-red: #f56c6c;
 
   /* semantic color variables for this project */
+  --color-success: var(--r-green);
+  --color-danger: var(--r-red);
 
   /* light-theme */
   --color-background: var(--r-white);
@@ -36,19 +42,17 @@
   --color-text-muted: var(--r-black-mute-3);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--r-black);
-    --color-background-soft: var(--r-black-soft);
-    --color-background-mute: var(--r-black-mute);
+:root.dark {
+  --color-background: var(--r-black);
+  --color-background-soft: var(--r-black-soft);
+  --color-background-mute: var(--r-black-mute);
 
-    --color-border: var(--r-divider-dark-2);
-    --color-border-hover: var(--r-divider-dark-1);
+  --color-border: var(--r-divider-dark-2);
+  --color-border-hover: var(--r-divider-dark-1);
 
-    --color-heading: var(--r-text-dark-1);
-    --color-text: var(--r-text-dark-2);
-    /* --color-text-muted: var(--r-black-mute-3); */
-  }
+  --color-heading: var(--r-text-dark-1);
+  --color-text: var(--r-text-dark-2);
+  /* --color-text-muted: var(--r-black-mute-3); */
 }
 
 *,
@@ -56,7 +60,7 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
-  font-weight: normal;
+  font-weight: 500;
 }
 
 html {
@@ -78,17 +82,14 @@ body {
     background-color 0.5s;
   line-height: 1.6;
   font-family:
-    Inter,
+    system-ui,
     -apple-system,
-    BlinkMacSystemFont,
     'Segoe UI',
     Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
     'Helvetica Neue',
+    'Noto Sans',
+    'Liberation Sans',
+    Arial,
     sans-serif;
   font-size: 1.4rem;
   text-rendering: optimizeLegibility;

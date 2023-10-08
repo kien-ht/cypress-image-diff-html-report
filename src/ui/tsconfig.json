@@ -18,7 +18,7 @@
       "@commonTypes": ["../common/types.ts"]
     }
   },
-  "include": ["./*.ts", "./*.d.ts", "./*.vue", "../common/*"],
+  "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.vue", "../common/**/*"],
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"
