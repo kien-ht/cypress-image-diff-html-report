@@ -32,11 +32,6 @@
     "html report"
   ],
   "license": "MIT",
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "dependencies": {
     "cac": "^6.7.14",
     "chalk": "^4.1.2",

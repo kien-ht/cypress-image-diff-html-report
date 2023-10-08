@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx --no -- commitlint --edit
+npx --no -- commitlint --edit ${1}
 
 # git prepare-commit-msg hook for emojified commit message prefix
 # source: https://gist.github.com/negokaz/27a39274061a728ebd09f847ea4e93b4
