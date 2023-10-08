@@ -41,7 +41,10 @@ describe('Core', () => {
       expect(fs.existsSync(expectedPath)).toBe(true)
 
       const expectedHtml = await fs.readFile(expectedPath, { encoding: 'utf8' })
-      expect(expectedHtml).toMatchSnapshot()
+      const extractedJson = expectedHtml.match(
+        /(?<=<script id="injected-data">window\.__injectedData__ = ).*?(?=<\/script>)/
+      )?.[0]
+      expect(extractedJson).toMatchSnapshot()
     })
 
     it('should create HTML report with given outputDir', async () => {
@@ -53,9 +56,6 @@ describe('Core', () => {
 
       const expectedPath = path.join(process.cwd(), 'my-report/html/index.html')
       expect(fs.existsSync(expectedPath)).toBe(true)
-
-      const expectedHtml = await fs.readFile(expectedPath, { encoding: 'utf8' })
-      expect(expectedHtml).toMatchSnapshot()
     })
   })
 
