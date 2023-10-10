@@ -3,8 +3,9 @@
     style="scroll-behavior: auto; height: auto"
     :data="suite?.tests ?? []"
     default-expand-all
+    :row-key="(row) => row.name"
   >
-    <el-table-column type="selection" />
+    <!-- <el-table-column type="selection" /> -->
 
     <el-table-column type="expand">
       <template #default="{ row }">
@@ -58,21 +59,23 @@
       </template>
     </el-table-column>
 
-    <!-- <el-table-column width="100">
-      <template #header>
+    <el-table-column width="100">
+      <template #default="{ row }">
         <el-button
+          v-if="row.failed"
           size="small"
           type="success"
-          disabled
+          @click="onClickUpdate(row.name)"
         >
-          Approve
+          Update
         </el-button>
       </template>
-    </el-table-column> -->
+    </el-table-column>
   </el-table>
 </template>
 
 <script lang="ts" setup>
+import { ElMessage, ElMessageBox } from 'element-plus'
 import type { ElTable } from 'element-plus'
 import { useMainStore } from '@/store'
 
@@ -85,6 +88,29 @@ const mainStore = useMainStore()
 const suite = computed(() => {
   return mainStore.report.suites.find((s) => s.id === props.suiteId)
 })
+
+async function onClickUpdate(testName: string) {
+  try {
+    await ElMessageBox.confirm(
+      'Update this baseline screenshot. Continue?',
+      'Warning',
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }
+    )
+
+    await mainStore.updateTest({ suiteId: props.suiteId!, name: testName })
+
+    ElMessage({
+      type: 'success',
+      message: 'Updated'
+    })
+  } catch {
+    /* empty */
+  }
+}
 </script>
 
 <style scoped>

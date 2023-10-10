@@ -4,9 +4,10 @@
     ref="suiteTableRef"
     :data="mainStore.report.suites"
     highlight-current-row
+    :row-key="(row) => row.id"
     @current-change="onCurrentChange"
   >
-    <el-table-column type="selection" />
+    <!-- <el-table-column type="selection" /> -->
 
     <el-table-column label="Suites">
       <template #default="{ row }">
@@ -71,7 +72,7 @@ function onCurrentChange(suite: ResolvedSuite) {
   color: var(--color-danger);
 }
 
-:deep(:not(.el-table-column--selection)) > .cell {
+/* :deep(:not(.el-table-column--selection)) > .cell {
   padding-left: 0;
-}
+} */
 </style>

@@ -66,7 +66,7 @@ describe('Core', () => {
       server.close()
     })
 
-    it('should serve /', async () => {
+    it('should serve GET /', async () => {
       try {
         server = await startServer()
       } catch {
@@ -76,7 +76,7 @@ describe('Core', () => {
       expect(response.statusCode).toBe(200)
     })
 
-    it('should serve /api/reports', async () => {
+    it('should serve GET /api/reports', async () => {
       try {
         server = await startServer()
       } catch {
