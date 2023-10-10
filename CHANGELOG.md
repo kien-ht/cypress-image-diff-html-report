@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.2.0...v1.3.0) (2023-10-10)
+
+
+### Features
+
+* ⭐ add inlineAssets config option ([dfb218d](https://github.com/kien-ht/cypress-image-diff-html-report/commit/dfb218d0a4f99b07cab62bda82df50219f14f1ee))
+
 # [1.2.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.1.0...v1.2.0) (2023-10-10)
 
 
