@@ -8,6 +8,16 @@
 
 A HTML reporting module for Cypress-Image-Diff to parse the JSON output into a beautiful report
 
+<img src="./assets/showcase-installation.gif"/>
+
+### Update baseline screenshots
+
+<img src="./assets/showcase-update-baseline.gif"/>
+
+### Provide with light/dark/system default theme
+
+<img src="./assets/showcase-light-dark-theme.gif"/>
+
 ## Installation
 
 Make sure you install [Cypress](https://www.cypress.io/) and [cypress-image-diff](https://cypress.visual-image-diff.dev/getting-started/cypress-integration) prior to this report installation.
