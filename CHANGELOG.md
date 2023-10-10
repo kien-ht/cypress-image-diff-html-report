@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.1.0...v1.2.0) (2023-10-10)
+
+
+### Features
+
+* ⭐ add update baseline screenshot function ([eef7def](https://github.com/kien-ht/cypress-image-diff-html-report/commit/eef7defb6409694ca8c486d53cd508f39293b399))
+
 # [1.1.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.0.1...v1.1.0) (2023-10-09)
 
 
