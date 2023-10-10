@@ -42,26 +42,42 @@ export async function getResolvedInputJson(
 
   return {
     ...json,
-    suites: json.suites
-      .map((suite) => ({
-        ...suite,
-        tests: suite.tests.map((test) => ({
-          ...test,
-          passed: test.status === 'pass' ? 1 : 0,
-          failed: test.status === 'fail' ? 1 : 0,
-          specPath: getNormalisedPath(test.specPath, config, mode),
-          baselinePath: getNormalisedPath(test.baselinePath, config, mode),
-          diffPath: getNormalisedPath(test.diffPath, config, mode),
-          comparisonPath: getNormalisedPath(test.comparisonPath, config, mode)
+    suites: (
+      await Promise.all(
+        json.suites.map(async (suite) => ({
+          ...suite,
+          tests: await Promise.all(
+            suite.tests.map(async (test) => ({
+              ...test,
+              passed: test.status === 'pass' ? 1 : 0,
+              failed: test.status === 'fail' ? 1 : 0,
+              specPath: getNormalisedPath(test.specPath, config, mode),
+              baselinePath: await getResolvedScreenshotPath(
+                test.baselinePath,
+                config,
+                mode
+              ),
+              diffPath: await getResolvedScreenshotPath(
+                test.diffPath,
+                config,
+                mode
+              ),
+              comparisonPath: await getResolvedScreenshotPath(
+                test.comparisonPath,
+                config,
+                mode
+              )
+            }))
+          )
         }))
-      }))
-      .map((suite) => ({
-        ...suite,
-        id: suite.path,
-        passed: suite.tests.reduce((s, i) => s + i.passed, 0),
-        failed: suite.tests.reduce((s, i) => s + i.failed, 0),
-        path: getNormalisedPath(suite.path, config, mode)
-      }))
+      )
+    ).map((suite) => ({
+      ...suite,
+      id: suite.path,
+      passed: suite.tests.reduce((s, i) => s + i.passed, 0),
+      failed: suite.tests.reduce((s, i) => s + i.failed, 0),
+      path: getNormalisedPath(suite.path, config, mode)
+    }))
   }
 }
 
@@ -115,15 +131,41 @@ export async function getInputJson(filePath: string): Promise<Report> {
   }
 }
 
+async function getResolvedScreenshotPath(
+  pathname: string,
+  config: ResolvedUserConfig,
+  mode: RunMode
+): Promise<string> {
+  if (config.inlineAssets && mode === 'static')
+    return await toBase64(pathname, config)
+
+  return getNormalisedPath(pathname, config, mode)
+}
+
 function getNormalisedPath(
   pathname: string,
   config: ResolvedUserConfig,
   mode: RunMode
 ): string {
-  if (pathname == '') return ''
+  if (pathname === '') return ''
 
   if (mode === 'served') return path.join(config.baseDir, pathname)
 
   const absolutePath = path.join(process.cwd(), config.baseDir, pathname)
   return path.relative(config.outputDir, absolutePath)
+}
+
+async function toBase64(
+  pathname: string,
+  config: ResolvedUserConfig
+): Promise<string> {
+  if (pathname === '') return ''
+
+  const absolutePath = path.join(process.cwd(), config.baseDir, pathname)
+  try {
+    const content = await fs.readFile(absolutePath, { encoding: 'base64' })
+    return `data:image/png;base64,${content}`
+  } catch (err) {
+    throw Error((err as Error).message)
+  }
 }

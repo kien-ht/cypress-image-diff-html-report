@@ -15,6 +15,9 @@ describe('Utils', () => {
     mock({
       node_modules: mock.load('node_modules'),
       dist: mock.load('dist'),
+      'cypress-visual-screenshots': mock.load(
+        'playground/cypress-visual-screenshots'
+      ),
       'package.json': mock.load('package.json'),
       'cypress-image-diff-html-report.config.js': mock.load(
         'test/fixtures/cypress-image-diff-html-report.config.js'
@@ -275,6 +278,27 @@ describe('Utils', () => {
       }
 
       expect(json).toStrictEqual(expectedJson)
+    })
+
+    it('should return resolved input json in static mode with inlineAssets', async () => {
+      let json!: Report
+      try {
+        json = await getResolvedInputJson(
+          {
+            inputJsonPath: 'test.json',
+            outputDir: 'my-report/html',
+            baseDir: '',
+            inlineAssets: true,
+            autoOpen: false,
+            serverPort: 6868
+          },
+          'static'
+        )
+      } catch (err) {
+        /* empty */
+      }
+
+      expect(json).toMatchSnapshot()
     })
   })
 

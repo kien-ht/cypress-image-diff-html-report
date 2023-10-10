@@ -84,7 +84,7 @@ interface GenerateConfig extends SharedConfig {
    */
   outputDir?: string
   /**
-   * Development stage, available soon
+   * Whether to inline all screenshots to base64 for the generated HTML
    */
   inlineAssets?: boolean
 }

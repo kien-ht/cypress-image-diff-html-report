@@ -28,6 +28,10 @@ cli
     '-o, --outputDir <dir>',
     'Set the output directory of the generated HTML report, relative to the process.cwd()'
   )
+  .option(
+    '--inlineAssets',
+    'Inline all screenshots to base64 for the generated HTML'
+  )
   .action(async (options: GenerateInlineConfig) => {
     try {
       await generate(options)

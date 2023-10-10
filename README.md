@@ -124,7 +124,7 @@ cypress-image-diff-html-report start --configFile my-visual-html-report.config.j
 | `inputJsonPath` | `string`  | Specify the input json file, relative to the `process.cwd()`                                            | `cypress-image-diff-html-report.input.json` |
 | `outputDir`     | `string`  | Set the output directory of the generated HTML report, relative to the `process.cwd()`                  | `cypress-image-diff-html-report`            |
 | `baseDir`       | `string`  | Specify the base directory for all the interal paths in the input json, relative to the `process.cwd()` | `''`                                        |
-| `inlineAssets`  | `boolean` | ~~Development stage, available soon.~~                                                                  | `false`                                     |
+| `inlineAssets`  | `boolean` | Whether to inline all screenshots to base64 for the generated HTML                                      | `false`                                     |
 | `autoOpen`      | `boolean` | Open the HTML report in the default browser as soon as the server starts                                | `false`                                     |
 | `serverPort`    | `number`  | Set the port of the local server                                                                        | `6868`                                      |
 | `strictPort`    | `boolean` | ~~Development stage, available soon.~~                                                                  | `false`                                     |
@@ -137,7 +137,7 @@ cypress-image-diff-html-report start --configFile my-visual-html-report.config.j
 | `-i, --inputJsonPath <file>` | `inputJsonPath` | `string`  | Specify the input json file, relative to the `process.cwd()`                                                  | `cypress-image-diff-html-report.input.json` |
 | `-o, --outputDir <dir>`      | `outputDir`     | `string`  | Set the output directory of the generated HTML report, relative to the `process.cwd()`                        | `cypress-image-diff-html-report`            |
 | `--baseDir <dir>`            | `baseDir`       | `string`  | Specify the base directory for all the interal paths in the input json, relative to the `process.cwd()`       | `''`                                        |
-| `--inlineAssets`             | `inlineAssets`  | `boolean` | ~~Development stage, available soon.~~                                                                        | `false`                                     |
+| `--inlineAssets`             | `inlineAssets`  | `boolean` | Whether to inline all screenshots to base64 for the generated HTML                                            | `false`                                     |
 
 ### Start options
 
