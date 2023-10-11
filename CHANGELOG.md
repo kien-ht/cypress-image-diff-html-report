@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.3.0...v1.3.1) (2023-10-11)
+
+
+### Bug Fixes
+
+* **ui:** 🐞 cached image issue when update new baseline with same name ([4584b01](https://github.com/kien-ht/cypress-image-diff-html-report/commit/4584b01fbe066542aec6cecc063396765762e6c8))
+
 # [1.3.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.2.0...v1.3.0) (2023-10-10)
 
 
