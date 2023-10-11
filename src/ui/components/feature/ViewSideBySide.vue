@@ -2,8 +2,8 @@
   <div class="screenshots">
     <BaseImage
       class="screenshots-cell"
-      :class="{ 'cell-shadow': Boolean(props.row.baselinePath) }"
-      :src="props.row.baselinePath"
+      :class="{ 'cell-shadow': Boolean(test.baselinePath) }"
+      :src="test.baselinePath"
     >
       <template #placeholder>
         <img
@@ -16,8 +16,8 @@
 
     <BaseImage
       class="screenshots-cell"
-      :class="{ 'cell-shadow': Boolean(props.row.diffPath) }"
-      :src="props.row.diffPath"
+      :class="{ 'cell-shadow': Boolean(test.diffPath) }"
+      :src="test.diffPath"
     >
       <template #placeholder>
         <img
@@ -30,8 +30,8 @@
 
     <BaseImage
       class="screenshots-cell"
-      :class="{ 'cell-shadow': Boolean(props.row.comparisonPath) }"
-      :src="props.row.comparisonPath"
+      :class="{ 'cell-shadow': Boolean(test.comparisonPath) }"
+      :src="test.comparisonPath"
     >
       <template #placeholder>
         <img
@@ -50,6 +50,20 @@ import { ResolvedTest } from '@commonTypes'
 const props = defineProps<{
   row: ResolvedTest
 }>()
+
+const test = computed<ResolvedTest>(() => {
+  const random = Date.now()
+  return {
+    ...props.row,
+    baselinePath: props.row.baselinePath
+      ? `${props.row.baselinePath}?v=${random}`
+      : '',
+    diffPath: props.row.diffPath ? `${props.row.diffPath}?v=${random}` : '',
+    comparisonPath: props.row.comparisonPath
+      ? `${props.row.comparisonPath}?v=${random}`
+      : ''
+  }
+})
 </script>
 
 <style scoped>
