@@ -127,7 +127,6 @@ cypress-image-diff-html-report start --configFile my-visual-html-report.config.j
 | `inlineAssets`  | `boolean` | Whether to inline all screenshots to base64 for the generated HTML                                      | `false`                                     |
 | `autoOpen`      | `boolean` | Open the HTML report in the default browser as soon as the server starts                                | `false`                                     |
 | `serverPort`    | `number`  | Set the port of the local server                                                                        | `6868`                                      |
-| `strictPort`    | `boolean` | ~~Development stage, available soon.~~                                                                  | `false`                                     |
 
 ### Generate options
 
@@ -148,4 +147,3 @@ cypress-image-diff-html-report start --configFile my-visual-html-report.config.j
 | `--baseDir <dir>`            | `baseDir`       | `string`  | Specify the base directory for all the interal paths in the input json, relative to the `process.cwd()`       | `''`                                        |
 | `--autoOpen`                 | `autoOpen`      | `boolean` | Open the HTML report in the default browser as soon as the server starts                                      | `false`                                     |
 | `--serverPort`               | `serverPort`    | `number`  | Set the port of the local server                                                                              | `6868`                                      |
-| `--strictPort`               | `strictPort`    | `boolean` | ~~Development stage, available soon.~~                                                                        | `false`                                     |

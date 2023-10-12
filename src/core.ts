@@ -7,6 +7,7 @@ import {
   getResolvedInputJson
 } from './common/utils.js'
 import { App } from './server/index.js'
+import http from 'http'
 
 export async function generate(
   inlineConfig?: GenerateInlineConfig
@@ -25,13 +26,10 @@ export async function generate(
   }
 }
 
-export async function startServer(inlineConfig?: StartInlineConfig) {
+export async function startServer(
+  inlineConfig?: StartInlineConfig
+): Promise<http.Server> {
   const config = await getResolvedConfig(inlineConfig)
   const app = new App(config)
-
-  try {
-    return app.listen()
-  } catch (err) {
-    throw Error((err as Error).message)
-  }
+  return app.listen()
 }

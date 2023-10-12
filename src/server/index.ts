@@ -6,6 +6,7 @@ import { ResolvedUserConfig } from '../common/types.js'
 import chalk from 'chalk'
 import open from 'open'
 import type { Express } from 'express'
+import http from 'http'
 
 export class App {
   private server: Express
@@ -21,17 +22,24 @@ export class App {
     this.server = server
   }
 
-  listen() {
-    return this.server.listen(this.config.serverPort, async () => {
-      const link = `http://127.0.0.1:${this.config.serverPort}`
-      console.log(
-        '[cypress-image-diff-html-report]: 🚀 Server running on',
-        chalk.cyan.underline(link)
-      )
+  listen(): http.Server {
+    return this.server
+      .listen(this.config.serverPort)
+      .on('error', (err: NodeJS.ErrnoException) => {
+        console.log(
+          chalk.magenta(`[cypress-image-diff-html-report]: ${err.message}`)
+        )
+      })
+      .on('listening', async () => {
+        const link = `http://127.0.0.1:${this.config.serverPort}`
+        console.log(
+          '[cypress-image-diff-html-report]: 🚀 Server running on',
+          chalk.cyan.underline(link)
+        )
 
-      if (this.config.autoOpen) {
-        await open(link)
-      }
-    })
+        if (this.config.autoOpen) {
+          await open(link)
+        }
+      })
   }
 }
