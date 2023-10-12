@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.3.1...v1.3.2) (2023-10-12)
+
+
+### Bug Fixes
+
+* **core.ts:** 🐞 error handling for starting server ([c636799](https://github.com/kien-ht/cypress-image-diff-html-report/commit/c6367995fe8c3e91a012d2ccc7f7d038a9d445ce))
+
 ## [1.3.1](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.3.0...v1.3.1) (2023-10-11)
 
 
