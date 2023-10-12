@@ -4,15 +4,16 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import { changeCwdToPlayground } from '../common/utils'
+import { changeCwdToPlayground, getResolvedConfig } from '../common/utils'
 import { __dirname } from '../common/utils-cjs'
-import { DEFAULT_CONFIG } from '../common/constants'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 
 export default defineConfig(async ({ mode }) => {
   if (mode === 'development') {
     changeCwdToPlayground()
   }
+
+  const { serverPort } = await getResolvedConfig()
 
   return {
     plugins: [
@@ -41,10 +42,10 @@ export default defineConfig(async ({ mode }) => {
     },
 
     server: {
-      port: 6869,
+      port: 6867,
       proxy: {
         '/api': {
-          target: `http://127.0.0.1:${DEFAULT_CONFIG.serverPort}`,
+          target: `http://127.0.0.1:${serverPort}`,
           changeOrigin: true
         }
       }
