@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.3.2...v1.4.0) (2023-10-13)
+
+
+### Features
+
+* **ui:** ⭐ support viewing screenshots in details ([53b84f9](https://github.com/kien-ht/cypress-image-diff-html-report/commit/53b84f94bd98241c101a84391a1040d5311775fc))
+
 ## [1.3.2](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.3.1...v1.3.2) (2023-10-12)
 
 
