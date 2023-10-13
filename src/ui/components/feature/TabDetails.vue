@@ -29,6 +29,5 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: minmax(15rem, 1fr) minmax(0, 5fr);
   column-gap: 2rem;
-  height: 500px;
 }
 </style>

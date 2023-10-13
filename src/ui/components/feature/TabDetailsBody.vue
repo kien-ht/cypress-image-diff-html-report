@@ -9,9 +9,9 @@
 
     <el-table-column type="expand">
       <template #default="{ row }">
-        <ViewSideBySide
-          class="screenshots-bg"
-          :row="row"
+        <TabDetailsBodyExpand
+          class="screenshot-wrapper-bg"
+          :test="row"
         />
       </template>
     </el-table-column>
@@ -59,7 +59,27 @@
       </template>
     </el-table-column>
 
-    <el-table-column width="100">
+    <el-table-column
+      width="70"
+      class-name="min-content"
+    >
+      <template #default="{ row }">
+        <el-button
+          size="small"
+          type="primary"
+          plain
+          @click="dialogViewComparisonRef!.open(row)"
+        >
+          <BaseIcon name="eye" />
+          <span style="margin-left: 0.5rem">View</span>
+        </el-button>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      width="112"
+      class-name="min-content"
+    >
       <template #default="{ row }">
         <el-button
           v-if="row.failed"
@@ -67,29 +87,39 @@
           type="success"
           @click="onClickUpdate(row.name)"
         >
-          Update
+          <BaseIcon name="checkmark" />
+          <span>Update</span>
         </el-button>
       </template>
     </el-table-column>
   </el-table>
+
+  <DialogViewComparison
+    ref="dialogViewComparisonRef"
+    @updated="doUpdated"
+  />
 </template>
 
 <script lang="ts" setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { ElTable } from 'element-plus'
 import { useMainStore } from '@/store'
+import type { default as DialogViewComparison } from './DialogViewComparison.vue'
 
 const props = defineProps<{
   suiteId?: string
 }>()
 
 const mainStore = useMainStore()
+const dialogViewComparisonRef = ref<InstanceType<
+  typeof DialogViewComparison
+> | null>()
 
 const suite = computed(() => {
   return mainStore.report.suites.find((s) => s.id === props.suiteId)
 })
 
-async function onClickUpdate(testName: string) {
+async function onClickUpdate(testName: string, throwError = false) {
   try {
     await ElMessageBox.confirm(
       'Update this baseline screenshot. Continue?',
@@ -108,59 +138,27 @@ async function onClickUpdate(testName: string) {
       message: 'Updated'
     })
   } catch {
+    if (throwError) {
+      throw Error()
+    }
+  }
+}
+
+async function doUpdated(testName: string, close: () => void) {
+  try {
+    await onClickUpdate(testName, true)
+    close()
+  } catch {
     /* empty */
   }
 }
 </script>
 
 <style scoped>
-.screenshots-bg {
-  background-color: #fff;
-  opacity: 0.8;
-  background-image: repeating-linear-gradient(
-      45deg,
-      #f0f0f0 25%,
-      transparent 25%,
-      transparent 75%,
-      #f0f0f0 75%,
-      #f0f0f0
-    ),
-    repeating-linear-gradient(
-      45deg,
-      #f0f0f0 25%,
-      #fff 25%,
-      #fff 75%,
-      #f0f0f0 75%,
-      #f0f0f0
-    );
-  background-position:
-    0 0,
-    10px 10px;
-  background-size: 20px 20px;
-}
-
-:root.dark .screenshots-bg {
-  background-color: #181818;
-  opacity: 0.8;
-  background-image: repeating-linear-gradient(
-      45deg,
-      #222222 25%,
-      transparent 25%,
-      transparent 75%,
-      #222222 75%,
-      #222222
-    ),
-    repeating-linear-gradient(
-      45deg,
-      #222222 25%,
-      #181818 25%,
-      #181818 75%,
-      #222222 75%,
-      #222222
-    );
-  background-position:
-    0 0,
-    10px 10px;
-  background-size: 20px 20px;
+.el-table :deep(td.min-content > .cell) {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

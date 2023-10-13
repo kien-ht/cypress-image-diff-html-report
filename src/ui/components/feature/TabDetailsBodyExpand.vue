@@ -2,12 +2,13 @@
   <div class="screenshots">
     <BaseImage
       class="screenshots-cell"
-      :class="{ 'cell-shadow': Boolean(test.baselinePath) }"
-      :src="test.baselinePath"
+      :class="{ 'cell-shadow': Boolean(props.test.baselinePath) }"
+      :src="props.test.baselinePath"
     >
       <template #placeholder>
         <img
           style="width: 30%"
+          :draggable="false"
           src="@/assets/images/empty.png"
         />
         <span>Not found</span>
@@ -16,12 +17,13 @@
 
     <BaseImage
       class="screenshots-cell"
-      :class="{ 'cell-shadow': Boolean(test.diffPath) }"
-      :src="test.diffPath"
+      :class="{ 'cell-shadow': Boolean(props.test.diffPath) }"
+      :src="props.test.diffPath"
     >
       <template #placeholder>
         <img
           style="width: 30%"
+          :draggable="false"
           src="@/assets/images/no-visual-changes.png"
         />
         <span>No visual changes</span>
@@ -30,12 +32,13 @@
 
     <BaseImage
       class="screenshots-cell"
-      :class="{ 'cell-shadow': Boolean(test.comparisonPath) }"
-      :src="test.comparisonPath"
+      :class="{ 'cell-shadow': Boolean(props.test.comparisonPath) }"
+      :src="props.test.comparisonPath"
     >
       <template #placeholder>
         <img
           style="width: 30%"
+          :draggable="false"
           src="@/assets/images/empty.png"
         />
         <span>Not found</span>
@@ -48,22 +51,8 @@
 import { ResolvedTest } from '@commonTypes'
 
 const props = defineProps<{
-  row: ResolvedTest
+  test: ResolvedTest
 }>()
-
-const test = computed<ResolvedTest>(() => {
-  const random = Date.now()
-  return {
-    ...props.row,
-    baselinePath: props.row.baselinePath
-      ? `${props.row.baselinePath}?v=${random}`
-      : '',
-    diffPath: props.row.diffPath ? `${props.row.diffPath}?v=${random}` : '',
-    comparisonPath: props.row.comparisonPath
-      ? `${props.row.comparisonPath}?v=${random}`
-      : ''
-  }
-})
 </script>
 
 <style scoped>
@@ -71,7 +60,6 @@ const test = computed<ResolvedTest>(() => {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.4rem;
-  padding: 1.4rem;
 }
 
 .screenshots > .screenshots-cell {
@@ -81,6 +69,8 @@ const test = computed<ResolvedTest>(() => {
   align-items: center;
   justify-content: center;
   color: var(--color-text-muted);
+
+  max-height: 20rem;
 }
 
 .cell-shadow > :deep(.image) {

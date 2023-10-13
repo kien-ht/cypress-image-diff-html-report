@@ -13,3 +13,12 @@ export interface RadioWithThumbnailOption<T> {
   label: string
   value: T
 }
+
+export type ViewComparisonMode = 'carousel' | 'slider' | 'mirror'
+
+export type ScreenshotType = 'baseline' | 'diff' | 'comparison'
+
+export interface Screenshot {
+  type: ScreenshotType
+  url: string
+}

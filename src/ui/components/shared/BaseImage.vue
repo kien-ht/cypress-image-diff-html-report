@@ -2,6 +2,7 @@
   <div>
     <img
       class="image"
+      :draggable="false"
       v-if="props.src"
       :src="props.src"
     />
@@ -21,6 +22,8 @@ const props = defineProps<{
 
 <style scoped>
 .image {
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 </style>
