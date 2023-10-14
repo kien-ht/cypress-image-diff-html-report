@@ -14,6 +14,10 @@ A HTML reporting module for Cypress-Image-Diff to parse the JSON output into a b
 
 <img src="./assets/showcase-update-baseline.gif"/>
 
+### Support different screenshot inspectors
+
+<img src="./assets/showcase-screenshot-inspectors.gif"/>
+
 ### Provide with light/dark/system default theme
 
 <img src="./assets/showcase-light-dark-theme.gif"/>
