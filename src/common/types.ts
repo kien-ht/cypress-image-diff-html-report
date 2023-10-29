@@ -73,7 +73,7 @@ interface SharedConfig {
    */
   inputJsonPath?: string
   /**
-   * Specify the base directory for all the interal paths in the input json, relative to the process.cwd()
+   * Specify the base directory for all the interal paths in the report json, relative to the process.cwd(). (Note: This field does not have any effect on the configFile, inputJsonPath and outputDir)
    */
   baseDir?: string
 }
