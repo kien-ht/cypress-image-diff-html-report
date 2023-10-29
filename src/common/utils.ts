@@ -38,7 +38,7 @@ export async function getResolvedInputJson(
   config: ResolvedUserConfig,
   mode: RunMode = 'served'
 ): Promise<ResolvedReport> {
-  const json = await getInputJson(config.inputJsonPath)
+  const json = await getInputJson(config.reportJsonFilePath)
 
   return {
     ...json,

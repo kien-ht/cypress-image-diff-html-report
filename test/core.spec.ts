@@ -14,8 +14,8 @@ describe('Core', () => {
       'cypress-image-diff-html-report.config.js': mock.load(
         'test/fixtures/cypress-image-diff-html-report.config.js'
       ),
-      'cypress-image-diff-html-report.input.json': mock.load(
-        'test/fixtures/cypress-image-diff-html-report.input.json'
+      'cypress-image-diff-html-report.json': mock.load(
+        'test/fixtures/cypress-image-diff-html-report.json'
       ),
       'my-config.js': mock.load('test/fixtures/my-config.js'),
       'test.json': mock.load('test/fixtures/test.json')
@@ -27,9 +27,9 @@ describe('Core', () => {
   })
 
   describe('Generate HTML report', () => {
-    it('should create HTML report with given inputJsonPath', async () => {
+    it('should create HTML report with given reportJsonFilePath', async () => {
       try {
-        await generate({ inputJsonPath: 'test.json' })
+        await generate({ reportJsonFilePath: 'test.json' })
       } catch (e) {
         /* empty */
       }
@@ -86,9 +86,9 @@ describe('Core', () => {
       expect(response.statusCode).toBe(200)
     })
 
-    it('should start local server with given inputJsonPath', async () => {
+    it('should start local server with given reportJsonFilePath', async () => {
       try {
-        server = await startServer({ inputJsonPath: 'test.json' })
+        server = await startServer({ reportJsonFilePath: 'test.json' })
       } catch {
         /* empty */
       }

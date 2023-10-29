@@ -22,8 +22,8 @@ describe('Utils', () => {
       'cypress-image-diff-html-report.config.js': mock.load(
         'test/fixtures/cypress-image-diff-html-report.config.js'
       ),
-      'cypress-image-diff-html-report.input.json': mock.load(
-        'test/fixtures/cypress-image-diff-html-report.input.json'
+      'cypress-image-diff-html-report.json': mock.load(
+        'test/fixtures/cypress-image-diff-html-report.json'
       ),
       'my-config.js': mock.load('test/fixtures/my-config.js'),
       'test.json': mock.load('test/fixtures/test.json')
@@ -46,7 +46,7 @@ describe('Utils', () => {
       const config = await getResolvedConfig({ configFile: 'my-config.js' })
       expect(config).toStrictEqual(
         merge({}, DEFAULT_CONFIG, {
-          inputJsonPath: './test.json',
+          reportJsonFilePath: './test.json',
           outputDir: 'my-html-report',
           autoOpen: true,
           serverPort: 6001
@@ -61,7 +61,7 @@ describe('Utils', () => {
       })
       expect(config).toStrictEqual(
         merge({}, DEFAULT_CONFIG, {
-          inputJsonPath: './test.json',
+          reportJsonFilePath: './test.json',
           outputDir: 'output',
           autoOpen: true,
           serverPort: 6001
@@ -74,7 +74,7 @@ describe('Utils', () => {
     it('should return input json from given path', async () => {
       let json!: Report
       try {
-        json = await getInputJson('cypress-image-diff-html-report.input.json')
+        json = await getInputJson('cypress-image-diff-html-report.json')
       } catch {
         /* empty */
       }
@@ -109,7 +109,7 @@ describe('Utils', () => {
       try {
         json = await getResolvedInputJson(
           {
-            inputJsonPath: 'cypress-image-diff-html-report.input.json',
+            reportJsonFilePath: 'cypress-image-diff-html-report.json',
             outputDir: 'cypress-image-diff-html-report',
             baseDir: '',
             inlineAssets: false,
@@ -153,7 +153,7 @@ describe('Utils', () => {
       try {
         json = await getResolvedInputJson(
           {
-            inputJsonPath: 'cypress-image-diff-html-report.input.json',
+            reportJsonFilePath: 'cypress-image-diff-html-report.json',
             outputDir: 'my-report/html',
             baseDir: 'visual-test',
             inlineAssets: false,
@@ -197,7 +197,7 @@ describe('Utils', () => {
       try {
         json = await getResolvedInputJson(
           {
-            inputJsonPath: 'cypress-image-diff-html-report.input.json',
+            reportJsonFilePath: 'cypress-image-diff-html-report.json',
             outputDir: 'cypress-image-diff-html-report',
             baseDir: '',
             inlineAssets: false,
@@ -241,7 +241,7 @@ describe('Utils', () => {
       try {
         json = await getResolvedInputJson(
           {
-            inputJsonPath: 'cypress-image-diff-html-report.input.json',
+            reportJsonFilePath: 'cypress-image-diff-html-report.json',
             outputDir: 'my-report/html',
             baseDir: 'visual-test',
             inlineAssets: false,
@@ -285,7 +285,7 @@ describe('Utils', () => {
       try {
         json = await getResolvedInputJson(
           {
-            inputJsonPath: 'test.json',
+            reportJsonFilePath: 'test.json',
             outputDir: 'my-report/html',
             baseDir: '',
             inlineAssets: true,

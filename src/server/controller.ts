@@ -17,7 +17,7 @@ export class Controller {
   }
 
   async updateTest(testId: TestIdentity) {
-    const originalReport = await getInputJson(this.config.inputJsonPath)
+    const originalReport = await getInputJson(this.config.reportJsonFilePath)
     const [suiteIndex, testIndex] = this.findTest(originalReport, testId)
 
     const foundTest = originalReport.suites[suiteIndex].tests[testIndex]
@@ -32,7 +32,7 @@ export class Controller {
 
     try {
       await fs.writeFile(
-        path.join(process.cwd(), this.config.inputJsonPath),
+        path.join(process.cwd(), this.config.reportJsonFilePath),
         JSON.stringify(originalReport, null, 2)
       )
     } catch {

@@ -14,12 +14,12 @@ cli
     'Specify config file, will be overwritten by other config options if provided, relative to the process.cwd()'
   )
   .option(
-    '-i, --inputJsonPath <file>',
-    'Specify the input json file, relative to the process.cwd()'
+    '-r, --reportJsonFilePath <file>',
+    'Specify the report json file path, relative to the process.cwd(). If provided, reportJsonDir will be ignored'
   )
   .option(
     '--baseDir <dir>',
-    'Specify the base directory for all the interal paths in the report json, relative to the process.cwd(). (Note: This field does not have any effect on the configFile, inputJsonPath and outputDir)'
+    'Specify the base directory for all the interal paths in the report json, relative to the process.cwd(). (Note: This field does not have any effect on the configFile, reportJsonFilePath and outputDir)'
   )
 
 cli
