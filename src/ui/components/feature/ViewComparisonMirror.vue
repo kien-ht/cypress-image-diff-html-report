@@ -60,7 +60,7 @@ function onMouseover(e: MouseEvent) {
   position: relative;
 
   cursor:
-    url(../../assets/icons/focus-square.svg) 15 15,
+    url(../../components/shared/base-icon/icons/focus-square.svg) 15 15,
     pointer;
 }
 
