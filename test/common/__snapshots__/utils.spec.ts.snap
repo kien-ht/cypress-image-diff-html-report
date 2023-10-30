@@ -1,5 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Utils getResolvedConfig should return correct merge config when configFile and other properties given 1`] = `
+{
+  "autoOpen": true,
+  "baseDir": "",
+  "inlineAssets": false,
+  "outputDir": "output",
+  "reportJsonFilePath": "./test.json",
+  "serverPort": 6001,
+}
+`;
+
+exports[`Utils getResolvedConfig should return correct merge config when only configFile given 1`] = `
+{
+  "autoOpen": true,
+  "baseDir": "",
+  "inlineAssets": false,
+  "outputDir": "my-html-report",
+  "reportJsonFilePath": "./test.json",
+  "serverPort": 6001,
+}
+`;
+
+exports[`Utils getResolvedConfig should return default config when no config found 1`] = `
+{
+  "autoOpen": false,
+  "baseDir": "",
+  "inlineAssets": false,
+  "outputDir": "cypress-image-diff-html-report",
+  "reportJsonFilePath": "cypress-image-diff-html-report/report_29-10-2023_165108.json",
+  "serverPort": 5001,
+}
+`;
+
 exports[`Utils getResolvedInputJson should return resolved input json in static mode with inlineAssets 1`] = `
 {
   "browserName": "chrome",

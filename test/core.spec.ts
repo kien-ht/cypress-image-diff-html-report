@@ -14,8 +14,8 @@ describe('Core', () => {
       'cypress-image-diff-html-report.config.js': mock.load(
         'test/fixtures/cypress-image-diff-html-report.config.js'
       ),
-      'cypress-image-diff-html-report.json': mock.load(
-        'test/fixtures/cypress-image-diff-html-report.json'
+      'cypress-image-diff-html-report/report_29-10-2023_165108.json': mock.load(
+        'test/fixtures/cypress-image-diff-html-report/report_29-10-2023_165108.json'
       ),
       'my-config.js': mock.load('test/fixtures/my-config.js'),
       'test.json': mock.load('test/fixtures/test.json')

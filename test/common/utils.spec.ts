@@ -1,5 +1,4 @@
 import mock from 'mock-fs'
-import merge from 'lodash/merge.js'
 
 import {
   getResolvedConfig,
@@ -7,7 +6,6 @@ import {
   getResolvedInputJson,
   getReportHtmlAfterPopulatingData
 } from '../../dist/common/utils.js'
-import { DEFAULT_CONFIG } from '../../dist/common/constants.js'
 import { Report } from '../../dist/common/types.js'
 
 describe('Utils', () => {
@@ -22,8 +20,8 @@ describe('Utils', () => {
       'cypress-image-diff-html-report.config.js': mock.load(
         'test/fixtures/cypress-image-diff-html-report.config.js'
       ),
-      'cypress-image-diff-html-report.json': mock.load(
-        'test/fixtures/cypress-image-diff-html-report.json'
+      'cypress-image-diff-html-report/report_29-10-2023_165108.json': mock.load(
+        'test/fixtures/cypress-image-diff-html-report/report_29-10-2023_165108.json'
       ),
       'my-config.js': mock.load('test/fixtures/my-config.js'),
       'test.json': mock.load('test/fixtures/test.json')
@@ -37,21 +35,12 @@ describe('Utils', () => {
   describe('getResolvedConfig', () => {
     it('should return default config when no config found', async () => {
       const config = await getResolvedConfig()
-      expect(config).toStrictEqual(
-        merge({}, DEFAULT_CONFIG, { serverPort: 5001 })
-      )
+      expect(config).toMatchSnapshot()
     })
 
     it('should return correct merge config when only configFile given', async () => {
       const config = await getResolvedConfig({ configFile: 'my-config.js' })
-      expect(config).toStrictEqual(
-        merge({}, DEFAULT_CONFIG, {
-          reportJsonFilePath: './test.json',
-          outputDir: 'my-html-report',
-          autoOpen: true,
-          serverPort: 6001
-        })
-      )
+      expect(config).toMatchSnapshot()
     })
 
     it('should return correct merge config when configFile and other properties given', async () => {
@@ -59,14 +48,7 @@ describe('Utils', () => {
         configFile: 'my-config.js',
         outputDir: 'output'
       })
-      expect(config).toStrictEqual(
-        merge({}, DEFAULT_CONFIG, {
-          reportJsonFilePath: './test.json',
-          outputDir: 'output',
-          autoOpen: true,
-          serverPort: 6001
-        })
-      )
+      expect(config).toMatchSnapshot()
     })
   })
 
@@ -74,7 +56,9 @@ describe('Utils', () => {
     it('should return input json from given path', async () => {
       let json!: Report
       try {
-        json = await getInputJson('cypress-image-diff-html-report.json')
+        json = await getInputJson(
+          'cypress-image-diff-html-report/report_29-10-2023_165108.json'
+        )
       } catch {
         /* empty */
       }
@@ -109,7 +93,8 @@ describe('Utils', () => {
       try {
         json = await getResolvedInputJson(
           {
-            reportJsonFilePath: 'cypress-image-diff-html-report.json',
+            reportJsonFilePath:
+              'cypress-image-diff-html-report/report_29-10-2023_165108.json',
             outputDir: 'cypress-image-diff-html-report',
             baseDir: '',
             inlineAssets: false,
@@ -153,7 +138,8 @@ describe('Utils', () => {
       try {
         json = await getResolvedInputJson(
           {
-            reportJsonFilePath: 'cypress-image-diff-html-report.json',
+            reportJsonFilePath:
+              'cypress-image-diff-html-report/report_29-10-2023_165108.json',
             outputDir: 'my-report/html',
             baseDir: 'visual-test',
             inlineAssets: false,
@@ -197,7 +183,8 @@ describe('Utils', () => {
       try {
         json = await getResolvedInputJson(
           {
-            reportJsonFilePath: 'cypress-image-diff-html-report.json',
+            reportJsonFilePath:
+              'cypress-image-diff-html-report/report_29-10-2023_165108.json',
             outputDir: 'cypress-image-diff-html-report',
             baseDir: '',
             inlineAssets: false,
@@ -241,7 +228,8 @@ describe('Utils', () => {
       try {
         json = await getResolvedInputJson(
           {
-            reportJsonFilePath: 'cypress-image-diff-html-report.json',
+            reportJsonFilePath:
+              'cypress-image-diff-html-report/report_29-10-2023_165108.json',
             outputDir: 'my-report/html',
             baseDir: 'visual-test',
             inlineAssets: false,
