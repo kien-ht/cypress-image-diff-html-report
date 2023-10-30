@@ -14,11 +14,11 @@ cli
     'Specify config file, will be overwritten by other config options if provided, relative to the process.cwd()'
   )
   .option(
-    '-rd, --reportJsonDir <dir>',
+    '--rd, --reportJsonDir <dir>',
     'Specify the report json directory, relative to the process.cwd(). Cypress-image-diff-html-report will automatically look for the latest created json file in this directory'
   )
   .option(
-    '-rf, --reportJsonFilePath <file>',
+    '--rf, --reportJsonFilePath <file>',
     'Specify the report json file path, relative to the process.cwd(). If provided, reportJsonDir will be ignored'
   )
   .option(
