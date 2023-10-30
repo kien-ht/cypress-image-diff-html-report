@@ -69,11 +69,15 @@ interface InlineConfig {
 
 interface SharedConfig {
   /**
-   * Specify the input json file, relative to the process.cwd()
+   * Specify the report json directory, relative to the process.cwd(). Cypress-image-diff-html-report will automatically look for the latest created json file in this directory
    */
-  inputJsonPath?: string
+  reportJsonDir?: string
   /**
-   * Specify the base directory for all the interal paths in the report json, relative to the process.cwd(). (Note: This field does not have any effect on the configFile, inputJsonPath and outputDir)
+   * Specify the report json file path, relative to the process.cwd(). If provided, reportJsonDir will be ignored
+   */
+  reportJsonFilePath?: string
+  /**
+   * Specify the base directory for all the interal paths in the report json, relative to the process.cwd(). (Note: This field does not have any effect on the configFile, reportJsonFilePath, reportJsonDir and outputDir)
    */
   baseDir?: string
 }
@@ -106,4 +110,5 @@ export interface StartInlineConfig extends StartConfig, InlineConfig {}
 
 export interface UserConfig extends GenerateConfig, StartConfig {}
 
-export interface ResolvedUserConfig extends Required<UserConfig> {}
+export interface ResolvedUserConfig
+  extends Required<Omit<UserConfig, 'reportJsonDir'>> {}

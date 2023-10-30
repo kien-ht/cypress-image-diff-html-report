@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig, type UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -8,12 +8,13 @@ import { changeCwdToPlayground, getResolvedConfig } from '../common/utils'
 import { __dirname } from '../common/utils-cjs'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 
-export default defineConfig(async ({ mode }) => {
+export default defineConfig(async ({ mode }): Promise<UserConfig> => {
+  let serverPort = 0
+
   if (mode === 'development') {
     changeCwdToPlayground()
+    serverPort = (await getResolvedConfig()).serverPort
   }
-
-  const { serverPort } = await getResolvedConfig()
 
   return {
     plugins: [
@@ -34,7 +35,6 @@ export default defineConfig(async ({ mode }) => {
     root: __dirname(import.meta.url),
 
     publicDir: mode === 'development' ? '../../playground' : false,
-    copyPublicDir: false,
 
     build: {
       outDir: '../../dist/ui',

@@ -2,7 +2,7 @@
 import { defineConfig } from './dist/index.js'
 
 export default defineConfig({
-  inputJsonPath: './test.json',
+  reportJsonFilePath: './test.json',
   outputDir: 'my-html-report',
   autoOpen: true,
   serverPort: 6001

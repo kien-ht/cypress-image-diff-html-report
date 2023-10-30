@@ -2,6 +2,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import chalk from 'chalk'
 import merge from 'lodash/merge.js'
+import maxBy from 'lodash/maxBy.js'
 import {
   UserConfig,
   ResolvedUserConfig,
@@ -28,9 +29,11 @@ export async function getResolvedConfig({
       path.join(process.cwd(), configFile ?? DEFAULT_CONFIG_PATH)
     )
 
-    return merge({}, DEFAULT_CONFIG, userConfig.default, config)
-  } catch (e) {
-    return merge({}, DEFAULT_CONFIG, config)
+    return await getResolvedReportJsonPath(
+      merge({}, DEFAULT_CONFIG, userConfig.default, config)
+    )
+  } catch (err) {
+    return await getResolvedReportJsonPath(merge({}, DEFAULT_CONFIG, config))
   }
 }
 
@@ -38,7 +41,7 @@ export async function getResolvedInputJson(
   config: ResolvedUserConfig,
   mode: RunMode = 'served'
 ): Promise<ResolvedReport> {
-  const json = await getInputJson(config.inputJsonPath)
+  const json = await getInputJson(config.reportJsonFilePath)
 
   return {
     ...json,
@@ -123,11 +126,11 @@ export async function getInputJson(filePath: string): Promise<Report> {
   } catch (err) {
     console.log(
       chalk.red(
-        `[cypress-image-diff-html-report]: Cannot find the input json. Are you sure the given path is correct?
+        `[cypress-image-diff-html-report]: Cannot find the report json. Are you sure the given path exists?
         \n${sourcePath}`
       )
     )
-    throw Error((err as Error).message)
+    throw Error()
   }
 }
 
@@ -165,6 +168,56 @@ async function toBase64(
   try {
     const content = await fs.readFile(absolutePath, { encoding: 'base64' })
     return `data:image/png;base64,${content}`
+  } catch (err) {
+    throw Error((err as Error).message)
+  }
+}
+
+async function getResolvedReportJsonPath(
+  config: UserConfig
+): Promise<ResolvedUserConfig> {
+  const resolvedConfig = { ...config }
+
+  if (resolvedConfig.reportJsonFilePath === undefined) {
+    const latestReport = await getLatestJsonFromDir(
+      resolvedConfig.reportJsonDir!
+    )
+    resolvedConfig.reportJsonFilePath = latestReport
+  }
+
+  delete resolvedConfig.reportJsonDir
+
+  console.log(
+    chalk.green(
+      `[cypress-image-diff-html-report]: Found a report json at ${path.join(
+        process.cwd(),
+        resolvedConfig.reportJsonFilePath!
+      )}`
+    )
+  )
+  return resolvedConfig as ResolvedUserConfig
+}
+
+async function getLatestJsonFromDir(dir: string): Promise<string | undefined> {
+  try {
+    const fullPath = path.join(process.cwd(), dir)
+    if (fs.existsSync(fullPath) === false) {
+      throw Error(
+        `[cypress-image-diff-html-report]: Given reportJsonDir does not exist ${fullPath}. Make sure you specify a valid reportJsonDir or reportJsonFilePath`
+      )
+    }
+    const reports = (await fs.readdir(fullPath))
+      .filter((r) => path.extname(r) === '.json')
+      .map((r) => path.join(fullPath, r))
+
+    const latestJson = maxBy(reports, (r) => fs.statSync(r).ctimeMs)
+    if (latestJson === undefined) {
+      throw Error(
+        `[cypress-image-diff-html-report]: Cannot find any report json in this directory ${fullPath}`
+      )
+    }
+
+    return path.relative(process.cwd(), latestJson)
   } catch (err) {
     throw Error((err as Error).message)
   }
