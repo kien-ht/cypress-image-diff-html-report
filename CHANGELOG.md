@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.0.0...v2.0.1) (2023-10-30)
+
+
+### Bug Fixes
+
+* **cli:** 🐞 broken cli option aliases ([38bbb5d](https://github.com/kien-ht/cypress-image-diff-html-report/commit/38bbb5dee70b9a77336b47368705e94904f91a39))
+
 # [2.0.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.4.1...v2.0.0) (2023-10-30)
 
 
