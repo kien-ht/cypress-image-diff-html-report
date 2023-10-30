@@ -1,3 +1,20 @@
+# [2.0.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.4.1...v2.0.0) (2023-10-30)
+
+
+### Code Refactoring
+
+* rename input json path and its default value ([49b5a37](https://github.com/kien-ht/cypress-image-diff-html-report/commit/49b5a37d3cd91bc1e7fa2b14f82304b736f66a30))
+
+
+### Features
+
+* ⭐ add config option reportJsonDir ([e5e9cf7](https://github.com/kien-ht/cypress-image-diff-html-report/commit/e5e9cf72891085c9a33ad205028c77fd8ffc668c))
+
+
+### BREAKING CHANGES
+
+* rename input json path and its default value
+
 ## [1.4.1](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v1.4.0...v1.4.1) (2023-10-14)
 
 
