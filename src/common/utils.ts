@@ -203,7 +203,7 @@ async function getLatestJsonFromDir(dir: string): Promise<string | undefined> {
     const fullPath = path.join(process.cwd(), dir)
     if (fs.existsSync(fullPath) === false) {
       throw Error(
-        `[cypress-image-diff-html-report]: Given reportJsonDir does not exist ${fullPath}. Make sure you specify a valid reportJsonDir or reportJsonFilePath`
+        `Given reportJsonDir does not exist ${fullPath}. Make sure you specify a valid reportJsonDir or reportJsonFilePath`
       )
     }
     const reports = (await fs.readdir(fullPath))
@@ -212,9 +212,7 @@ async function getLatestJsonFromDir(dir: string): Promise<string | undefined> {
 
     const latestJson = maxBy(reports, (r) => fs.statSync(r).ctimeMs)
     if (latestJson === undefined) {
-      throw Error(
-        `[cypress-image-diff-html-report]: Cannot find any report json in this directory ${fullPath}`
-      )
+      throw Error(`Cannot find any report json in this directory ${fullPath}`)
     }
 
     return path.relative(process.cwd(), latestJson)
