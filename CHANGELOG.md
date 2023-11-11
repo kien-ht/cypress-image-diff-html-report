@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.0.1...v2.0.2) (2023-11-11)
+
+
+### Bug Fixes
+
+* 🐞 dynamic icon gives false positive error ([a28504b](https://github.com/kien-ht/cypress-image-diff-html-report/commit/a28504baec9acfd16cfd4a9193c4e25959485020))
+
 ## [2.0.1](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.0.0...v2.0.1) (2023-10-30)
 
 
