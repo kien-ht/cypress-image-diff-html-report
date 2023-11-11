@@ -21,13 +21,13 @@ async function replaceOriginalSvg(el: HTMLElement) {
   if (!svgMap.has(props.name as SvgIcon))
     throw Error(`BaseIcon: Cannot find ${props.name}.svg`)
 
+  el.innerHTML = svgMap.get(props.name as SvgIcon)!
+
   if (el.children.length > 1) {
     throw Error(
       `BaseIcon: svg can only have one root element! Found ${el.children.length} elements in ${props.name}.svg.`
     )
   }
-
-  el.innerHTML = svgMap.get(props.name as SvgIcon)!
 
   // copy all attributes from original svg to the wrapper svg
   Array.from(el.firstElementChild!.attributes).forEach((attribute) => {
