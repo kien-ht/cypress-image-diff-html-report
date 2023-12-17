@@ -9,6 +9,7 @@
     "esModuleInterop": true
   },
   "include": ["src/index.ts"],
+  "exclude": ["examples/*"],
   "ts-node": {
     "esm": true
   }

@@ -18,7 +18,8 @@ tsconfig.tsbuildinfo
 src/ui/auto-imports.d.ts
 src/ui/components.d.ts
 
-playground/cypress-image-diff-html-report
+cypress-image-diff-html-report
+cypress-image-diff-screenshots
 
 /cypress/videos/
 /cypress/screenshots/
