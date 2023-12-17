@@ -1,0 +1,24 @@
+{
+  "name": "typescript",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "cypress run",
+    "view-test": "cypress-image-diff-html-report start"
+  },
+  "dependencies": {
+    "cypress": "^13.6.1",
+    "cypress-image-diff-html-report": "^2.0.2",
+    "cypress-image-diff-js": "^2.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint-plugin-cypress": "^2.15.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
+}
