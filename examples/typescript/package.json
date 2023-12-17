@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vite",
     "test": "cypress run",
-    "view-test": "cypress-image-diff-html-report start"
+    "view-test": "cypress-image-diff-html-report start --autoOpen"
   },
   "dependencies": {
     "cypress": "^13.6.1",
