@@ -2,7 +2,8 @@
   "name": "javascript",
   "scripts": {
     "dev": "vite",
-    "test": "cypress run"
+    "test": "cypress run",
+    "view-test": "cypress-image-diff-html-report start --autoOpen"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.2.1",
