@@ -9,7 +9,7 @@
   "dependencies": {
     "cypress": "^13.6.1",
     "cypress-image-diff-html-report": "^2.0.2",
-    "cypress-image-diff-js": "^2.1.1",
+    "cypress-image-diff-js": "^2.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
