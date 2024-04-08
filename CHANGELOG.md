@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.0.2...v2.0.3) (2024-04-08)
+
+
+### Bug Fixes
+
+* 🐞 remove versioning for base 64 images ([4b14d02](https://github.com/kien-ht/cypress-image-diff-html-report/commit/4b14d02db56a32475280afdb52aec89f24a159f6))
+
 ## [2.0.2](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.0.1...v2.0.2) (2023-11-11)
 
 
