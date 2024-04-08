@@ -18,18 +18,24 @@ const props = defineProps<{
 }>()
 
 const resolvedTest = computed<ResolvedTest>(() => {
-  const random = Date.now()
   return {
     ...props.test,
-    baselinePath: props.test.baselinePath
-      ? `${props.test.baselinePath}?v=${random}`
-      : '',
-    diffPath: props.test.diffPath ? `${props.test.diffPath}?v=${random}` : '',
-    comparisonPath: props.test.comparisonPath
-      ? `${props.test.comparisonPath}?v=${random}`
-      : ''
+    baselinePath: versionizePath(props.test.baselinePath),
+    diffPath: versionizePath(props.test.diffPath),
+    comparisonPath: versionizePath(props.test.comparisonPath)
   }
 })
+
+function versionizePath(path: string): string {
+  if (path && path.startsWith('data:image/png;base64,')) return path
+
+  if (path) {
+    const random = Date.now()
+    return `${path}?v=${random}`
+  }
+
+  return ''
+}
 
 const componentMap: Partial<Record<ViewComparisonMode, Component>> = {
   carousel: ViewComparisonCarousel,
