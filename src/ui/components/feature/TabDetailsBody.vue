@@ -25,6 +25,48 @@
       label="Status"
       width="100"
     >
+      <template #header>
+        <el-dropdown
+          :hide-on-click="false"
+          trigger="click"
+          @command="onCommandFilterStatus"
+        >
+          <div class="filter-header">
+            <span>Status</span>
+            <BaseIcon
+              name="filter"
+              :class="{
+                active:
+                  mainStore.filter.status.length !==
+                  DEFAULT_FITLER_STATUS.length
+              }"
+            />
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                v-for="item in DEFAULT_FITLER_STATUS"
+                :key="item"
+                :label="item"
+                :command="item"
+                :class="{
+                  'el-dropdown-item--active':
+                    mainStore.filter.status.includes(item)
+                }"
+              >
+                <span>{{ item }}</span>
+                <BaseIcon
+                  v-if="mainStore.filter.status.includes(item)"
+                  name="checkmark"
+                  width="16"
+                  height="16"
+                />
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </template>
+
       <template #default="{ row }">
         <el-tag
           v-if="row.failed"
@@ -105,6 +147,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { ElTable } from 'element-plus'
 import { useMainStore } from '@/store'
 import type { default as DialogViewComparison } from './DialogViewComparison.vue'
+import { DEFAULT_FITLER_STATUS } from '@/constants'
+import { TestStatus } from '@commonTypes'
 
 const props = defineProps<{
   suiteId?: string
@@ -116,7 +160,7 @@ const dialogViewComparisonRef = ref<InstanceType<
 > | null>()
 
 const suite = computed(() => {
-  return mainStore.report.suites.find((s) => s.id === props.suiteId)
+  return mainStore.displayReport.suites.find((s) => s.id === props.suiteId)
 })
 
 async function onClickUpdate(testName: string, throwError = false) {
@@ -152,6 +196,16 @@ async function doUpdated(testName: string, close: () => void) {
     /* empty */
   }
 }
+
+function onCommandFilterStatus(selected: TestStatus) {
+  if (mainStore.filter.status.includes(selected)) {
+    mainStore.filter.status = mainStore.filter.status.filter(
+      (s) => s !== selected
+    )
+    return
+  }
+  mainStore.filter.status.push(selected)
+}
 </script>
 
 <style scoped>
@@ -160,5 +214,29 @@ async function doUpdated(testName: string, close: () => void) {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+}
+.filter-header > .active {
+  color: var(--color-primary);
+}
+.el-dropdown {
+  color: unset;
+  cursor: pointer;
+}
+:deep(.el-dropdown-menu__item) {
+  display: flex;
+  justify-content: space-between;
+  min-width: 96px;
+}
+:deep(.el-dropdown-menu__item.el-dropdown-item--active) {
+  color: var(--color-primary);
+}
+:deep(.el-dropdown-menu__item:not(.is-disabled):focus) {
+  color: unset;
 }
 </style>

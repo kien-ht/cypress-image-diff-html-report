@@ -6,3 +6,4 @@ export type SvgIcon =
   | 'resize'
   | 'settings'
   | 'task'
+  | 'filter'
