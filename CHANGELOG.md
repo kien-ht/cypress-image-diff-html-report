@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.0.3...v2.1.0) (2024-04-23)
+
+
+### Features
+
+* ⭐ filter status ([dcae115](https://github.com/kien-ht/cypress-image-diff-html-report/commit/dcae11574c4973917c72cca709f3fa79be48f799))
+
 ## [2.0.3](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.0.2...v2.0.3) (2024-04-08)
 
 
