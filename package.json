@@ -57,7 +57,7 @@
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "cross-env": "^7.0.3",
-    "element-plus": "^2.3.12",
+    "element-plus": "^2.5.6",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-cypress": "^2.15.1",
