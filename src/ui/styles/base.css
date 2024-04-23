@@ -26,9 +26,12 @@
   --r-red: #f56c6c;
   --r-red-2: rgb(245, 108, 108, 0.7);
 
+  --r-blue: #409eff;
+
   /* semantic color variables for this project */
   --color-success: var(--r-green);
   --color-danger: var(--r-red);
+  --color-primary: var(--r-blue);
   --color-background-danger-soft: var(--r-red-2);
 
   /* light-theme */
