@@ -24,17 +24,18 @@ export async function getResolvedConfig({
   configFile,
   ...config
 }: GenerateInlineConfig | StartInlineConfig = {}): Promise<ResolvedUserConfig> {
+  let userConfig: { default: UserConfig }
   try {
-    const userConfig: { default: UserConfig } = await dynamicImport(
+    userConfig = await dynamicImport(
       path.join(process.cwd(), configFile ?? DEFAULT_CONFIG_PATH)
-    )
-
-    return await getResolvedReportJsonPath(
-      merge({}, DEFAULT_CONFIG, userConfig.default, config)
     )
   } catch (err) {
     return await getResolvedReportJsonPath(merge({}, DEFAULT_CONFIG, config))
   }
+
+  return await getResolvedReportJsonPath(
+    merge({}, DEFAULT_CONFIG, userConfig.default, config)
+  )
 }
 
 export async function getResolvedInputJson(
