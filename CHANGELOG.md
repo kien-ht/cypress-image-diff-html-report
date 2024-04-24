@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.1.0...v2.1.1) (2024-04-24)
+
+
+### Bug Fixes
+
+* 🐞 incorrectly resolve report json dir ([0d51b5b](https://github.com/kien-ht/cypress-image-diff-html-report/commit/0d51b5baa99949fbf08dc27a72224c7613100c66))
+
 # [2.1.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.0.3...v2.1.0) (2024-04-23)
 
 
