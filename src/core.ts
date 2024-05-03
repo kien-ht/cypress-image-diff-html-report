@@ -6,7 +6,7 @@ import {
   getReportHtmlAfterPopulatingData,
   getResolvedInputJson
 } from './common/utils.js'
-import { App } from './server/index.js'
+import { App } from './local-server/index.js'
 import http from 'http'
 
 export async function generate(
