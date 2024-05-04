@@ -9,6 +9,7 @@
     "format": "prettier . --write --list-different",
     "lint": "eslint . --fix --max-warnings=0",
     "start": "nodemon -w src/local-server -w src/common --exec node --loader ts-node/esm src/local-server/dev.ts",
+    "dev:ci": "npm run build:server && nodemon ./dist/github-ci-server/index.js",
     "dev:ui": "vite dev --config src/ui/vite.config.js",
     "build:ui": "vite build --config src/ui/vite.config.js",
     "build:server": "tsc",
@@ -33,16 +34,21 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "adm-zip": "^0.5.12",
     "cac": "^6.7.14",
     "chalk": "^4.1.2",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "fs-extra": "^11.1.1",
     "lodash": "^4.17.21",
-    "open": "^9.1.0"
+    "octokit": "^3.2.1",
+    "open": "^9.1.0",
+    "probot": "^13.2.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
+    "@types/adm-zip": "^0.5.5",
     "@types/express": "^4.17.17",
     "@types/fs-extra": "^11.0.2",
     "@types/jest": "^29.5.5",
@@ -69,6 +75,7 @@
     "npm-run-all": "^4.1.5",
     "pinia": "^2.1.6",
     "prettier": "^3.0.3",
+    "smee-client": "^2.0.1",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",

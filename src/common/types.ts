@@ -112,3 +112,21 @@ export interface UserConfig extends GenerateConfig, StartConfig {}
 
 export interface ResolvedUserConfig
   extends Required<Omit<UserConfig, 'reportJsonDir'>> {}
+
+export interface CheckRunInstance {
+  installationId: number
+  owner: string
+  repo: string
+  sha: string
+  workflowId: number
+}
+
+export interface CiTestIdentity extends CheckRunInstance, TestIdentity {}
+
+export type ProbotLogLevel =
+  | 'trace'
+  | 'debug'
+  | 'info'
+  | 'warn'
+  | 'error'
+  | 'fatal'

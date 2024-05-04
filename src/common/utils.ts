@@ -11,7 +11,8 @@ import {
   GenerateInlineConfig,
   StartInlineConfig,
   RunMode,
-  InjectedData
+  InjectedData,
+  ProbotLogLevel
 } from './types.js'
 import { DEFAULT_CONFIG, DEFAULT_CONFIG_PATH } from './constants.js'
 import { __dirname, dynamicImport } from './utils-cjs.js'
@@ -219,5 +220,14 @@ async function getLatestJsonFromDir(dir: string): Promise<string | undefined> {
     return path.relative(process.cwd(), latestJson)
   } catch (err) {
     throw Error((err as Error).message)
+  }
+}
+
+export function getProbotConfig() {
+  return {
+    appId: process.env.APP_ID!,
+    privateKey: process.env.PRIVATE_KEY!,
+    secret: process.env.WEBHOOK_SECRET!,
+    logLevel: process.env.LOG_LEVEL! as ProbotLogLevel
   }
 }

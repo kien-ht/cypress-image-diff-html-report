@@ -24,6 +24,8 @@ cypress-image-diff-screenshots
 /cypress/videos/
 /cypress/screenshots/
 
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
