@@ -4,7 +4,7 @@ import { GenerateInlineConfig, StartInlineConfig } from './common/types.js'
 import {
   getResolvedConfig,
   getReportHtmlAfterPopulatingData,
-  getResolvedInputJson
+  getResolvedReportJson
 } from './common/utils.js'
 import { App } from './local-server/index.js'
 import http from 'http'
@@ -13,7 +13,7 @@ export async function generate(
   inlineConfig?: GenerateInlineConfig
 ): Promise<void> {
   const config = await getResolvedConfig(inlineConfig)
-  const json = await getResolvedInputJson(config, 'static')
+  const json = await getResolvedReportJson(config, 'static')
   const html = await getReportHtmlAfterPopulatingData(json)
 
   try {

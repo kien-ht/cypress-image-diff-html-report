@@ -38,11 +38,11 @@ export async function getResolvedConfig({
   )
 }
 
-export async function getResolvedInputJson(
+export async function getResolvedReportJson(
   config: ResolvedUserConfig,
   mode: RunMode = 'served'
 ): Promise<ResolvedReport> {
-  const json = await getInputJson(config.reportJsonFilePath)
+  const json = await getReportJson(config.reportJsonFilePath)
   const jsonWithTotalStats = getReportJsonWithTotalStats(json)
 
   return {
@@ -130,7 +130,7 @@ export function changeCwdToPlayground() {
   }
 }
 
-export async function getInputJson(filePath: string): Promise<Report> {
+export async function getReportJson(filePath: string): Promise<Report> {
   const sourcePath = path.join(process.cwd(), filePath)
   try {
     const report = await fs.readFile(sourcePath, { encoding: 'utf8' })
