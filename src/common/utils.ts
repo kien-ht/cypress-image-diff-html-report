@@ -165,6 +165,7 @@ async function toBase64(
   config: ResolvedUserConfig
 ): Promise<string> {
   if (pathname === '') return ''
+  if (pathname.startsWith('data:image/png;base64,')) return pathname
 
   const absolutePath = path.join(process.cwd(), config.baseDir, pathname)
   try {

@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.1.1...v2.1.2) (2024-05-04)
+
+
+### Bug Fixes
+
+* 🐞 skip inline assets if already inlined ([4ed1d20](https://github.com/kien-ht/cypress-image-diff-html-report/commit/4ed1d207015e24351318714d681a2464b20529a6))
+
 ## [2.1.1](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.1.0...v2.1.1) (2024-04-24)
 
 
