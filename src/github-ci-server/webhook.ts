@@ -142,26 +142,39 @@ export default (app: Probot) => {
       const admZip = new AdmZip(Buffer.from(zip))
       const report = admZip.getEntries().find((z) => /\.json$/.test(z.name))
 
-      if (!report) return
+      if (report) {
+        const { totalFailed } = JSON.parse(report.getData().toString())
 
-      const { totalFailed } = JSON.parse(report.getData().toString())
-
-      // evaluate status
-      await context.octokit.checks.update({
-        owner,
-        repo,
-        check_run_id: checkRun.id,
-        status: 'completed',
-        conclusion: totalFailed > 0 ? 'action_required' : 'success',
-        completed_at: new Date().toISOString(),
-        output: {
-          title:
-            totalFailed > 0
-              ? `${totalFailed} visual change(s) need review`
-              : 'All tests passed! 🚀',
-          summary: ''
-        }
-      })
+        // evaluate status
+        await context.octokit.checks.update({
+          owner,
+          repo,
+          check_run_id: checkRun.id,
+          status: 'completed',
+          conclusion: totalFailed > 0 ? 'action_required' : 'success',
+          completed_at: new Date().toISOString(),
+          output: {
+            title:
+              totalFailed > 0
+                ? `${totalFailed} visual change(s) need review`
+                : 'All tests passed! 🚀',
+            summary: ''
+          }
+        })
+      } else {
+        await context.octokit.checks.update({
+          owner,
+          repo,
+          check_run_id: checkRun.id,
+          status: 'completed',
+          conclusion: 'failure',
+          completed_at: new Date().toISOString(),
+          output: {
+            title: 'No report found',
+            summary: ''
+          }
+        })
+      }
     }
   })
 }

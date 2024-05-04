@@ -6,11 +6,7 @@ import {
   CheckRunInstance
 } from '../common/types.js'
 import { App as OctokitApp } from 'octokit'
-import {
-  getProbotConfig,
-  getResolvedConfig,
-  getResolvedInputJson
-} from '../common/utils.js'
+import { getProbotConfig } from '../common/utils.js'
 
 export class CiController {
   private app: OctokitApp
@@ -47,18 +43,11 @@ export class CiController {
     )
 
     const admZip = new AdmZip(Buffer.from(zip))
-    admZip.extractAllTo('./', true)
+    const report = admZip.getEntries().find((z) => /\.json$/.test(z.name))
 
-    const config = await getResolvedConfig({
-      reportJsonDir: 'cypress-image-diff-html-report',
-      reportJsonFilePath: undefined,
-      outputDir: 'cypress-image-diff-html-report',
-      baseDir: '',
-      inlineAssets: false,
-      autoOpen: false,
-      serverPort: 6868
-    })
-    return getResolvedInputJson(config)
+    if (!report) return Promise.reject('No reports found')
+
+    return JSON.parse(report.getData().toString())
   }
 
   async updateTest(testId: CiTestIdentity) {
