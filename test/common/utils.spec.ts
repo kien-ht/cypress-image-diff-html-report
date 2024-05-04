@@ -2,8 +2,8 @@ import mock from 'mock-fs'
 
 import {
   getResolvedConfig,
-  getInputJson,
-  getResolvedInputJson,
+  getReportJson,
+  getResolvedReportJson,
   getReportHtmlAfterPopulatingData
 } from '../../dist/common/utils.js'
 import { Report } from '../../dist/common/types.js'
@@ -52,11 +52,11 @@ describe('Utils', () => {
     })
   })
 
-  describe('getInputJson', () => {
+  describe('getReportJson', () => {
     it('should return input json from given path', async () => {
       let json!: Report
       try {
-        json = await getInputJson(
+        json = await getReportJson(
           'cypress-image-diff-html-report/report_29-10-2023_165108.json'
         )
       } catch {
@@ -87,11 +87,11 @@ describe('Utils', () => {
     })
   })
 
-  describe('getResolvedInputJson', () => {
+  describe('getResolvedReportJson', () => {
     it('should return resolved input json in served mode with default config', async () => {
       let json!: Report
       try {
-        json = await getResolvedInputJson(
+        json = await getResolvedReportJson(
           {
             reportJsonFilePath:
               'cypress-image-diff-html-report/report_29-10-2023_165108.json',
@@ -136,7 +136,7 @@ describe('Utils', () => {
     it('should return resolved input json in served mode with custom config', async () => {
       let json!: Report
       try {
-        json = await getResolvedInputJson(
+        json = await getResolvedReportJson(
           {
             reportJsonFilePath:
               'cypress-image-diff-html-report/report_29-10-2023_165108.json',
@@ -160,7 +160,7 @@ describe('Utils', () => {
         suites: [
           {
             name: 'image-diff.cy.js',
-            path: 'visual-test/cypress/specs/image-diff.cy.js',
+            path: 'cypress/specs/image-diff.cy.js',
             id: 'cypress/specs/image-diff.cy.js',
             passed: 0,
             failed: 0,
@@ -181,7 +181,7 @@ describe('Utils', () => {
     it('should return resolved input json in static mode with default config', async () => {
       let json!: Report
       try {
-        json = await getResolvedInputJson(
+        json = await getResolvedReportJson(
           {
             reportJsonFilePath:
               'cypress-image-diff-html-report/report_29-10-2023_165108.json',
@@ -205,7 +205,7 @@ describe('Utils', () => {
         suites: [
           {
             name: 'image-diff.cy.js',
-            path: '../cypress/specs/image-diff.cy.js',
+            path: 'cypress/specs/image-diff.cy.js',
             id: 'cypress/specs/image-diff.cy.js',
             passed: 0,
             failed: 0,
@@ -226,7 +226,7 @@ describe('Utils', () => {
     it('should return resolved input json in static mode with custom config', async () => {
       let json!: Report
       try {
-        json = await getResolvedInputJson(
+        json = await getResolvedReportJson(
           {
             reportJsonFilePath:
               'cypress-image-diff-html-report/report_29-10-2023_165108.json',
@@ -250,7 +250,7 @@ describe('Utils', () => {
         suites: [
           {
             name: 'image-diff.cy.js',
-            path: '../../visual-test/cypress/specs/image-diff.cy.js',
+            path: 'cypress/specs/image-diff.cy.js',
             id: 'cypress/specs/image-diff.cy.js',
             passed: 0,
             failed: 0,
@@ -271,7 +271,7 @@ describe('Utils', () => {
     it('should return resolved input json in static mode with inlineAssets', async () => {
       let json!: Report
       try {
-        json = await getResolvedInputJson(
+        json = await getResolvedReportJson(
           {
             reportJsonFilePath: 'test.json',
             outputDir: 'my-report/html',

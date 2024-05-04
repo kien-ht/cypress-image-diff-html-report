@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import path from 'path'
-import { getInputJson, getResolvedInputJson } from '../common/utils.js'
+import { getReportJson, getResolvedReportJson } from '../common/utils.js'
 import {
   ResolvedUserConfig,
   Report,
@@ -13,11 +13,11 @@ export class Controller {
   constructor(private config: ResolvedUserConfig) {}
 
   async getReports(): Promise<ResolvedReport> {
-    return await getResolvedInputJson(this.config, 'served')
+    return await getResolvedReportJson(this.config, 'served')
   }
 
   async updateTest(testId: TestIdentity) {
-    const originalReport = await getInputJson(this.config.reportJsonFilePath)
+    const originalReport = await getReportJson(this.config.reportJsonFilePath)
     const [suiteIndex, testIndex] = this.findTest(originalReport, testId)
 
     const foundTest = originalReport.suites[suiteIndex].tests[testIndex]
