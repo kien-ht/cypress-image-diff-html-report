@@ -43,45 +43,56 @@ export async function getResolvedInputJson(
   mode: RunMode = 'served'
 ): Promise<ResolvedReport> {
   const json = await getInputJson(config.reportJsonFilePath)
+  const jsonWithTotalStats = getReportJsonWithTotalStats(json)
 
   return {
+    ...jsonWithTotalStats,
+    suites: await Promise.all(
+      jsonWithTotalStats.suites.map(async (suite) => ({
+        ...suite,
+        tests: await Promise.all(
+          suite.tests.map(async (test) => ({
+            ...test,
+            baselinePath: await getResolvedScreenshotPath(
+              test.baselinePath,
+              config,
+              mode
+            ),
+            diffPath: await getResolvedScreenshotPath(
+              test.diffPath,
+              config,
+              mode
+            ),
+            comparisonPath: await getResolvedScreenshotPath(
+              test.comparisonPath,
+              config,
+              mode
+            )
+          }))
+        )
+      }))
+    )
+  }
+}
+
+export function getReportJsonWithTotalStats(json: Report): ResolvedReport {
+  return {
     ...json,
-    suites: (
-      await Promise.all(
-        json.suites.map(async (suite) => ({
-          ...suite,
-          tests: await Promise.all(
-            suite.tests.map(async (test) => ({
-              ...test,
-              passed: test.status === 'pass' ? 1 : 0,
-              failed: test.status === 'fail' ? 1 : 0,
-              specPath: getNormalisedPath(test.specPath, config, mode),
-              baselinePath: await getResolvedScreenshotPath(
-                test.baselinePath,
-                config,
-                mode
-              ),
-              diffPath: await getResolvedScreenshotPath(
-                test.diffPath,
-                config,
-                mode
-              ),
-              comparisonPath: await getResolvedScreenshotPath(
-                test.comparisonPath,
-                config,
-                mode
-              )
-            }))
-          )
+    suites: json.suites
+      .map((suite) => ({
+        ...suite,
+        tests: suite.tests.map((test) => ({
+          ...test,
+          passed: test.status === 'pass' ? 1 : 0,
+          failed: test.status === 'fail' ? 1 : 0
         }))
-      )
-    ).map((suite) => ({
-      ...suite,
-      id: suite.path,
-      passed: suite.tests.reduce((s, i) => s + i.passed, 0),
-      failed: suite.tests.reduce((s, i) => s + i.failed, 0),
-      path: getNormalisedPath(suite.path, config, mode)
-    }))
+      }))
+      .map((suite) => ({
+        ...suite,
+        id: suite.path,
+        passed: suite.tests.reduce((s, i) => s + i.passed, 0),
+        failed: suite.tests.reduce((s, i) => s + i.failed, 0)
+      }))
   }
 }
 
