@@ -1,7 +1,7 @@
 {
   "name": "playground",
   "scripts": {
-    "start": "nodemon index.ts"
+    "start": "nodemon --exec node --loader ts-node/esm index.ts"
   },
   "dependencies": {
     "cypress-image-diff-html-report": "file:.."

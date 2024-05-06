@@ -11,9 +11,10 @@
     "start": "nodemon -w src/local-server -w src/common --exec node --loader ts-node/esm src/local-server/dev.ts",
     "dev:ci": "npm run build:server && nodemon ./dist/github-ci-server/index.js",
     "dev:ui": "vite dev --config src/ui/vite.config.js",
-    "build:ui": "vite build --config src/ui/vite.config.js",
+    "build:ui:inline": "vite build --config src/ui/vite.config.js",
+    "build:ui:ci": "RUN_MODE=ci vite build --config src/ui/vite.config.js",
     "build:server": "tsc",
-    "build": "run-s build:*",
+    "build": "run-s build:ui:inline build:ui:ci build:server",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
     "type-check:ui": "vue-tsc --noEmit --project src/ui/tsconfig.json",
     "type-check:rest": "tsc --noEmit",
@@ -43,7 +44,8 @@
     "lodash": "^4.17.21",
     "octokit": "^3.2.1",
     "open": "^9.1.0",
-    "probot": "^13.2.1"
+    "probot": "^13.2.1",
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
@@ -97,10 +99,11 @@
   "homepage": "https://github.com/kien-ht/cypress-image-diff-html-report#readme",
   "type": "module",
   "files": [
-    "dist",
-    "package.json",
-    "package-lock.json",
-    "README.md"
+    "dist/common",
+    "dist/local-server",
+    "dist/ui",
+    "*.ts",
+    "*.js"
   ],
   "release": {
     "branches": [

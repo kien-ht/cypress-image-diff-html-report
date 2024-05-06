@@ -15,28 +15,24 @@ export const useMainStore = defineStore('main', {
   getters: {
     displayReport: (state) => ({
       ...state.report,
-      suites: state.report.suites.map((suite) => ({
-        ...suite,
-        tests: suite.tests.filter((test) =>
-          state.filter.status.includes(test.status)
-        )
-      }))
+      suites:
+        state.report?.suites.map((suite) => ({
+          ...suite,
+          tests: suite.tests.filter((test) =>
+            state.filter.status.includes(test.status)
+          )
+        })) ?? []
     })
   },
 
   actions: {
     async fetchReport() {
+      if (this.mode === 'static') return
+
       try {
         this.report = await getReports()
-        this.mode = 'served'
-      } catch {
-        this.mode = 'static'
-
-        ElNotification({
-          message: 'You are viewing the report in the static mode.',
-          type: 'info',
-          duration: 3000
-        })
+      } catch (err) {
+        Promise.reject(err)
       }
     },
 
@@ -44,15 +40,8 @@ export const useMainStore = defineStore('main', {
       try {
         await updateTest(testId)
         await this.fetchReport()
-        this.mode = 'served'
-      } catch {
-        this.mode = 'static'
-
-        ElNotification({
-          message: 'You are viewing the report in the static mode.',
-          type: 'info',
-          duration: 3000
-        })
+      } catch (err) {
+        Promise.reject(err)
       }
     }
   }

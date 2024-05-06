@@ -88,7 +88,7 @@ describe('Utils', () => {
   })
 
   describe('getResolvedReportJson', () => {
-    it('should return resolved input json in served mode with default config', async () => {
+    it('should return resolved input json in local mode with default config', async () => {
       let json!: Report
       try {
         json = await getResolvedReportJson(
@@ -101,7 +101,7 @@ describe('Utils', () => {
             autoOpen: false,
             serverPort: 6868
           },
-          'served'
+          'local'
         )
       } catch {
         /* empty */
@@ -133,7 +133,7 @@ describe('Utils', () => {
       expect(json).toStrictEqual(expectedJson)
     })
 
-    it('should return resolved input json in served mode with custom config', async () => {
+    it('should return resolved input json in local mode with custom config', async () => {
       let json!: Report
       try {
         json = await getResolvedReportJson(
@@ -146,7 +146,7 @@ describe('Utils', () => {
             autoOpen: false,
             serverPort: 6868
           },
-          'served'
+          'local'
         )
       } catch {
         /* empty */
