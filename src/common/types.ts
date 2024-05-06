@@ -48,11 +48,11 @@ export interface ResolvedTest extends Test {
   failed: number
 }
 
-export type RunMode = 'static' | 'local'
+export type RunMode = 'static' | 'local' | 'ci'
 
 export interface InjectedData {
-  report: ResolvedReport
-  mode?: RunMode
+  readonly mode: RunMode
+  report?: ResolvedReport
 }
 
 export interface TestIdentity {
