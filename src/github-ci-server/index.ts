@@ -6,6 +6,7 @@ import { __dirname } from '../common/utils-cjs.js'
 import ciRouter from './router.js'
 import webhooks from './webhook.js'
 import { getProbotConfig } from '../common/utils.js'
+import { DEFAULT_PORT } from '../common/constants.js'
 
 setDotenvConfig()
 
@@ -14,7 +15,8 @@ startServer()
 async function startServer() {
   const server = new Server({
     Probot: Probot.defaults(getProbotConfig()),
-    webhookProxy: process.env.WEBHOOK_PROXY_URL
+    webhookProxy: process.env.WEBHOOK_PROXY_URL,
+    port: DEFAULT_PORT
   })
 
   server.expressApp.use(
