@@ -30,14 +30,14 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
         dts: './components.d.ts',
         resolvers: [ElementPlusResolver()]
       }),
-      !process.env.BUILD_MODE && viteSingleFile(),
+      !process.env.RUN_MODE && viteSingleFile(),
       {
         name: 'index-html-data-injection',
         transformIndexHtml: {
           order: 'pre',
           async transform(html) {
             const buildMode: RunMode =
-              process.env.BUILD_MODE === 'ci' ? 'ci' : 'local'
+              process.env.RUN_MODE === 'ci' ? 'ci' : 'local'
             return html.replace(
               '<script id="injected-data"></script>',
               `<script>window.__injectedData__=${JSON.stringify({
@@ -57,7 +57,7 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 
     build: {
       outDir:
-        process.env.BUILD_MODE === 'ci' ? '../../dist/ui-ci' : '../../dist/ui',
+        process.env.RUN_MODE === 'ci' ? '../../dist/ui-ci' : '../../dist/ui',
       emptyOutDir: true
     },
 
