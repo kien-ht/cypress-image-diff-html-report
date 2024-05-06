@@ -28,7 +28,7 @@ export const useMainStore = defineStore('main', {
     async fetchReport() {
       try {
         this.report = await getReports()
-        this.mode = 'served'
+        this.mode = 'local'
       } catch {
         this.mode = 'static'
 
@@ -44,7 +44,7 @@ export const useMainStore = defineStore('main', {
       try {
         await updateTest(testId)
         await this.fetchReport()
-        this.mode = 'served'
+        this.mode = 'local'
       } catch {
         this.mode = 'static'
 

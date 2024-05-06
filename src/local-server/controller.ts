@@ -13,7 +13,7 @@ export class Controller {
   constructor(private config: ResolvedUserConfig) {}
 
   async getReports(): Promise<ResolvedReport> {
-    return await getResolvedReportJson(this.config, 'served')
+    return await getResolvedReportJson(this.config, 'local')
   }
 
   async updateTest(testId: TestIdentity) {

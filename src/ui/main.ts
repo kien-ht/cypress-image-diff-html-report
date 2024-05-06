@@ -9,7 +9,7 @@ import { getReports } from '@/service'
   try {
     window.__injectedData__ = {
       report: await getReports(),
-      mode: 'served'
+      mode: 'local'
     }
   } catch {
     window.__injectedData__.mode = 'static'

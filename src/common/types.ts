@@ -48,7 +48,7 @@ export interface ResolvedTest extends Test {
   failed: number
 }
 
-export type RunMode = 'static' | 'served'
+export type RunMode = 'static' | 'local'
 
 export interface InjectedData {
   report: ResolvedReport
