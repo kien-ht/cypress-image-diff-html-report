@@ -1,27 +1,11 @@
-import './styles/index.css'
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
-import { getReports } from '@/service'
-;(async () => {
-  try {
-    window.__injectedData__ = {
-      report: await getReports(),
-      mode: 'local'
-    }
-  } catch {
-    window.__injectedData__.mode = 'static'
+import router from './router'
+import './styles/index.css'
 
-    ElNotification({
-      message: 'You are viewing the report in the static mode.',
-      type: 'info',
-      duration: 3000
-    })
-  }
-
-  const app = createApp(App)
-  app.use(createPinia())
-  app.mount('#app')
-})()
+const app = createApp(App)
+app.use(createPinia())
+app.use(router)
+app.mount('#app')

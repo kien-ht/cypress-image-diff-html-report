@@ -10,9 +10,10 @@
     "lint": "eslint . --fix --max-warnings=0",
     "start": "nodemon -w src/local-server -w src/common --exec node --loader ts-node/esm src/local-server/dev.ts",
     "dev:ui": "vite dev --config src/ui/vite.config.js",
-    "build:ui": "vite build --config src/ui/vite.config.js",
+    "build:ui:inline": "vite build --config src/ui/vite.config.js",
+    "build:ui:ci": "BUILD_MODE=ci vite build --config src/ui/vite.config.js",
     "build:server": "tsc",
-    "build": "run-s build:*",
+    "build": "run-s build:ui:inline build:ui:ci build:server",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
     "type-check:ui": "vue-tsc --noEmit --project src/ui/tsconfig.json",
     "type-check:rest": "tsc --noEmit",
@@ -38,7 +39,8 @@
     "express": "^4.18.2",
     "fs-extra": "^11.1.1",
     "lodash": "^4.17.21",
-    "open": "^9.1.0"
+    "open": "^9.1.0",
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",

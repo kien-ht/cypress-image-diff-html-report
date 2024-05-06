@@ -2,7 +2,7 @@
   <el-table
     style="scroll-behavior: auto; height: auto"
     ref="suiteTableRef"
-    :data="mainStore.report.suites"
+    :data="mainStore.report?.suites"
     highlight-current-row
     :row-key="(row) => row.id"
     @current-change="onCurrentChange"
@@ -42,7 +42,13 @@ const mainStore = useMainStore()
 const suiteTableRef = ref<InstanceType<typeof ElTable>>()
 
 onMounted(() => {
-  suiteTableRef.value!.setCurrentRow(mainStore.report.suites[0])
+  mainStore.report &&
+    suiteTableRef.value!.setCurrentRow(mainStore.report.suites[0])
+
+  mainStore.$subscribe(async () => {
+    await nextTick()
+    suiteTableRef.value!.setCurrentRow(mainStore.report?.suites[0])
+  })
 })
 
 function onCurrentChange(suite: ResolvedSuite) {

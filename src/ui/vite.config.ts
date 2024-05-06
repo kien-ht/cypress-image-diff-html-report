@@ -7,6 +7,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { changeCwdToPlayground, getResolvedConfig } from '../common/utils'
 import { __dirname } from '../common/utils-cjs'
 import { viteSingleFile } from 'vite-plugin-singlefile'
+import { RunMode } from '@commonTypes'
 
 export default defineConfig(async ({ mode }): Promise<UserConfig> => {
   let serverPort = 0
@@ -29,7 +30,25 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
         dts: './components.d.ts',
         resolvers: [ElementPlusResolver()]
       }),
-      viteSingleFile()
+      !process.env.BUILD_MODE && viteSingleFile(),
+      {
+        name: 'index-html-data-injection',
+        transformIndexHtml: {
+          order: 'pre',
+          async transform(html) {
+            const buildMode: RunMode =
+              process.env.BUILD_MODE === 'ci' ? 'ci' : 'local'
+            return html.replace(
+              '<script id="injected-data"></script>',
+              `<script>window.__injectedData__=${JSON.stringify({
+                mode: buildMode
+              })}</script>
+              <script id="injected-data"></script>
+              `
+            )
+          }
+        }
+      }
     ],
 
     root: __dirname(import.meta.url),
@@ -37,7 +56,8 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
     publicDir: mode === 'development' ? '../../playground' : false,
 
     build: {
-      outDir: '../../dist/ui',
+      outDir:
+        process.env.BUILD_MODE === 'ci' ? '../../dist/ui-ci' : '../../dist/ui',
       emptyOutDir: true
     },
 
