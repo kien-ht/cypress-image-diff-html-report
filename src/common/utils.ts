@@ -40,7 +40,7 @@ export async function getResolvedConfig({
 
 export async function getResolvedReportJson(
   config: ResolvedUserConfig,
-  mode: RunMode = 'served'
+  mode: RunMode = 'local'
 ): Promise<ResolvedReport> {
   const json = await getReportJson(config.reportJsonFilePath)
   const jsonWithTotalStats = getReportJsonWithTotalStats(json)
@@ -164,7 +164,7 @@ function getNormalisedPath(
 ): string {
   if (pathname === '') return ''
 
-  if (mode === 'served') return path.join(config.baseDir, pathname)
+  if (mode === 'local') return path.join(config.baseDir, pathname)
 
   const absolutePath = path.join(process.cwd(), config.baseDir, pathname)
   return path.relative(config.outputDir, absolutePath)
