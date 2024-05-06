@@ -92,10 +92,11 @@
   "homepage": "https://github.com/kien-ht/cypress-image-diff-html-report#readme",
   "type": "module",
   "files": [
-    "dist",
-    "package.json",
-    "package-lock.json",
-    "README.md"
+    "dist/common",
+    "dist/local-server",
+    "dist/ui",
+    "*.ts",
+    "*.js"
   ],
   "release": {
     "branches": [
