@@ -60,7 +60,8 @@ function onMouseover(e: MouseEvent) {
   position: relative;
 
   cursor:
-    url(../../components/shared/base-icon/icons/focus-square.svg) 15 15,
+    url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMCAzMCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDkwLjI1NCA0OTAuMjU0IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIGZpbGw9IiNmNTZjNmMiPjxwYXRoIGQ9Ik0wIDEwLjM3MmguOTM2Vi45NDRoOS40MjlWLjAwOEgwWm0uOTM2IDkuMjU2SDB2MTAuMzY0aDEwLjM2NXYtLjkzNkguOTM2Wk0xOS42MzUuMDA4di45MzZoOS40Mjl2OS40MjhIMzBWLjAwOFptOS40MjkgMjkuMDQ4aC05LjQyOXYuOTM2SDMwVjE5LjYyOGgtLjkzNloiLz48L3N2Zz4K)
+      15 15,
     pointer;
 }
 
