@@ -13,3 +13,8 @@ export const DEFAULT_CONFIG: UserConfig = {
   autoOpen: false,
   serverPort: DEFAULT_PORT
 }
+
+export const GITHUB_APP_NAME = 'cypress-image-diff'
+
+export const GITHUB_APP_WORKFLOW_PATH =
+  '.github/workflows/cypress-image-diff.yml'

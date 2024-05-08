@@ -8,8 +8,9 @@ export default () => {
 
   router.get('/reports', async (req, res) => {
     try {
-      console.log('req.params=', req.params)
-      const json = await controller.getReports(req.params as CheckRunInstance)
+      const json = await controller.getReports(
+        req.query as unknown as CheckRunInstance
+      )
       res.json(json)
     } catch (err) {
       res.status(400).end(err)

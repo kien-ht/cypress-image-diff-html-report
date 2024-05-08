@@ -28,6 +28,9 @@ export interface Test {
   baselinePath: string
   diffPath: string
   comparisonPath: string
+  baselineDataUrl?: string
+  diffDataUrl?: string
+  comparisonDataUrl?: string
 }
 
 export type TestStatus = 'pass' | 'fail'
@@ -118,6 +121,13 @@ export interface CheckRunInstance {
   owner: string
   repo: string
   sha: string
+  ref: string
+  workflowId: number
+}
+
+export interface DownloadArtifactsOptions {
+  owner: string
+  repo: string
   workflowId: number
 }
 
