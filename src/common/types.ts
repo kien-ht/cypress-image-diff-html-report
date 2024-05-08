@@ -131,7 +131,26 @@ export interface DownloadArtifactsOptions {
   workflowId: number
 }
 
-export interface CiTestIdentity extends WorkflowInstance, TestIdentity {}
+export interface SnapshotToUpdate {
+  baselinePath: string
+  comparisonDataUrl: string
+}
+
+export interface HashedSnapshotToUpdate {
+  baselinePath: string
+  sha: string
+}
+
+export interface UpdateBaselines {
+  instance: WorkflowInstance
+  snapshots: SnapshotToUpdate[]
+}
+
+export interface GetSnapshotsHashed {
+  owner: string
+  repo: string
+  snapshots: SnapshotToUpdate[]
+}
 
 export type ProbotLogLevel =
   | 'trace'

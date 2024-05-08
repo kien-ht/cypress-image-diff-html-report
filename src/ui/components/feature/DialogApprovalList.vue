@@ -104,7 +104,7 @@ export interface DialogApprovalListProps {
 
 export interface DialogApprovalListEmits {
   (e: 'update:show', show: boolean): void
-  (e: 'selected', testName: string, toAdd: boolean): void
+  (e: 'submitted'): void
 }
 </script>
 
@@ -112,6 +112,8 @@ export interface DialogApprovalListEmits {
 import { useRoute } from 'vue-router'
 import { useMainStore } from '@/store'
 import { ElMessage } from 'element-plus'
+import { updateBaselines, updateTests } from '@/service'
+import { WorkflowInstance } from '@commonTypes'
 
 const props = defineProps<DialogApprovalListProps>()
 const emit = defineEmits<DialogApprovalListEmits>()
@@ -125,7 +127,14 @@ const isVisible = computed({
 
 async function onClickUpdateLocal() {
   try {
-    await mainStore.updateTestsLocal()
+    const testIds = mainStore.selectedTestsFlatten.map((s) => ({
+      specPath: s.specPath,
+      name: s.name
+    }))
+    await updateTests(testIds)
+
+    mainStore.selectedTests = new Map()
+    emit('submitted')
     ElMessage({
       type: 'success',
       message: 'Updated'
@@ -139,7 +148,30 @@ async function onClickUpdateLocal() {
   isVisible.value = false
 }
 
-function onClickUpdateCi() {}
+async function onClickUpdateCi() {
+  try {
+    await updateBaselines({
+      instance: route.query as unknown as WorkflowInstance,
+      snapshots: mainStore.selectedTestsFlatten.map((s) => ({
+        baselinePath: s.baselinePath,
+        comparisonDataUrl: s.comparisonDataUrl!
+      }))
+    })
+
+    mainStore.selectedTests = new Map()
+    emit('submitted')
+    ElMessage({
+      type: 'success',
+      message: 'Updated'
+    })
+  } catch (err) {
+    ElMessage({
+      type: 'error',
+      message: (err as Error).message
+    })
+  }
+  isVisible.value = false
+}
 </script>
 
 <style scoped>

@@ -1,10 +1,6 @@
 import { defineStore } from 'pinia'
-import { getReports, updateTests } from '@/service'
-import {
-  WorkflowInstance,
-  ResolvedTest,
-  ResolvedReport
-} from '@commonTypes'
+import { getReports } from '@/service'
+import { WorkflowInstance, ResolvedTest, ResolvedReport } from '@commonTypes'
 import { DEFAULT_FITLER_STATUS } from '@/constants'
 
 export const useMainStore = defineStore('main', {
@@ -50,20 +46,6 @@ export const useMainStore = defineStore('main', {
         Promise.reject(err)
       }
       this.isLoadingReport = false
-    },
-
-    async updateTestsLocal() {
-      try {
-        const testIds = this.selectedTestsFlatten.map((s) => ({
-          specPath: s.specPath,
-          name: s.name
-        }))
-        await updateTests(testIds)
-        this.selectedTests = new Map()
-        await this.fetchReport()
-      } catch (err) {
-        Promise.reject(err)
-      }
     }
   }
 })

@@ -166,7 +166,10 @@
     @selected="doSelected"
   />
 
-  <DialogApprovalList v-model:show="isDialogApprovalListVisible" />
+  <DialogApprovalList
+    v-model:show="isDialogApprovalListVisible"
+    @submitted="testTableRef?.clearSelection"
+  />
 </template>
 
 <script lang="ts" setup>

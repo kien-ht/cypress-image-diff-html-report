@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { CiTestIdentity, WorkflowInstance } from '../common/types.js'
+import { UpdateBaselines, WorkflowInstance } from '../common/types.js'
 import { CiController } from './controller.js'
 
 export default () => {
@@ -13,15 +13,17 @@ export default () => {
       )
       res.json(json)
     } catch (err) {
-      res.status(400).end(err)
+      console.log(err)
+      res.status(400).end()
     }
   })
 
-  router.put('/reports', async (req, res) => {
+  router.patch('/reports', async (req, res) => {
     try {
-      await controller.updateTest(req.body as CiTestIdentity)
+      await controller.updateBaselines(req.body as UpdateBaselines)
       res.status(200).end()
-    } catch {
+    } catch (err) {
+      console.log(err)
       res.status(400).end()
     }
   })
