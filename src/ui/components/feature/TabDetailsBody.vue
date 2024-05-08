@@ -12,6 +12,7 @@
       v-if="mainStore.mode !== 'static'"
       type="selection"
       width="40"
+      :selectable="(row) => Boolean(row.diffDataUrl)"
     />
 
     <el-table-column type="expand">
@@ -264,5 +265,6 @@ function doSelected(testName: string, toAdd: boolean) {
 .actions > i {
   text-decoration: underline;
   text-underline-offset: 2px;
+  font-size: 12px;
 }
 </style>

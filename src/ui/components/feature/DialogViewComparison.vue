@@ -56,7 +56,7 @@
         </el-radio-button>
       </el-radio-group>
 
-      <template v-if="mainStore.mode !== 'static'">
+      <template v-if="mainStore.mode !== 'static' && currentTest?.diffDataUrl">
         <el-button
           v-if="hasAddedToApprovalList"
           type="danger"
