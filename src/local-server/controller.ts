@@ -42,11 +42,11 @@ export class Controller {
 
   private findTest(
     report: Report | ResolvedReport,
-    { suiteId, name }: TestIdentity
+    { specPath, name }: TestIdentity
   ): [suiteIndex: number, testIndex: number] {
-    const foundSuiteIndex = report.suites.findIndex((s) => s.path === suiteId)
+    const foundSuiteIndex = report.suites.findIndex((s) => s.path === specPath)
     if (foundSuiteIndex === -1) {
-      throw Error(`Could not find the test with spec path ${suiteId}`)
+      throw Error(`Could not find the test with spec path ${specPath}`)
     }
 
     const foundTestIndex = report.suites[foundSuiteIndex].tests.findIndex(

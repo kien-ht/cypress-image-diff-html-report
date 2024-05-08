@@ -176,7 +176,7 @@ async function onClickUpdate(testName: string, throwError = false) {
       }
     )
 
-    await mainStore.updateTest({ suiteId: props.suiteId!, name: testName })
+    await mainStore.updateTest({ specPath: props.suiteId!, name: testName })
 
     ElMessage({
       type: 'success',

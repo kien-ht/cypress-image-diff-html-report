@@ -59,7 +59,7 @@ export interface InjectedData {
 }
 
 export interface TestIdentity {
-  suiteId: string
+  specPath: string
   name: string
 }
 
