@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getReports, updateTest } from '@/service'
-import { TestIdentity } from '@commonTypes'
+import { CheckRunInstance, TestIdentity } from '@commonTypes'
 import { DEFAULT_FITLER_STATUS } from '@/constants'
 
 export const useMainStore = defineStore('main', {
@@ -9,7 +9,8 @@ export const useMainStore = defineStore('main', {
     mode: window.__injectedData__.mode,
     filter: {
       status: DEFAULT_FITLER_STATUS
-    }
+    },
+    isLoadingReport: false
   }),
 
   getters: {
@@ -26,14 +27,16 @@ export const useMainStore = defineStore('main', {
   },
 
   actions: {
-    async fetchReport() {
+    async fetchReport(instance?: CheckRunInstance) {
       if (this.mode === 'static') return
 
+      this.isLoadingReport = true
       try {
-        this.report = await getReports()
+        this.report = await getReports(instance)
       } catch (err) {
         Promise.reject(err)
       }
+      this.isLoadingReport = false
     },
 
     async updateTest(testId: TestIdentity) {

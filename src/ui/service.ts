@@ -1,10 +1,20 @@
-import { ResolvedReport, TestIdentity } from '@commonTypes'
+import { CheckRunInstance, ResolvedReport, TestIdentity } from '@commonTypes'
 
 export { getReports, updateTest }
 
-async function getReports(): Promise<ResolvedReport> {
+async function getReports(
+  instance?: CheckRunInstance
+): Promise<ResolvedReport> {
   try {
-    const response = await fetch('/api/reports')
+    let url = '/api/reports?'
+
+    if (instance) {
+      url += new URLSearchParams(
+        Object.entries(instance).map(([k, v]) => [k, String(v)])
+      ).toString()
+    }
+
+    const response = await fetch(url)
     if (!response.ok) throw Error('Network response was not OK')
 
     return await response.json()

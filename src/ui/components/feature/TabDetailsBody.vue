@@ -1,5 +1,6 @@
 <template>
   <el-table
+    v-loading="mainStore.isLoadingReport"
     style="scroll-behavior: auto; height: auto"
     :data="suite?.tests ?? []"
     default-expand-all

@@ -1,5 +1,6 @@
 <template>
   <el-table
+    v-loading="mainStore.isLoadingReport"
     style="scroll-behavior: auto; height: auto"
     ref="suiteTableRef"
     :data="mainStore.report?.suites"

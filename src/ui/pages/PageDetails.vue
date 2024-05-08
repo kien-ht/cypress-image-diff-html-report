@@ -60,16 +60,20 @@
 </template>
 
 <script lang="ts" setup>
+import { useRoute } from 'vue-router'
 import { useMainStore } from '@/store'
 import { TabValue } from '@/types'
 import { useAppTheme } from '@/hooks'
+import { CheckRunInstance } from '@commonTypes'
 
 const mainStore = useMainStore()
 const { setTheme } = useAppTheme()
 const activeTab = ref<keyof typeof TabValue>('Details')
 
 setTheme()
-mainStore.fetchReport()
+
+const route = useRoute()
+mainStore.fetchReport(route.query as unknown as CheckRunInstance)
 </script>
 
 <style scoped>
