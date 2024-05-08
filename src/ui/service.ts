@@ -1,9 +1,9 @@
-import { CheckRunInstance, ResolvedReport, TestIdentity } from '@commonTypes'
+import { WorkflowInstance, ResolvedReport, TestIdentity } from '@commonTypes'
 
 export { getReports, updateTest }
 
 async function getReports(
-  instance?: CheckRunInstance
+  instance?: WorkflowInstance
 ): Promise<ResolvedReport> {
   try {
     let url = '/api/reports?'

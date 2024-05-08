@@ -64,7 +64,7 @@ import { useRoute } from 'vue-router'
 import { useMainStore } from '@/store'
 import { TabValue } from '@/types'
 import { useAppTheme } from '@/hooks'
-import { CheckRunInstance } from '@commonTypes'
+import { WorkflowInstance } from '@commonTypes'
 
 const mainStore = useMainStore()
 const { setTheme } = useAppTheme()
@@ -73,7 +73,7 @@ const activeTab = ref<keyof typeof TabValue>('Details')
 setTheme()
 
 const route = useRoute()
-mainStore.fetchReport(route.query as unknown as CheckRunInstance)
+mainStore.fetchReport(route.query as unknown as WorkflowInstance)
 </script>
 
 <style scoped>

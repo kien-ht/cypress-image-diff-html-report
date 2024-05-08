@@ -3,7 +3,7 @@ import AdmZip from 'adm-zip'
 import {
   CiTestIdentity,
   ResolvedReport,
-  CheckRunInstance,
+  WorkflowInstance,
   Report,
   DownloadArtifactsOptions
 } from '../common/types.js'
@@ -20,7 +20,7 @@ export class CiController {
     this.app = new OctokitApp(getProbotConfig())
   }
 
-  async getReports(instance: CheckRunInstance): Promise<ResolvedReport> {
+  async getReports(instance: WorkflowInstance): Promise<ResolvedReport> {
     const octokit = await this.app.getInstallationOctokit(
       instance.installationId
     )

@@ -92,7 +92,7 @@ export default (app: Probot) => {
     }
   })
 
-  // Update check run status
+  // Update commit status
   app.on('workflow_run.completed', async (context): Promise<void> => {
     if (context.payload.workflow_run.path !== GITHUB_APP_WORKFLOW_PATH) return
 

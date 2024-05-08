@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getReports, updateTest } from '@/service'
-import { CheckRunInstance, TestIdentity } from '@commonTypes'
+import { WorkflowInstance, TestIdentity } from '@commonTypes'
 import { DEFAULT_FITLER_STATUS } from '@/constants'
 
 export const useMainStore = defineStore('main', {
@@ -27,7 +27,7 @@ export const useMainStore = defineStore('main', {
   },
 
   actions: {
-    async fetchReport(instance?: CheckRunInstance) {
+    async fetchReport(instance?: WorkflowInstance) {
       if (this.mode === 'static') return
 
       this.isLoadingReport = true

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { CiTestIdentity, CheckRunInstance } from '../common/types.js'
+import { CiTestIdentity, WorkflowInstance } from '../common/types.js'
 import { CiController } from './controller.js'
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
   router.get('/reports', async (req, res) => {
     try {
       const json = await controller.getReports(
-        req.query as unknown as CheckRunInstance
+        req.query as unknown as WorkflowInstance
       )
       res.json(json)
     } catch (err) {
