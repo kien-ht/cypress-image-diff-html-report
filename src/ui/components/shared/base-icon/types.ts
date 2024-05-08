@@ -6,3 +6,5 @@ export type SvgIcon =
   | 'settings'
   | 'task'
   | 'filter'
+  | 'plus'
+  | 'minus'

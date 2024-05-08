@@ -7,9 +7,9 @@ import { routes } from './routes'
 
 const router = createRouter({
   history:
-    window.__injectedData__.mode === 'static'
-      ? createWebHashHistory()
-      : createWebHistory(),
+    window.__injectedData__.mode === 'ci'
+      ? createWebHistory()
+      : createWebHashHistory(),
   scrollBehavior() {
     return { top: 0 }
   },

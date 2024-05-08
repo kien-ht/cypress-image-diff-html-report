@@ -1,6 +1,10 @@
 import { defineStore } from 'pinia'
-import { getReports, updateTest } from '@/service'
-import { WorkflowInstance, TestIdentity } from '@commonTypes'
+import { getReports, updateTests } from '@/service'
+import {
+  WorkflowInstance,
+  ResolvedTest,
+  ResolvedReport
+} from '@commonTypes'
 import { DEFAULT_FITLER_STATUS } from '@/constants'
 
 export const useMainStore = defineStore('main', {
@@ -10,25 +14,29 @@ export const useMainStore = defineStore('main', {
     filter: {
       status: DEFAULT_FITLER_STATUS
     },
-    isLoadingReport: false
+    isLoadingReport: false,
+    selectedTests: new Map<string, ResolvedTest[]>()
   }),
 
   getters: {
-    displayReport: (state) => ({
-      ...state.report,
-      suites:
-        state.report?.suites.map((suite) => ({
-          ...suite,
-          tests: suite.tests
-            .filter((test) => state.filter.status.includes(test.status))
-            .map((test) => ({
-              ...test,
-              baselineDataUrl: test.baselineDataUrl ?? test.baselinePath,
-              diffDataUrl: test.diffDataUrl ?? test.diffPath,
-              comparisonDataUrl: test.comparisonDataUrl ?? test.comparisonPath
-            }))
-        })) ?? []
-    })
+    displayReport: (state) =>
+      ({
+        ...state.report,
+        suites:
+          state.report?.suites.map((suite) => ({
+            ...suite,
+            tests: suite.tests
+              .filter((test) => state.filter.status.includes(test.status))
+              .map((test) => ({
+                ...test,
+                baselineDataUrl: test.baselineDataUrl ?? test.baselinePath,
+                diffDataUrl: test.diffDataUrl ?? test.diffPath,
+                comparisonDataUrl: test.comparisonDataUrl ?? test.comparisonPath
+              }))
+          })) ?? []
+      }) as ResolvedReport,
+    selectedTestsFlatten: (state) =>
+      Array.from(state.selectedTests.values()).flat()
   },
 
   actions: {
@@ -44,9 +52,14 @@ export const useMainStore = defineStore('main', {
       this.isLoadingReport = false
     },
 
-    async updateTest(testId: TestIdentity) {
+    async updateTestsLocal() {
       try {
-        await updateTest(testId)
+        const testIds = this.selectedTestsFlatten.map((s) => ({
+          specPath: s.specPath,
+          name: s.name
+        }))
+        await updateTests(testIds)
+        this.selectedTests = new Map()
         await this.fetchReport()
       } catch (err) {
         Promise.reject(err)

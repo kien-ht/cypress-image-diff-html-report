@@ -1,12 +1,18 @@
 <template>
   <el-table
+    ref="testTableRef"
     v-loading="mainStore.isLoadingReport"
     style="scroll-behavior: auto; height: auto"
     :data="suite?.tests ?? []"
     default-expand-all
     :row-key="(row) => row.name"
+    @selection-change="onSelectionChange"
   >
-    <!-- <el-table-column type="selection" /> -->
+    <el-table-column
+      v-if="mainStore.mode !== 'static'"
+      type="selection"
+      width="40"
+    />
 
     <el-table-column type="expand">
       <template #default="{ row }">
@@ -102,10 +108,44 @@
       </template>
     </el-table-column>
 
-    <el-table-column
-      width="70"
-      class-name="min-content"
-    >
+    <el-table-column class-name="min-content">
+      <template
+        v-if="mainStore.mode !== 'static'"
+        #header
+      >
+        <div
+          v-if="mainStore.selectedTestsFlatten.length"
+          class="actions"
+        >
+          <i v-if="mainStore.selectedTestsFlatten.length === 1"
+            >{{ mainStore.selectedTestsFlatten.length }} test selected</i
+          >
+          <i v-else
+            >{{ mainStore.selectedTestsFlatten.length }} tests selected</i
+          >
+          <el-button
+            size="small"
+            type="success"
+            @click="isDialogApprovalListVisible = true"
+          >
+            <span>See Approval List</span>
+          </el-button>
+        </div>
+
+        <div
+          v-else
+          class="actions"
+        >
+          <i>No tests selected</i>
+          <el-button
+            size="small"
+            type="success"
+            disabled
+          >
+            <span>See Approval List</span>
+          </el-button>
+        </div>
+      </template>
       <template #default="{ row }">
         <el-button
           size="small"
@@ -114,24 +154,7 @@
           @click="dialogViewComparisonRef!.open(row)"
         >
           <BaseIcon name="eye" />
-          <span style="margin-left: 0.5rem">View</span>
-        </el-button>
-      </template>
-    </el-table-column>
-
-    <el-table-column
-      width="112"
-      class-name="min-content"
-    >
-      <template #default="{ row }">
-        <el-button
-          v-if="row.failed"
-          size="small"
-          type="success"
-          @click="onClickUpdate(row.name)"
-        >
-          <BaseIcon name="checkmark" />
-          <span>Update</span>
+          <span style="margin-left: 0.5rem">Inspect</span>
         </el-button>
       </template>
     </el-table-column>
@@ -139,17 +162,18 @@
 
   <DialogViewComparison
     ref="dialogViewComparisonRef"
-    @updated="doUpdated"
+    @selected="doSelected"
   />
+
+  <DialogApprovalList v-model:show="isDialogApprovalListVisible" />
 </template>
 
 <script lang="ts" setup>
-import { ElMessage, ElMessageBox } from 'element-plus'
 import type { ElTable } from 'element-plus'
 import { useMainStore } from '@/store'
 import type { default as DialogViewComparison } from './DialogViewComparison.vue'
 import { DEFAULT_FITLER_STATUS } from '@/constants'
-import { TestStatus } from '@commonTypes'
+import { TestStatus, ResolvedTest } from '@commonTypes'
 
 const props = defineProps<{
   suiteId?: string
@@ -159,44 +183,14 @@ const mainStore = useMainStore()
 const dialogViewComparisonRef = ref<InstanceType<
   typeof DialogViewComparison
 > | null>()
+const isDialogApprovalListVisible = ref(false)
 
 const suite = computed(() => {
   return mainStore.displayReport.suites.find((s) => s.id === props.suiteId)
 })
 
-async function onClickUpdate(testName: string, throwError = false) {
-  try {
-    await ElMessageBox.confirm(
-      'Update this baseline screenshot. Continue?',
-      'Warning',
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      }
-    )
-
-    await mainStore.updateTest({ specPath: props.suiteId!, name: testName })
-
-    ElMessage({
-      type: 'success',
-      message: 'Updated'
-    })
-  } catch {
-    if (throwError) {
-      throw Error()
-    }
-  }
-}
-
-async function doUpdated(testName: string, close: () => void) {
-  try {
-    await onClickUpdate(testName, true)
-    close()
-  } catch {
-    /* empty */
-  }
-}
+const testTableRef = ref<InstanceType<typeof ElTable>>()
+watch(() => props.suiteId, restoreSelection)
 
 function onCommandFilterStatus(selected: TestStatus) {
   if (mainStore.filter.status.includes(selected)) {
@@ -207,13 +201,36 @@ function onCommandFilterStatus(selected: TestStatus) {
   }
   mainStore.filter.status.push(selected)
 }
+
+function onSelectionChange(selections: ResolvedTest[]) {
+  if (selections.length) {
+    mainStore.selectedTests.set(props.suiteId!, selections)
+  } else {
+    mainStore.selectedTests.delete(props.suiteId!)
+  }
+}
+
+async function restoreSelection() {
+  const selections = mainStore.selectedTests.get(props.suiteId!)
+  if (selections) {
+    await nextTick()
+    selections.forEach((row) =>
+      testTableRef.value!.toggleRowSelection(row, true)
+    )
+  }
+}
+
+function doSelected(testName: string, toAdd: boolean) {
+  const foundTest = suite.value!.tests.find((t) => t.name === testName)!
+  testTableRef.value!.toggleRowSelection(foundTest, toAdd)
+}
 </script>
 
 <style scoped>
-.el-table :deep(td.min-content > .cell) {
-  padding: 0;
+.el-table :deep(.min-content > .cell) {
+  padding-right: 14px;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
 }
 
@@ -239,5 +256,13 @@ function onCommandFilterStatus(selected: TestStatus) {
 }
 :deep(.el-dropdown-menu__item:not(.is-disabled):focus) {
   color: unset;
+}
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+.actions > i {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 </style>

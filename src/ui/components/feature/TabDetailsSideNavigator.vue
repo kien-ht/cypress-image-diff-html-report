@@ -43,13 +43,18 @@ const mainStore = useMainStore()
 const suiteTableRef = ref<InstanceType<typeof ElTable>>()
 
 onMounted(() => {
-  mainStore.report &&
+  if (mainStore.report) {
     suiteTableRef.value!.setCurrentRow(mainStore.report.suites[0])
-
-  mainStore.$subscribe(async () => {
-    await nextTick()
-    suiteTableRef.value!.setCurrentRow(mainStore.report?.suites[0])
-  })
+  } else {
+    const teardownWatcher = watch(
+      () => mainStore.report,
+      async () => {
+        await nextTick()
+        suiteTableRef.value!.setCurrentRow(mainStore.report?.suites[0])
+        teardownWatcher()
+      }
+    )
+  }
 })
 
 function onCurrentChange(suite: ResolvedSuite) {

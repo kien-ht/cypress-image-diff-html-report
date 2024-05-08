@@ -1,6 +1,11 @@
-import { WorkflowInstance, ResolvedReport, TestIdentity } from '@commonTypes'
+import {
+  WorkflowInstance,
+  ResolvedReport,
+  TestIdentity,
+  CiTestIdentity
+} from '@commonTypes'
 
-export { getReports, updateTest }
+export { getReports, updateTests }
 
 async function getReports(
   instance?: WorkflowInstance
@@ -23,14 +28,16 @@ async function getReports(
   }
 }
 
-async function updateTest(testId: TestIdentity): Promise<void> {
+async function updateTests(
+  testIds: TestIdentity[] | CiTestIdentity[]
+): Promise<void> {
   try {
     const response = await fetch('/api/reports', {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(testId)
+      body: JSON.stringify(testIds)
     })
     if (!response.ok) throw Error('Network response was not OK')
   } catch (err) {

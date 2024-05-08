@@ -16,7 +16,13 @@ export class Controller {
     return await getResolvedReportJson(this.config, 'local')
   }
 
-  async updateTest(testId: TestIdentity) {
+  async updateTests(testIds: TestIdentity[]) {
+    for (const testId of testIds) {
+      await this.updateTest(testId)
+    }
+  }
+
+  private async updateTest(testId: TestIdentity) {
     const originalReport = await getReportJson(this.config.reportJsonFilePath)
     const [suiteIndex, testIndex] = this.findTest(originalReport, testId)
 
@@ -72,7 +78,9 @@ export class Controller {
 
     // remove diff screenshot
     try {
-      await fs.remove(path.join(process.cwd(), test.diffPath))
+      if (test.diffPath) {
+        await fs.remove(path.join(process.cwd(), test.diffPath))
+      }
     } catch {
       throw Error('Cannot remove diff screenshot')
     }

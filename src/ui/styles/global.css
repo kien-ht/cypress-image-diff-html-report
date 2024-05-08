@@ -3,6 +3,12 @@
   position: relative;
 }
 
+.el-overlay-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .screenshot-wrapper-bg {
   background-color: #fff;
   opacity: 0.8;
@@ -53,4 +59,24 @@
     10px 10px;
   background-size: 20px 20px;
   padding: 1.4rem;
+}
+
+.dialog-custom {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-custom > .el-dialog__body {
+  flex: 1 1 auto;
+  padding: 0 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dialog-custom:not(.is-fullscreen) {
+  max-height: 90vh;
+  width: auto;
+  overflow: auto;
+  margin: auto;
 }

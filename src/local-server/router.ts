@@ -15,9 +15,9 @@ export default (config: ResolvedUserConfig) => {
     }
   })
 
-  router.put('/reports', async (req, res) => {
+  router.patch('/reports', async (req, res) => {
     try {
-      await controller.updateTest(req.body as TestIdentity)
+      await controller.updateTests(req.body as TestIdentity[])
       res.status(200).end()
     } catch {
       res.status(400).end()
