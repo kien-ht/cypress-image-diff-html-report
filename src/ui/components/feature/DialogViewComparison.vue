@@ -104,14 +104,16 @@ const tabItems: ComputedRef<TabItem[]> = computed(() => [
     value: 'slider',
     icon: 'settings',
     disabled:
-      !currentTest.value?.baselinePath || !currentTest.value?.comparisonPath
+      !currentTest.value?.baselineDataUrl ||
+      !currentTest.value?.comparisonDataUrl
   },
   {
     label: 'Mirror',
     value: 'mirror',
     icon: 'settings',
     disabled:
-      !currentTest.value?.baselinePath || !currentTest.value?.comparisonPath
+      !currentTest.value?.baselineDataUrl ||
+      !currentTest.value?.comparisonDataUrl
   }
 ])
 

@@ -9,8 +9,8 @@
       @mousemove="onMouseover"
     >
       <img
-        :src="props.test.baselinePath"
-        :class="{ 'cell-shadow': Boolean(props.test.baselinePath) }"
+        :src="props.test.baselineDataUrl"
+        :class="{ 'cell-shadow': Boolean(props.test.baselineDataUrl) }"
       />
     </div>
 
@@ -19,8 +19,8 @@
       @mousemove="onMouseover"
     >
       <img
-        :src="props.test.comparisonPath"
-        :class="{ 'cell-shadow': Boolean(props.test.comparisonPath) }"
+        :src="props.test.comparisonDataUrl"
+        :class="{ 'cell-shadow': Boolean(props.test.comparisonDataUrl) }"
       />
     </div>
   </div>

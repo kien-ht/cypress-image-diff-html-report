@@ -48,8 +48,8 @@ const props = defineProps<{
 }>()
 
 const screenshots = computed(() => ({
-  baseline: props.test.baselinePath,
-  comparison: props.test.comparisonPath
+  baseline: props.test.baselineDataUrl,
+  comparison: props.test.comparisonDataUrl
 }))
 
 const currentSlide = ref('50')

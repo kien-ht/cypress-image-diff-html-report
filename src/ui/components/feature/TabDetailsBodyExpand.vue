@@ -2,8 +2,8 @@
   <div class="screenshots">
     <BaseImage
       class="screenshots-cell"
-      :class="{ 'cell-shadow': Boolean(resolvedTest.baselinePath) }"
-      :src="resolvedTest.baselinePath"
+      :class="{ 'cell-shadow': Boolean(resolvedTest.baselineDataUrl) }"
+      :src="resolvedTest.baselineDataUrl!"
     >
       <template #placeholder>
         <img
@@ -17,8 +17,8 @@
 
     <BaseImage
       class="screenshots-cell"
-      :class="{ 'cell-shadow': Boolean(resolvedTest.diffPath) }"
-      :src="resolvedTest.diffPath"
+      :class="{ 'cell-shadow': Boolean(resolvedTest.diffDataUrl) }"
+      :src="resolvedTest.diffDataUrl!"
     >
       <template #placeholder>
         <img
@@ -32,8 +32,8 @@
 
     <BaseImage
       class="screenshots-cell"
-      :class="{ 'cell-shadow': Boolean(resolvedTest.comparisonPath) }"
-      :src="resolvedTest.comparisonPath"
+      :class="{ 'cell-shadow': Boolean(resolvedTest.comparisonDataUrl) }"
+      :src="resolvedTest.comparisonDataUrl!"
     >
       <template #placeholder>
         <img
@@ -57,9 +57,9 @@ const props = defineProps<{
 const resolvedTest = computed<ResolvedTest>(() => {
   return {
     ...props.test,
-    baselinePath: versionizePath(props.test.baselinePath),
-    diffPath: versionizePath(props.test.diffPath),
-    comparisonPath: versionizePath(props.test.comparisonPath)
+    baselinePath: versionizePath(props.test.baselineDataUrl!),
+    diffPath: versionizePath(props.test.diffDataUrl!),
+    comparisonPath: versionizePath(props.test.comparisonDataUrl!)
   }
 })
 

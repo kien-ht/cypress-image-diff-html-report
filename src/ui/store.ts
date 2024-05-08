@@ -19,9 +19,14 @@ export const useMainStore = defineStore('main', {
       suites:
         state.report?.suites.map((suite) => ({
           ...suite,
-          tests: suite.tests.filter((test) =>
-            state.filter.status.includes(test.status)
-          )
+          tests: suite.tests
+            .filter((test) => state.filter.status.includes(test.status))
+            .map((test) => ({
+              ...test,
+              baselineDataUrl: test.baselineDataUrl ?? test.baselinePath,
+              diffDataUrl: test.diffDataUrl ?? test.diffPath,
+              comparisonDataUrl: test.comparisonDataUrl ?? test.comparisonPath
+            }))
         })) ?? []
     })
   },

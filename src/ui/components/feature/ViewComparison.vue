@@ -20,9 +20,9 @@ const props = defineProps<{
 const resolvedTest = computed<ResolvedTest>(() => {
   return {
     ...props.test,
-    baselinePath: versionizePath(props.test.baselinePath),
-    diffPath: versionizePath(props.test.diffPath),
-    comparisonPath: versionizePath(props.test.comparisonPath)
+    baselinePath: versionizePath(props.test.baselineDataUrl!),
+    diffPath: versionizePath(props.test.diffDataUrl!),
+    comparisonPath: versionizePath(props.test.comparisonDataUrl!)
   }
 })
 

@@ -31,11 +31,12 @@ const props = defineProps<{
 
 const screenshots = computed(() => {
   const images: Screenshot[] = []
-  props.test.baselinePath &&
-    images.push({ type: 'baseline', url: props.test.baselinePath })
-  props.test.diffPath && images.push({ type: 'diff', url: props.test.diffPath })
-  props.test.comparisonPath &&
-    images.push({ type: 'comparison', url: props.test.comparisonPath })
+  props.test.baselineDataUrl &&
+    images.push({ type: 'baseline', url: props.test.baselineDataUrl })
+  props.test.diffDataUrl &&
+    images.push({ type: 'diff', url: props.test.diffDataUrl })
+  props.test.comparisonDataUrl &&
+    images.push({ type: 'comparison', url: props.test.comparisonDataUrl })
   return images
 })
 
