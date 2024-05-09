@@ -47,33 +47,16 @@ export default (app: Probot) => {
   app.on('workflow_run.requested', async (context): Promise<void> => {
     if (context.payload.workflow_run.path !== GITHUB_APP_WORKFLOW_PATH) return
 
-    const installationId = context.payload.installation!.id
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
     const head_sha = context.payload.workflow_run.head_sha
-    const ref = context.payload.workflow_run.head_branch
-    const workflowId = context.payload.workflow_run.id
 
     try {
-      const query = {
-        installationId,
-        owner,
-        repo,
-        sha: head_sha,
-        ref,
-        workflowId
-      }
-
       await context.octokit.rest.repos.createCommitStatus({
         owner,
         repo,
         sha: head_sha,
         state: 'pending',
-        target_url:
-          'http://localhost:6867/details?' +
-          new URLSearchParams(
-            Object.entries(query).map(([k, v]) => [k, String(v)])
-          ).toString(),
         description: 'Visual Regression Test',
         context: GITHUB_APP_NAME
       })
