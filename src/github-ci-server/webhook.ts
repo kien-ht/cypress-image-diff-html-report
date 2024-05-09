@@ -4,6 +4,7 @@ import {
   GITHUB_APP_NAME,
   GITHUB_APP_WORKFLOW_PATH
 } from '../common/constants.js'
+import { GithubCommitState } from '../common/types.js'
 
 export default (app: Probot) => {
   // Mark the last pending commit status as skipped if any new push
@@ -14,36 +15,28 @@ export default (app: Probot) => {
 
     try {
       // Get the last commit before this new commit
-      const { data: getCommitsData } = await context.octokit.request(
-        `GET /repos/${owner}/${repo}/commits/${sha}`,
-        { owner, repo, ref: sha }
-      )
+      const { data: getCommitsData } =
+        await context.octokit.rest.repos.getCommit({ owner, repo, ref: sha })
 
       if (!getCommitsData.parents?.[0].sha) return
 
       const lastSha = getCommitsData.parents?.[0].sha
 
-      const { data } = await context.octokit.request(
-        `GET /repos/${owner}/${repo}/commits/${lastSha}/status`,
+      const { data } = await context.octokit.rest.repos.getCombinedStatusForRef(
         { owner, repo, ref: lastSha }
       )
-
       if (
-        data.statuses.findLast(
-          (s: Record<string, string>) => s.context === GITHUB_APP_NAME
-        )?.state === 'pending'
+        data.statuses.filter((s) => s.context === GITHUB_APP_NAME).pop()
+          ?.state === 'pending'
       ) {
-        await context.octokit.request(
-          `POST /repos/${owner}/${repo}/statuses/${lastSha}`,
-          {
-            owner,
-            repo,
-            sha: lastSha,
-            state: 'success',
-            description: 'Skipped: Visual Regression Test',
-            context: GITHUB_APP_NAME
-          }
-        )
+        await context.octokit.rest.repos.createCommitStatus({
+          owner,
+          repo,
+          sha: lastSha,
+          state: 'success',
+          description: 'Skipped: Visual Regression Test',
+          context: GITHUB_APP_NAME
+        })
       }
     } catch (err) {
       console.log(err)
@@ -71,22 +64,19 @@ export default (app: Probot) => {
         workflowId
       }
 
-      await context.octokit.request(
-        `POST /repos/${owner}/${repo}/statuses/${head_sha}`,
-        {
-          owner,
-          repo,
-          sha: head_sha,
-          state: 'pending',
-          target_url:
-            'http://localhost:6867/details?' +
-            new URLSearchParams(
-              Object.entries(query).map(([k, v]) => [k, String(v)])
-            ).toString(),
-          description: 'Visual Regression Test',
-          context: GITHUB_APP_NAME
-        }
-      )
+      await context.octokit.rest.repos.createCommitStatus({
+        owner,
+        repo,
+        sha: head_sha,
+        state: 'pending',
+        target_url:
+          'http://localhost:6867/details?' +
+          new URLSearchParams(
+            Object.entries(query).map(([k, v]) => [k, String(v)])
+          ).toString(),
+        description: 'Visual Regression Test',
+        context: GITHUB_APP_NAME
+      })
     } catch (err) {
       console.log(err)
     }
@@ -104,7 +94,7 @@ export default (app: Probot) => {
     const ref = context.payload.workflow_run.head_branch
 
     let description: string
-    let state: string
+    let state: GithubCommitState
 
     try {
       const { totalFailed } = await downloadArtifacts(
@@ -133,22 +123,19 @@ export default (app: Probot) => {
         ref,
         workflowId
       }
-      await context.octokit.request(
-        `POST /repos/${owner}/${repo}/statuses/${sha}`,
-        {
-          owner,
-          repo,
-          sha,
-          state,
-          description,
-          context: GITHUB_APP_NAME,
-          target_url:
-            'http://localhost:6867/details?' +
-            new URLSearchParams(
-              Object.entries(query).map(([k, v]) => [k, String(v)])
-            ).toString()
-        }
-      )
+      await context.octokit.rest.repos.createCommitStatus({
+        owner,
+        repo,
+        sha,
+        state,
+        description,
+        context: GITHUB_APP_NAME,
+        target_url:
+          'http://localhost:6867/details?' +
+          new URLSearchParams(
+            Object.entries(query).map(([k, v]) => [k, String(v)])
+          ).toString()
+      })
     } catch (err) {
       console.log(err)
     }

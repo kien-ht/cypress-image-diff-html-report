@@ -159,3 +159,5 @@ export type ProbotLogLevel =
   | 'warn'
   | 'error'
   | 'fatal'
+
+export type GithubCommitState = 'error' | 'success' | 'failure' | 'pending'

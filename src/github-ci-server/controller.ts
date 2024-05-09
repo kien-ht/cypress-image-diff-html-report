@@ -44,47 +44,35 @@ export class CiController {
       octokit
     )
 
-    // get a new tree
-    const { data } = await octokit.request(
-      `POST /repos/${owner}/${repo}/git/trees`,
-      {
-        owner,
-        repo,
-        base_tree: sha,
-        tree: hashSnapshotToUpdate.map((s) => ({
-          path: s.baselinePath,
-          sha: s.sha,
-          mode: '100644',
-          type: 'blob'
-        }))
-      }
-    )
+    // create a new tree
+    const { data } = await octokit.rest.git.createTree({
+      owner,
+      repo,
+      base_tree: sha,
+      tree: hashSnapshotToUpdate.map((s) => ({
+        path: s.baselinePath,
+        sha: s.sha,
+        mode: '100644',
+        type: 'blob'
+      }))
+    })
 
     // commit
-    const { data: commitData } = await octokit.request(
-      `POST /repos/${owner}/${repo}/git/commits`,
-      {
-        owner,
-        repo,
-        message: 'cypress-image-diff: update baselines',
-        tree: data.sha,
-        parents: [sha]
-      }
-    )
+    const { data: commitData } = await octokit.rest.git.createCommit({
+      owner,
+      repo,
+      message: 'cypress-image-diff: update baselines',
+      tree: data.sha,
+      parents: [sha]
+    })
 
     // push
-    const branch = `heads/${ref}`
-    const { data: pushData } = await octokit.request(
-      `PATCH /repos/${owner}/${repo}/git/refs/${branch}`,
-      {
-        owner,
-        repo,
-        ref: branch,
-        sha: commitData.sha
-      }
-    )
-
-    console.log(pushData)
+    await octokit.rest.git.updateRef({
+      owner,
+      repo,
+      ref: `heads/${ref}`,
+      sha: commitData.sha
+    })
   }
 }
 
@@ -93,30 +81,24 @@ export async function downloadArtifacts(
   octokit: Octokit | ProbotOctokit
 ): Promise<Report> {
   const { owner, repo, workflowId } = instance
-  const { data } = await octokit.request(
-    `GET /repos/${owner}/${repo}/actions/runs/${workflowId}/artifacts`,
-    {
-      owner,
-      repo,
-      run_id: workflowId
-    }
-  )
+  const { data } = await octokit.rest.actions.listWorkflowRunArtifacts({
+    owner,
+    repo,
+    run_id: workflowId
+  })
 
   if (data.artifacts.length === 0) return Promise.reject('Not found artifacts')
 
   const artifact = data.artifacts[0]
 
-  const { data: zip } = await octokit.request(
-    `GET /repos/${owner}/${repo}/actions/artifacts/${artifact.id}/zip`,
-    {
-      owner,
-      repo,
-      artifact_id: artifact.id,
-      archive_format: 'zip'
-    }
-  )
+  const { data: zip } = await octokit.rest.actions.downloadArtifact({
+    owner,
+    repo,
+    artifact_id: artifact.id,
+    archive_format: 'zip'
+  })
 
-  const admZip = new AdmZip(Buffer.from(zip))
+  const admZip = new AdmZip(Buffer.from(zip as ArrayBuffer))
   const report = admZip.getEntries().find((z) => /\.json$/.test(z.name))
 
   if (!report) return Promise.reject('Not found report')
@@ -133,15 +115,12 @@ export async function getSnapshotsHashes(
       snapshots.map(async (snapshot) => {
         const content =
           snapshot.comparisonDataUrl.split(',')[1] ?? snapshot.comparisonDataUrl
-        const { data } = await octokit.request(
-          `POST /repos/${owner}/${repo}/git/blobs`,
-          {
-            owner,
-            repo,
-            content,
-            encoding: 'base64'
-          }
-        )
+        const { data } = await octokit.rest.git.createBlob({
+          owner,
+          repo,
+          content,
+          encoding: 'base64'
+        })
         return { baselinePath: snapshot.baselinePath, sha: data.sha as string }
       })
     )
