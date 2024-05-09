@@ -18,17 +18,17 @@ export default (app: Probot) => {
       const { data: getCommitsData } =
         await context.octokit.rest.repos.getCommit({ owner, repo, ref: sha })
 
-      if (!getCommitsData.parents?.[0].sha) return
+      if (!getCommitsData.parents[0]?.sha) return
 
-      const lastSha = getCommitsData.parents?.[0].sha
+      const lastSha = getCommitsData.parents[0].sha
 
       const { data } = await context.octokit.rest.repos.getCombinedStatusForRef(
         { owner, repo, ref: lastSha }
       )
-      if (
-        data.statuses.filter((s) => s.context === GITHUB_APP_NAME).pop()
-          ?.state === 'pending'
-      ) {
+      const lastCommitStatus = data.statuses
+        .filter((s) => s.context === GITHUB_APP_NAME)
+        .pop()
+      if (lastCommitStatus?.state === 'pending') {
         await context.octokit.rest.repos.createCommitStatus({
           owner,
           repo,
@@ -98,14 +98,17 @@ export default (app: Probot) => {
     }
 
     try {
-      const query = {
-        installationId,
-        owner,
-        repo,
-        sha,
-        ref,
-        workflowId
-      }
+      const queryString = new URLSearchParams(
+        Object.entries({
+          installationId,
+          owner,
+          repo,
+          sha,
+          ref,
+          workflowId
+        }).map(([k, v]) => [k, String(v)])
+      ).toString()
+
       await context.octokit.rest.repos.createCommitStatus({
         owner,
         repo,
@@ -113,11 +116,7 @@ export default (app: Probot) => {
         state,
         description,
         context: GITHUB_APP_NAME,
-        target_url:
-          'http://localhost:6867/details?' +
-          new URLSearchParams(
-            Object.entries(query).map(([k, v]) => [k, String(v)])
-          ).toString()
+        target_url: `${process.env.GITHUB_APP_DOMAIN}/details?${queryString}`
       })
     } catch (err) {
       console.log(err)

@@ -8,7 +8,7 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "include": ["src/index.ts", "src/github-ci-server/index.ts"],
+  "include": ["src/index.ts"],
   "exclude": ["examples/*"],
   "ts-node": {
     "esm": true

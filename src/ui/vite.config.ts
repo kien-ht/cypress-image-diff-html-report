@@ -53,7 +53,7 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 
     build: {
       outDir:
-        process.env.RUN_MODE === 'ci' ? '../../dist/ui-ci' : '../../dist/ui',
+        process.env.RUN_MODE === 'ci' ? '../../dist-ci/ui' : '../../dist/ui',
       emptyOutDir: true
     },
 

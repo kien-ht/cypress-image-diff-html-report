@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 .DS_Store
 dist
+dist-ci
 dist-ssr
 coverage
 *.local
@@ -24,7 +25,8 @@ cypress-image-diff-screenshots
 /cypress/videos/
 /cypress/screenshots/
 
-.env
+.env.dev
+.env.prod
 
 # Editor directories and files
 .vscode/*

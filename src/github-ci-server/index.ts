@@ -8,7 +8,8 @@ import webhooks from './webhook.js'
 import { getProbotConfig } from '../common/utils.js'
 import { DEFAULT_PORT } from '../common/constants.js'
 
-setDotenvConfig()
+process.env.NODE_ENV = process.env.NODE_ENV ?? 'dev'
+setDotenvConfig({ path: `./.env.${process.env.NODE_ENV}` })
 
 startServer()
 
