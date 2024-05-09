@@ -15,7 +15,7 @@
     "build:ui": "vite build --config src/ui/vite.config.js",
     "build:ui:ci": "RUN_MODE=ci vite build --config src/ui/vite.config.js",
     "build:server": "tsc",
-    "build:server:ci": "NODE_ENV=prod tsc src/github-ci-server/index.ts --outDir dist-ci --module ESNext --moduleResolution bundler --skipLibCheck --esModuleInterop",
+    "build:server:ci": "NODE_ENV=prod tsc netlify/functions/*.ts --module ESNext --moduleResolution bundler --skipLibCheck --esModuleInterop",
     "build": "run-s build:ui build:server",
     "build:ci": "run-s build:ui:ci build:server:ci",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
@@ -38,6 +38,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@probot/adapter-aws-lambda-serverless": "^3.0.4",
     "adm-zip": "^0.5.12",
     "cac": "^6.7.14",
     "chalk": "^4.1.2",
