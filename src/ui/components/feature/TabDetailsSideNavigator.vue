@@ -12,18 +12,20 @@
 
     <el-table-column label="Suites">
       <template #default="{ row }">
-        <div class="row">
+        <div
+          class="row"
+          :class="{ 'row--selected': hasSelected(row) }"
+        >
           <h3 class="label">{{ row.name }}</h3>
 
-          <div class="tag passed">
+          <el-tag type="success">
             <BaseIcon name="checkmark" />
             <span>{{ row.passed }}</span>
-          </div>
-
-          <div class="tag failed">
+          </el-tag>
+          <el-tag type="danger">
             <BaseIcon name="close" />
             <span>{{ row.failed }}</span>
-          </div>
+          </el-tag>
         </div>
       </template>
     </el-table-column>
@@ -60,31 +62,40 @@ onMounted(() => {
 function onCurrentChange(suite: ResolvedSuite) {
   emit('selected', suite.id)
 }
+
+function hasSelected(row: ResolvedSuite) {
+  return mainStore.selectedTestsFlatten.find((s) => s.specPath === row.path)
+}
 </script>
 
 <style scoped>
+.el-table {
+  border-radius: 1rem 1rem 0 0;
+}
+
+.el-table :deep(td .cell) {
+  padding: 0;
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
+  gap: 1rem 0.5rem;
+  padding: 0 1.5rem;
+  border-left: 3px solid transparent;
+}
+
+.row--selected {
+  border-left-color: var(--color-primary);
 }
 
 .row > .label {
   flex-basis: 100%;
 }
 
-.row > .tag {
+.row :deep(.el-tag__content) {
   display: flex;
   align-items: center;
+  gap: 0.25rem;
 }
-.row > .tag.passed {
-  color: var(--color-success);
-}
-.row > .tag.failed {
-  color: var(--color-danger);
-}
-
-/* :deep(:not(.el-table-column--selection)) > .cell {
-  padding-left: 0;
-} */
 </style>

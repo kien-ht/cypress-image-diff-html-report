@@ -32,49 +32,11 @@
     <el-table-column
       label="Status"
       width="100"
+      :filters="fitlerStatuses"
+      :filter-method="
+        (value: TestStatus, row: ResolvedTest) => row.status === value
+      "
     >
-      <template #header>
-        <el-dropdown
-          :hide-on-click="false"
-          trigger="click"
-          @command="onCommandFilterStatus"
-        >
-          <div class="filter-header">
-            <span>Status</span>
-            <BaseIcon
-              name="filter"
-              :class="{
-                active:
-                  mainStore.filter.status.length !==
-                  DEFAULT_FITLER_STATUS.length
-              }"
-            />
-          </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item
-                v-for="item in DEFAULT_FITLER_STATUS"
-                :key="item"
-                :label="item"
-                :command="item"
-                :class="{
-                  'el-dropdown-item--active':
-                    mainStore.filter.status.includes(item)
-                }"
-              >
-                <span>{{ item }}</span>
-                <BaseIcon
-                  v-if="mainStore.filter.status.includes(item)"
-                  name="checkmark"
-                  width="16"
-                  height="16"
-                />
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </template>
-
       <template #default="{ row }">
         <el-tag
           v-if="row.failed"
@@ -119,11 +81,11 @@
           class="actions"
         >
           <i v-if="mainStore.selectedTestsFlatten.length === 1"
-            >{{ mainStore.selectedTestsFlatten.length }} test selected</i
-          >
+            >{{ mainStore.selectedTestsFlatten.length }} test selected
+          </i>
           <i v-else
-            >{{ mainStore.selectedTestsFlatten.length }} tests selected</i
-          >
+            >{{ mainStore.selectedTestsFlatten.length }} tests selected
+          </i>
           <el-button
             size="small"
             type="success"
@@ -151,7 +113,6 @@
         <el-button
           size="small"
           type="primary"
-          plain
           @click="dialogViewComparisonRef!.open(row)"
         >
           <BaseIcon name="eye" />
@@ -176,12 +137,16 @@
 import type { ElTable } from 'element-plus'
 import { useMainStore } from '@/store'
 import type { default as DialogViewComparison } from './DialogViewComparison.vue'
-import { DEFAULT_FITLER_STATUS } from '@/constants'
 import { TestStatus, ResolvedTest } from '@commonTypes'
 
 const props = defineProps<{
   suiteId?: string
 }>()
+
+const fitlerStatuses: { text: string; value: TestStatus }[] = [
+  { text: 'Fail', value: 'fail' },
+  { text: 'Pass', value: 'pass' }
+]
 
 const mainStore = useMainStore()
 const dialogViewComparisonRef = ref<InstanceType<
@@ -195,16 +160,6 @@ const suite = computed(() => {
 
 const testTableRef = ref<InstanceType<typeof ElTable>>()
 watch(() => props.suiteId, restoreSelection)
-
-function onCommandFilterStatus(selected: TestStatus) {
-  if (mainStore.filter.status.includes(selected)) {
-    mainStore.filter.status = mainStore.filter.status.filter(
-      (s) => s !== selected
-    )
-    return
-  }
-  mainStore.filter.status.push(selected)
-}
 
 function onSelectionChange(selections: ResolvedTest[]) {
   if (selections.length) {
@@ -231,6 +186,10 @@ function doSelected(testName: string, toAdd: boolean) {
 </script>
 
 <style scoped>
+.el-table {
+  border-radius: 1rem 1rem 0 0;
+}
+
 .el-table :deep(.min-content > .cell) {
   padding-right: 14px;
   display: flex;

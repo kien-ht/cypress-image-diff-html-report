@@ -39,7 +39,7 @@ const props = withDefaults(
   padding: 0;
   margin-right: 3rem;
   border-width: 2px;
-  border-radius: 0.8rem;
+  border-radius: 1rem;
 }
 
 .el-radio > :deep(.el-radio__input) {

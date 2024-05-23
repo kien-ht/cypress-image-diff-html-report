@@ -64,6 +64,7 @@
 .dialog-custom {
   display: flex;
   flex-direction: column;
+  border-radius: 1rem;
 }
 
 .dialog-custom > .el-dialog__body {
