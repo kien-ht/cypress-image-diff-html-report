@@ -4,7 +4,7 @@
       v-for="(option, index) in props.options"
       :key="index"
       border
-      :label="option.value"
+      :value="option.value"
     >
       <p class="custom-label">{{ option.label }}</p>
 

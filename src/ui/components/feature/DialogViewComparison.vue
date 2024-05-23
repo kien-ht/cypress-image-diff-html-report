@@ -48,7 +48,7 @@
         <el-radio-button
           v-for="tab in tabItems"
           :key="tab.value"
-          :label="tab.value"
+          :value="tab.value"
           :disabled="tab.disabled"
           border
         >
