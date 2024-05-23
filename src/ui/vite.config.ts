@@ -63,6 +63,10 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
         '/api': {
           target: `http://127.0.0.1:${DEFAULT_PORT}`,
           changeOrigin: true
+        },
+        '/.netlify/functions': {
+          target: `http://127.0.0.1:${DEFAULT_PORT}`,
+          changeOrigin: true
         }
       }
     },

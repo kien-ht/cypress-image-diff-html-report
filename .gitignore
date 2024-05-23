@@ -21,12 +21,13 @@ src/ui/components.d.ts
 
 cypress-image-diff-html-report
 cypress-image-diff-screenshots
-
 /cypress/videos/
 /cypress/screenshots/
 
 .env.dev
 .env.prod
+
+.netlify
 
 # Editor directories and files
 .vscode/*

@@ -11,7 +11,10 @@ async function getReports(
   instance?: WorkflowInstance
 ): Promise<ResolvedReport> {
   try {
-    let url = '/api/reports?'
+    let url =
+      window.__injectedData__.mode === 'ci'
+        ? '/.netlify/functions/api/reports?'
+        : '/api/reports?'
 
     if (instance) {
       url += new URLSearchParams(
@@ -30,7 +33,12 @@ async function getReports(
 
 async function updateTests(testIds: TestIdentity[]): Promise<void> {
   try {
-    const response = await fetch('/api/reports', {
+    const url =
+      window.__injectedData__.mode === 'ci'
+        ? '/.netlify/functions/api/reports'
+        : '/api/reports'
+
+    const response = await fetch(url, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
