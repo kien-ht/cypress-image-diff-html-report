@@ -8,7 +8,7 @@ import { changeCwdToPlayground } from '../common/utils'
 import { __dirname } from '../common/utils-cjs'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import { RunMode } from '@commonTypes'
-import { DEFAULT_PORT } from '../common/constants'
+import { DEFAULT_PORT, PATH_TO_SERVERLESS_FUNCTIONS } from '../common/constants'
 
 export default defineConfig(async ({ mode }): Promise<UserConfig> => {
   if (mode === 'development') changeCwdToPlayground()
@@ -64,7 +64,7 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
           target: `http://127.0.0.1:${DEFAULT_PORT}`,
           changeOrigin: true
         },
-        '/.netlify/functions': {
+        [PATH_TO_SERVERLESS_FUNCTIONS]: {
           target: `http://127.0.0.1:${DEFAULT_PORT}`,
           changeOrigin: true
         }

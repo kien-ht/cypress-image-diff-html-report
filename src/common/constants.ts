@@ -18,3 +18,5 @@ export const GITHUB_APP_NAME = 'cypress-image-diff'
 
 export const GITHUB_APP_WORKFLOW_PATH =
   '.github/workflows/cypress-image-diff.yml'
+
+export const PATH_TO_SERVERLESS_FUNCTIONS = '/.netlify/functions'

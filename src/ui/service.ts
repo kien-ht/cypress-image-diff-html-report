@@ -4,22 +4,22 @@ import {
   TestIdentity,
   UpdateBaselines
 } from '@commonTypes'
+import { PATH_TO_SERVERLESS_FUNCTIONS } from '../common/constants'
 
 export { getReports, updateTests, updateBaselines }
+
+monkeyPatchWindowFetch()
 
 async function getReports(
   instance?: WorkflowInstance
 ): Promise<ResolvedReport> {
   try {
-    let url =
-      window.__injectedData__.mode === 'ci'
-        ? '/.netlify/functions/api/reports?'
-        : '/api/reports?'
+    let url = '/api/reports'
 
     if (instance) {
-      url += new URLSearchParams(
+      url += `?${new URLSearchParams(
         Object.entries(instance).map(([k, v]) => [k, String(v)])
-      ).toString()
+      ).toString()}`
     }
 
     const response = await fetch(url)
@@ -33,12 +33,7 @@ async function getReports(
 
 async function updateTests(testIds: TestIdentity[]): Promise<void> {
   try {
-    const url =
-      window.__injectedData__.mode === 'ci'
-        ? '/.netlify/functions/api/reports'
-        : '/api/reports'
-
-    const response = await fetch(url, {
+    const response = await fetch('/api/reports', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -63,5 +58,16 @@ async function updateBaselines(args: UpdateBaselines): Promise<void> {
     if (!response.ok) throw Error('Network response was not OK')
   } catch (err) {
     throw Error((err as Error).message)
+  }
+}
+
+function monkeyPatchWindowFetch() {
+  const originalFetch = window.fetch
+  window.fetch = function (url, config) {
+    const requestUrl =
+      window.__injectedData__.mode === 'ci'
+        ? `${PATH_TO_SERVERLESS_FUNCTIONS}${url}`
+        : url
+    return originalFetch.call(this, requestUrl, config)
   }
 }

@@ -6,7 +6,7 @@ import {
 } from '../common/constants.js'
 import { GithubCommitState } from '../common/types.js'
 
-export default (app: Probot) => {
+export const appFn = (app: Probot) => {
   // Mark the last pending commit status as skipped if any new push
   app.on('pull_request.synchronize', async (context): Promise<void> => {
     const owner = context.payload.repository.owner.login

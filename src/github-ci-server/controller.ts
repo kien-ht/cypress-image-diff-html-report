@@ -19,7 +19,6 @@ export class CiController {
   private app: OctokitApp
 
   constructor() {
-    console.log(getProbotConfig().privateKey)
     this.app = new OctokitApp(getProbotConfig())
   }
 
