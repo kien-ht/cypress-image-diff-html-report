@@ -61,7 +61,7 @@ export class CiController {
     const { data: commitData } = await octokit.rest.git.createCommit({
       owner,
       repo,
-      message: 'cypress-image-diff: update baselines',
+      message: 'test: cypress-image-diff - update baselines',
       tree: data.sha,
       parents: [sha]
     })
