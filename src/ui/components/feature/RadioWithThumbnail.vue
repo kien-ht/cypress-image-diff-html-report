@@ -30,6 +30,10 @@ const props = withDefaults(
 </script>
 
 <style scoped>
+.el-radio-group {
+  gap: 1rem;
+}
+
 .el-radio {
   --spacing: 1rem;
 

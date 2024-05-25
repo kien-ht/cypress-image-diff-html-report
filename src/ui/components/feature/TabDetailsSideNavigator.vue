@@ -8,25 +8,36 @@
     :row-key="(row) => row.id"
     @current-change="onCurrentChange"
   >
-    <!-- <el-table-column type="selection" /> -->
-
     <el-table-column label="Suites">
       <template #default="{ row }">
         <div
-          class="row"
-          :class="{ 'row--selected': hasSelected(row) }"
+          class="suites"
+          :class="{ 'suites--selected': hasSelected(row) }"
         >
           <h3 class="label">{{ row.name }}</h3>
 
-          <el-tag type="success">
+          <el-tag :type="row.passed === 0 ? 'info' : 'success'">
             <BaseIcon name="checkmark" />
             <span>{{ row.passed }}</span>
           </el-tag>
-          <el-tag type="danger">
+          <el-tag :type="row.failed === 0 ? 'info' : 'danger'">
             <BaseIcon name="close" />
             <span>{{ row.failed }}</span>
           </el-tag>
         </div>
+      </template>
+    </el-table-column>
+
+    <el-table-column width="40">
+      <template #default="{ row }">
+        <div
+          class="status"
+          :style="{
+            'background-color': row.failed
+              ? 'var(--color-danger)'
+              : 'var(--color-success)'
+          }"
+        />
       </template>
     </el-table-column>
   </el-table>
@@ -64,7 +75,9 @@ function onCurrentChange(suite: ResolvedSuite) {
 }
 
 function hasSelected(row: ResolvedSuite) {
-  return mainStore.selectedTestsFlatten.find((s) => s.specPath === row.path)
+  return Boolean(
+    mainStore.selectedTestsFlatten.find((s) => s.specPath === row.path)
+  )
 }
 </script>
 
@@ -77,7 +90,12 @@ function hasSelected(row: ResolvedSuite) {
   padding: 0;
 }
 
-.row {
+.el-table :deep(th .cell) {
+  padding: 0 1.5rem;
+  margin: 0 3px;
+}
+
+.suites {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem 0.5rem;
@@ -85,17 +103,24 @@ function hasSelected(row: ResolvedSuite) {
   border-left: 3px solid transparent;
 }
 
-.row--selected {
+.suites--selected {
   border-left-color: var(--color-primary);
 }
 
-.row > .label {
+.suites > .label {
   flex-basis: 100%;
 }
 
-.row :deep(.el-tag__content) {
+.suites :deep(.el-tag__content) {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+}
+
+.status {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 0.7rem;
+  margin: auto;
 }
 </style>

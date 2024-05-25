@@ -13,6 +13,11 @@
       :row-key="(row) => row.name"
     >
       <el-table-column
+        type="index"
+        width="50"
+      />
+
+      <el-table-column
         label="New Snapshot"
         width="160"
       >
@@ -66,9 +71,22 @@
           <span>{{ (row.failureThreshold * 100).toFixed(2) }}%</span>
         </template>
       </el-table-column>
+
+      <el-table-column width="100">
+        <template #default="{ row }">
+          <el-button
+            size="small"
+            type="danger"
+            @click="onClickDeselect(row)"
+          >
+            Deselect
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-button
+      v-loading.fullscreen.lock="isUpdatingBaselines"
       v-if="mainStore.mode === 'local'"
       type="success"
       style="margin-top: 2rem"
@@ -87,6 +105,7 @@
       </p>
 
       <el-button
+        v-loading.fullscreen.lock="isUpdatingBaselines"
         type="success"
         style="margin-top: 2rem"
         @click="onClickUpdateCi"
@@ -105,6 +124,7 @@ export interface DialogApprovalListProps {
 export interface DialogApprovalListEmits {
   (e: 'update:show', show: boolean): void
   (e: 'submitted'): void
+  (e: 'deselected', row: ResolvedTest): void
 }
 </script>
 
@@ -113,7 +133,7 @@ import { useRoute } from 'vue-router'
 import { useMainStore } from '@/store'
 import { ElMessage } from 'element-plus'
 import { updateBaselines, updateTests } from '@/service'
-import { WorkflowInstance } from '@commonTypes'
+import { ResolvedTest, WorkflowInstance } from '@commonTypes'
 
 const props = defineProps<DialogApprovalListProps>()
 const emit = defineEmits<DialogApprovalListEmits>()
@@ -124,8 +144,10 @@ const isVisible = computed({
   get: () => props.show,
   set: (newValue) => emit('update:show', newValue)
 })
+const isUpdatingBaselines = ref(false)
 
 async function onClickUpdateLocal() {
+  isUpdatingBaselines.value = true
   try {
     const testIds = mainStore.selectedTestsFlatten.map((s) => ({
       specPath: s.specPath,
@@ -145,10 +167,12 @@ async function onClickUpdateLocal() {
       message: (err as Error).message
     })
   }
+  isUpdatingBaselines.value = false
   isVisible.value = false
 }
 
 async function onClickUpdateCi() {
+  isUpdatingBaselines.value = true
   try {
     await updateBaselines({
       instance: route.query as unknown as WorkflowInstance,
@@ -170,7 +194,15 @@ async function onClickUpdateCi() {
       message: (err as Error).message
     })
   }
+  isUpdatingBaselines.value = false
   isVisible.value = false
+}
+
+function onClickDeselect(row: ResolvedTest) {
+  emit('deselected', row)
+  if (mainStore.selectedTestsFlatten.length === 0) {
+    isVisible.value = false
+  }
 }
 </script>
 

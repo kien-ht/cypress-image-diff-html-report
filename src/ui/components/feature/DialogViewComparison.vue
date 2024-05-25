@@ -52,7 +52,8 @@
           :disabled="tab.disabled"
           border
         >
-          {{ tab.label }}
+          <BaseIcon :name="tab.icon" />
+          <span>{{ tab.label }}</span>
         </el-radio-button>
       </el-radio-group>
 
@@ -89,11 +90,12 @@
 import { useMainStore } from '@/store'
 import { ViewComparisonMode } from '@/types'
 import { ResolvedTest } from '@commonTypes'
+import { SvgIcon } from '../shared/base-icon/types'
 
 interface TabItem {
   label: string
   value: ViewComparisonMode
-  icon: string
+  icon: SvgIcon
   disabled: boolean
 }
 
@@ -109,13 +111,13 @@ const tabItems: ComputedRef<TabItem[]> = computed(() => [
   {
     label: 'Carousel',
     value: 'carousel',
-    icon: 'settings',
+    icon: 'carousel',
     disabled: false
   },
   {
     label: 'Slider',
     value: 'slider',
-    icon: 'settings',
+    icon: 'slider',
     disabled:
       !currentTest.value?.baselineDataUrl ||
       !currentTest.value?.comparisonDataUrl
@@ -123,7 +125,7 @@ const tabItems: ComputedRef<TabItem[]> = computed(() => [
   {
     label: 'Mirror',
     value: 'mirror',
-    icon: 'settings',
+    icon: 'mirror',
     disabled:
       !currentTest.value?.baselineDataUrl ||
       !currentTest.value?.comparisonDataUrl
@@ -155,5 +157,11 @@ defineExpose({
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+:deep(.el-radio-button__inner) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 </style>

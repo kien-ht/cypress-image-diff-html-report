@@ -115,7 +115,7 @@
           type="primary"
           @click="dialogViewComparisonRef!.open(row)"
         >
-          <BaseIcon name="eye" />
+          <BaseIcon name="inspect" />
           <span style="margin-left: 0.5rem">Inspect</span>
         </el-button>
       </template>
@@ -124,11 +124,12 @@
 
   <DialogViewComparison
     ref="dialogViewComparisonRef"
-    @selected="doSelected"
+    @selected="doSelectedToggle"
   />
 
   <DialogApprovalList
     v-model:show="isDialogApprovalListVisible"
+    @deselected="doDeselected"
     @submitted="testTableRef?.clearSelection"
   />
 </template>
@@ -179,9 +180,21 @@ async function restoreSelection() {
   }
 }
 
-function doSelected(testName: string, toAdd: boolean) {
+function doSelectedToggle(testName: string, toAdd: boolean) {
   const foundTest = suite.value!.tests.find((t) => t.name === testName)!
   testTableRef.value!.toggleRowSelection(foundTest, toAdd)
+}
+
+function doDeselected(row: ResolvedTest) {
+  let foundTest = suite.value!.tests.find((t) => t.name === row.name)
+  if (foundTest) return doSelectedToggle(row.name, false)
+
+  const tests = mainStore.selectedTests
+    .get(row.specPath)!
+    .filter((t) => t.name !== row.name)
+  tests.length === 0
+    ? mainStore.selectedTests.delete(row.specPath)
+    : mainStore.selectedTests.set(row.specPath, tests)
 }
 </script>
 
