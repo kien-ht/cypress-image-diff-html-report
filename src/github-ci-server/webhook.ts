@@ -90,7 +90,10 @@ export const appFn = (app: Probot) => {
         description = 'All tests passed!'
       } else {
         state = 'failure'
-        description = `${totalFailed} visual change(s) need review`
+        description =
+          totalFailed === 1
+            ? `A visual change needs review`
+            : `${totalFailed} visual changes need review`
       }
     } catch (err) {
       state = 'error'

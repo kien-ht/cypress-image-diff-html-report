@@ -147,16 +147,12 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 import { useMainStore } from '@/store'
 import { TabValue } from '@/types'
-import { useAppTheme } from '@/hooks'
 import { WorkflowInstance } from '@commonTypes'
 
 dayjs.extend(relativeTime)
 
 const mainStore = useMainStore()
-const { setTheme } = useAppTheme()
 const activeTab = ref<keyof typeof TabValue>('Details')
-
-setTheme()
 
 const route = useRoute()
 mainStore.fetchReport(route.query as unknown as WorkflowInstance)

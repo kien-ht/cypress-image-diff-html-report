@@ -4,7 +4,7 @@
       v-loading="mainStore.isLoadingReport"
       class="general-wrapper"
     >
-      <template v-if="mainStore.mode === 'ci'">
+      <template v-if="mainStore.mode === 'ci' && !isEmpty($route.query)">
         <h4>Github Repository</h4>
         <div class="general-wrapper__cell">
           <img
@@ -108,6 +108,13 @@
         </div>
       </template>
 
+      <a
+        href="https://github.com/kien-ht/cypress-image-diff-html-report/issues"
+        class="report-issue-link"
+      >
+        Report an issue
+      </a>
+
       <el-button
         type="primary"
         plain
@@ -202,6 +209,10 @@ const browser = computed(() => {
     mainStore.report?.browserName.toLowerCase().includes(key)
   )
 })
+
+function isEmpty(obj: Record<any, any>) {
+  return Object.keys(obj).length === 0
+}
 </script>
 
 <style scoped>
@@ -220,10 +231,6 @@ const browser = computed(() => {
   border-right: 1.5rem solid var(--color-background-mute);
   width: 30rem;
   min-width: 30rem;
-}
-
-.general-wrapper a {
-  color: var(--color-primary);
 }
 
 .general-wrapper > h4:not(:first-child) {
@@ -273,5 +280,10 @@ const browser = computed(() => {
 }
 .expand-bar > .el-button {
   padding: 0;
+}
+.report-issue-link {
+  margin-top: auto;
+  color: var(--color-text-seconadry);
+  align-self: flex-start;
 }
 </style>

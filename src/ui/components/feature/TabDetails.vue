@@ -32,7 +32,7 @@ onMounted(async () => {
 .wrapper {
   flex: 1 1 auto;
   display: grid;
-  grid-template-columns: minmax(18rem, 2fr) minmax(0, 9fr);
+  grid-template-columns: minmax(20rem, 1fr) minmax(0, 4fr);
   column-gap: 2rem;
 }
 </style>

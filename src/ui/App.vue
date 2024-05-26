@@ -4,6 +4,10 @@
 
 <script lang="ts" setup>
 import { useMainStore } from './store'
+import { useAppTheme } from '@/hooks'
+
+const { setTheme } = useAppTheme()
+setTheme()
 
 const mainStore = useMainStore()
 mainStore.mode === 'static' &&
