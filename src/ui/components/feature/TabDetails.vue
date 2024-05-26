@@ -1,11 +1,15 @@
 <template>
-  <div
-    class="wrapper"
-    ref="wrapperRef"
-  >
-    <TabDetailsSideNavigator @selected="doSelected" />
+  <div style="display: flex; gap: 2rem">
+    <TabDetailsGeneral />
 
-    <TabDetailsBody :suite-id="currentSuiteId" />
+    <div
+      class="wrapper"
+      ref="wrapperRef"
+    >
+      <TabDetailsSuites @selected="doSelected" />
+
+      <TabDetailsBody :suite-id="currentSuiteId" />
+    </div>
   </div>
 </template>
 
@@ -26,8 +30,9 @@ onMounted(async () => {
 
 <style scoped>
 .wrapper {
+  flex: 1 1 auto;
   display: grid;
-  grid-template-columns: minmax(15rem, 1fr) minmax(0, 5fr);
+  grid-template-columns: minmax(18rem, 2fr) minmax(0, 9fr);
   column-gap: 2rem;
 }
 </style>

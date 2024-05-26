@@ -12,3 +12,8 @@ export type SvgIcon =
   | 'slider'
   | 'mirror'
   | 'timer'
+  | 'pull-request'
+  | 'branch'
+  | 'right-chevron'
+  | 'commit'
+  | 'version'

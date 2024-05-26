@@ -12,10 +12,7 @@
       placement="bottom"
     >
       <template #content>
-        <p style="max-width: 20rem">
-          Static mode supports report viewing only. Switch to serve mode from
-          your local server if you want to use all the features.
-        </p>
+        <p style="max-width: 20rem">Static mode supports report viewing only</p>
       </template>
 
       <el-tag type="warning">Static</el-tag>
@@ -53,21 +50,24 @@
     <el-skeleton
       :loading="mainStore.isLoadingReport"
       animated
-      style="width: 40rem"
+      style="width: 60rem"
     >
       <template #template>
         <el-skeleton-item
           variant="text"
           style="width: 70%"
         />
+        <el-skeleton-item variant="text" />
         <el-skeleton-item
           variant="text"
           style="width: 60%"
         />
-        <el-skeleton-item variant="text" />
       </template>
 
-      <div class="information-box">
+      <div
+        v-if="mainStore.report"
+        class="information-box"
+      >
         <div class="progress">
           <div class="progress__statistics">
             <div
@@ -81,8 +81,8 @@
                 color="var(--color-success)"
               />
               <span style="width: 80px; font-weight: bold">
-                {{ mainStore.report?.totalPassed }}
-                <template v-if="mainStore.report?.totalPassed === 1">
+                {{ mainStore.report.totalPassed }}
+                <template v-if="mainStore.report.totalPassed === 1">
                   Pass
                 </template>
                 <template v-else>Passes</template>
@@ -99,8 +99,8 @@
                 color="var(--color-danger)"
               />
               <span style="width: 80px; font-weight: bold">
-                {{ mainStore.report?.totalFailed }}
-                <template v-if="mainStore.report?.totalFailed === 1">
+                {{ mainStore.report.totalFailed }}
+                <template v-if="mainStore.report.totalFailed === 1">
                   Fail
                 </template>
                 <template v-else>Fails</template>
@@ -109,8 +109,8 @@
           </div>
 
           <span style="line-height: 50px; color: var(--color-primary)">
-            {{ mainStore.report?.total }}
-            <template v-if="mainStore.report?.total === 1">Test</template>
+            {{ mainStore.report.total }}
+            <template v-if="mainStore.report.total === 1">Test</template>
             <template v-else>Tests</template>
           </span>
 
@@ -130,32 +130,15 @@
 
         <div class="general-info">
           <BaseIcon name="timer" />
-          <span>{{ dayjs(mainStore.report?.endedAt).fromNow() }}</span>
 
-          <template v-if="browser">
-            <img
-              :src="browserIconMap[browser]"
-              height="20"
-              style="margin-left: 2rem"
-            />
-            <span>{{ mainStore.report?.browserVersion }}</span>
-          </template>
-
-          <img
-            src="@/assets/images/cypress.png"
-            height="20"
-            style="margin-left: 2rem"
-          />
-          <span>{{ mainStore.report?.cypressVersion }}</span>
+          <el-tooltip :content="dayjs(mainStore.report.endedAt).format()">
+            <span>{{ dayjs(mainStore.report.endedAt).fromNow() }}</span>
+          </el-tooltip>
         </div>
       </div>
     </el-skeleton>
   </main>
 </template>
-
-<script lang="ts">
-export type Browser = 'chrome' | 'edge' | 'firefox' | 'safari' | 'electron'
-</script>
 
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
@@ -166,11 +149,6 @@ import { useMainStore } from '@/store'
 import { TabValue } from '@/types'
 import { useAppTheme } from '@/hooks'
 import { WorkflowInstance } from '@commonTypes'
-import chrome from '@/assets/images/chrome.png'
-import edge from '@/assets/images/edge.png'
-import firefox from '@/assets/images/firefox.png'
-import safari from '@/assets/images/safari.png'
-import electron from '@/assets/images/electron.png'
 
 dayjs.extend(relativeTime)
 
@@ -182,19 +160,6 @@ setTheme()
 
 const route = useRoute()
 mainStore.fetchReport(route.query as unknown as WorkflowInstance)
-
-const browserIconMap: Record<Browser, string> = {
-  chrome,
-  edge,
-  firefox,
-  safari,
-  electron
-}
-const browser = computed(() => {
-  return (Object.keys(browserIconMap) as Browser[]).find((key) =>
-    mainStore.report?.browserName.toLowerCase().includes(key)
-  )
-})
 
 const passPercentage = computed(() => {
   return mainStore.report
@@ -235,7 +200,7 @@ const failPercentage = computed(() => {
   top: -5rem;
   right: 0;
   padding: 0 2rem;
-  min-width: 40rem;
+  width: 60rem;
 }
 .el-skeleton {
   text-align: right;
@@ -249,6 +214,7 @@ const failPercentage = computed(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  justify-content: end;
 }
 .el-progress :deep(.el-progress__text) {
   font-size: 1.2rem !important;

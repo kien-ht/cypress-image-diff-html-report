@@ -2,12 +2,15 @@
   --r-white: #ffffff;
   --r-white-soft: #f5f6e6;
   --r-white-mute: #ebeef5;
+  --r-white-mute-2: #a3a6ad;
 
   --r-black: #191a23;
+  --r-black-1: #141414;
   --r-black-soft: #222222;
   --r-black-mute: #282828;
   --r-black-mute-2: #606266;
   --r-black-mute-3: #95a8ac;
+  --r-black-mute-4: #909399;
 
   --r-indigo: #2c3e50;
 
@@ -37,6 +40,7 @@
 
   /* light-theme */
   --color-background: var(--r-white);
+  --color-background-el: var(--r-white);
   --color-background-soft: var(--r-white-soft);
   --color-background-mute: var(--r-white-mute);
 
@@ -46,6 +50,7 @@
   --color-heading: var(--r-text-light-1);
   --color-text: var(--r-black-mute-2);
   --color-text-muted: var(--r-black-mute-3);
+  --color-text-secondary: var(--r-black-mute-4);
 
   --el-color-primary: #9373ee;
   --el-color-primary-light-5: #9373ee;
@@ -56,6 +61,7 @@
 
 :root#root.dark {
   --color-background: var(--r-black);
+  --color-background-el: var(--r-black-1);
   --color-background-soft: var(--r-black-soft);
   --color-background-mute: var(--r-black-mute);
 
@@ -64,7 +70,9 @@
 
   --color-heading: var(--r-text-dark-1);
   --color-text: var(--r-text-dark-2);
+  --color-text: var(--r-text-dark-2);
   /* --color-text-muted: var(--r-black-mute-3); */
+  --color-text-secondary: var(--r-white-mute-2);
 
   --el-color-primary: #8276c9;
   --el-color-primary-light-5: #8276c9;

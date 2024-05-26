@@ -125,6 +125,13 @@ export interface WorkflowInstance {
   workflowId: number
 }
 
+export interface DetailsUrlQuery extends WorkflowInstance {
+  pullNumber: number
+  targetRef: string
+  author: string
+  authorAvatar: string
+}
+
 export interface DownloadArtifactsOptions {
   owner: string
   repo: string

@@ -4,7 +4,7 @@ import {
   GITHUB_APP_NAME,
   GITHUB_APP_WORKFLOW_PATH
 } from '../common/constants.js'
-import { GithubCommitState } from '../common/types.js'
+import { DetailsUrlQuery, GithubCommitState } from '../common/types.js'
 
 export const appFn = (app: Probot) => {
   // Mark the last pending commit status as skipped if any new push
@@ -98,15 +98,24 @@ export const appFn = (app: Probot) => {
     }
 
     try {
+      const pullRequest = context.payload.workflow_run.pull_requests.find(
+        (p) => p.head.ref === ref
+      )!
+      const rawQuery: DetailsUrlQuery = {
+        installationId,
+        owner,
+        repo,
+        sha,
+        ref,
+        workflowId,
+        // only for the UI
+        pullNumber: pullRequest.number,
+        targetRef: pullRequest.base.ref,
+        author: context.payload.workflow_run.actor.login,
+        authorAvatar: context.payload.workflow_run.actor.avatar_url
+      }
       const queryString = new URLSearchParams(
-        Object.entries({
-          installationId,
-          owner,
-          repo,
-          sha,
-          ref,
-          workflowId
-        }).map(([k, v]) => [k, String(v)])
+        Object.entries(rawQuery).map(([k, v]) => [k, String(v)])
       ).toString()
 
       await context.octokit.rest.repos.createCommitStatus({
