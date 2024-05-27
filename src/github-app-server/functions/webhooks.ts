@@ -3,7 +3,7 @@ import {
   createProbot,
   ApplicationFunction
 } from '@probot/adapter-aws-lambda-serverless'
-import { appFn } from '../../src/github-ci-server/webhook'
+import { appFn } from '../probot-app'
 
 // Replace escaped newlines to fix this octokit bug
 // Error: secretOrPrivateKey must be an asymmetric key when using RS256

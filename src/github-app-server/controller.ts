@@ -7,13 +7,11 @@ import {
   Report,
   DownloadArtifactsOptions,
   GetSnapshotsHashed,
-  HashedSnapshotToUpdate
+  HashedSnapshotToUpdate,
+  ProbotLogLevel
 } from '../common/types.js'
 import { App as OctokitApp, Octokit } from 'octokit'
-import {
-  getProbotConfig,
-  getReportJsonWithTotalStats
-} from '../common/utils.js'
+import { getReportJsonWithTotalStats } from '../common/utils.js'
 
 export class CiController {
   private app: OctokitApp
@@ -106,7 +104,16 @@ export async function downloadArtifacts(
   return JSON.parse(report.getData().toString())
 }
 
-export async function getSnapshotsHashes(
+function getProbotConfig() {
+  return {
+    appId: process.env.APP_ID!,
+    privateKey: process.env.PRIVATE_KEY!,
+    secret: process.env.WEBHOOK_SECRET!,
+    logLevel: process.env.LOG_LEVEL! as ProbotLogLevel
+  }
+}
+
+async function getSnapshotsHashes(
   { owner, repo, snapshots }: GetSnapshotsHashed,
   octokit: Octokit | ProbotOctokit
 ): Promise<HashedSnapshotToUpdate[]> {

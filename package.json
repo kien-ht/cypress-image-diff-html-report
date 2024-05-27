@@ -15,7 +15,7 @@
     "build:ui": "vite build --config src/ui/vite.config.js",
     "build:ui:ci": "RUN_MODE=ci vite build --config src/ui/vite.config.js",
     "build:server": "tsc",
-    "build:server:ci": "NODE_ENV=prod tsc netlify/functions/*.ts --module ESNext --moduleResolution bundler --skipLibCheck --esModuleInterop",
+    "build:server:ci": "NODE_ENV=prod tsc src/github-app-server/functions/*.ts --module ESNext --moduleResolution bundler --skipLibCheck --esModuleInterop",
     "build": "run-s build:ui build:server",
     "build:ci": "run-s build:ui:ci build:server:ci",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",

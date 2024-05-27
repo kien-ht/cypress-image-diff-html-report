@@ -2,3 +2,11 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[functions]
+  directory = "/src/github-app-server/functions"
+
+[build]
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF src/github-app-server src/common src/ui package.json netlify.toml"
+  publish = "dist/ui"
+  command = "npm run build:ci"

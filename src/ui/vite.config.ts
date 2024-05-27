@@ -52,8 +52,7 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
     publicDir: mode === 'development' ? '../../playground' : false,
 
     build: {
-      outDir:
-        process.env.RUN_MODE === 'ci' ? '../../dist-ci/ui' : '../../dist/ui',
+      outDir: '../../dist/ui',
       emptyOutDir: true
     },
 

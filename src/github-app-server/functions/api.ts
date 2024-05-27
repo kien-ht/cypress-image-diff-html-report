@@ -1,7 +1,7 @@
 import { Handler } from '@netlify/functions'
-import { UpdateBaselines, WorkflowInstance } from '../../src/common/types'
-import { CiController } from '../../src/github-ci-server/controller'
-import { PATH_TO_SERVERLESS_FUNCTIONS } from '../../src/common/constants'
+import { UpdateBaselines, WorkflowInstance } from '../../common/types'
+import { CiController } from '../controller'
+import { PATH_TO_SERVERLESS_FUNCTIONS } from '../../common/constants'
 
 // Replace escaped newlines to fix this octokit bug
 // Error: secretOrPrivateKey must be an asymmetric key when using RS256
