@@ -28,6 +28,9 @@ export interface Test {
   baselinePath: string
   diffPath: string
   comparisonPath: string
+  baselineDataUrl?: string
+  diffDataUrl?: string
+  comparisonDataUrl?: string
 }
 
 export type TestStatus = 'pass' | 'fail'
@@ -56,7 +59,7 @@ export interface InjectedData {
 }
 
 export interface TestIdentity {
-  suiteId: string
+  specPath: string
   name: string
 }
 
@@ -112,3 +115,56 @@ export interface UserConfig extends GenerateConfig, StartConfig {}
 
 export interface ResolvedUserConfig
   extends Required<Omit<UserConfig, 'reportJsonDir'>> {}
+
+export interface WorkflowInstance {
+  installationId: number
+  owner: string
+  repo: string
+  sha: string
+  ref: string
+  workflowId: number
+}
+
+export interface DetailsUrlQuery extends WorkflowInstance {
+  pullNumber: number
+  targetRef: string
+  author: string
+  authorAvatar: string
+}
+
+export interface DownloadArtifactsOptions {
+  owner: string
+  repo: string
+  workflowId: number
+}
+
+export interface SnapshotToUpdate {
+  baselinePath: string
+  comparisonDataUrl: string
+}
+
+export interface HashedSnapshotToUpdate {
+  baselinePath: string
+  sha: string
+}
+
+export interface UpdateBaselines {
+  instance: WorkflowInstance
+  snapshots: SnapshotToUpdate[]
+}
+
+export interface GetSnapshotsHashed {
+  owner: string
+  repo: string
+  snapshots: SnapshotToUpdate[]
+}
+
+export type ProbotLogLevel =
+  | 'trace'
+  | 'debug'
+  | 'info'
+  | 'warn'
+  | 'error'
+  | 'fatal'
+
+export type GithubCommitState = 'error' | 'success' | 'failure' | 'pending'

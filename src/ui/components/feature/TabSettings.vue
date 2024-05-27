@@ -57,7 +57,7 @@ const themeOptions: RadioWithThumbnailOption<AppTheme>[] = [
   margin: 0 16.66%;
   padding: 0 3rem 3rem 3rem;
   border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
+  border-radius: 1rem;
 }
 
 .wrapper > .title {

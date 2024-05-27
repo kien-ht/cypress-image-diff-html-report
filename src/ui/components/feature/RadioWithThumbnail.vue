@@ -4,7 +4,7 @@
       v-for="(option, index) in props.options"
       :key="index"
       border
-      :label="option.value"
+      :value="option.value"
     >
       <p class="custom-label">{{ option.label }}</p>
 
@@ -30,6 +30,10 @@ const props = withDefaults(
 </script>
 
 <style scoped>
+.el-radio-group {
+  gap: 1rem;
+}
+
 .el-radio {
   --spacing: 1rem;
 
@@ -39,7 +43,7 @@ const props = withDefaults(
   padding: 0;
   margin-right: 3rem;
   border-width: 2px;
-  border-radius: 0.8rem;
+  border-radius: 1rem;
 }
 
 .el-radio > :deep(.el-radio__input) {

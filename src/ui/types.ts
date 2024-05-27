@@ -1,5 +1,4 @@
 export enum TabValue {
-  Dashboard = 'Dashboard',
   Details = 'Details',
   Settings = 'Settings'
 }

@@ -1,15 +1,30 @@
 import type { RouteRecordRaw } from 'vue-router'
 
-import PageHome from '@/pages/PageHome.vue'
-
-export const routes: RouteRecordRaw[] = [
+export const ciRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'PageHome',
-    component: PageHome
+    component: () => import('@/pages/PageHome.vue')
+  },
+  {
+    path: '/details',
+    name: 'PageDetails',
+    component: () => import('@/pages/PageDetails.vue')
   },
   {
     path: '/:pathMatch(.*)*',
     redirect: { name: 'PageHome' }
+  }
+]
+
+export const localRoutes: RouteRecordRaw[] = [
+  {
+    path: '/details',
+    name: 'PageDetails',
+    component: () => import('@/pages/PageDetails.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: { name: 'PageDetails' }
   }
 ]

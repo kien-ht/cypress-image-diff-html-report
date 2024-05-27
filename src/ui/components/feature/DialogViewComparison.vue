@@ -4,7 +4,7 @@
     fullscreen
     append-to-body
     :destroy-on-close="true"
-    class="dialog-screenshot-view"
+    class="dialog-custom"
   >
     <el-descriptions
       title="Details View"
@@ -48,22 +48,34 @@
         <el-radio-button
           v-for="tab in tabItems"
           :key="tab.value"
-          :label="tab.value"
+          :value="tab.value"
           :disabled="tab.disabled"
           border
         >
-          {{ tab.label }}
+          <BaseIcon :name="tab.icon" />
+          <span>{{ tab.label }}</span>
         </el-radio-button>
       </el-radio-group>
 
-      <el-button
-        v-if="currentTest?.failed"
-        type="success"
-        @click="onClickUpdate"
-      >
-        <BaseIcon name="checkmark" />
-        <span>Update</span>
-      </el-button>
+      <template v-if="mainStore.mode !== 'static' && currentTest?.diffDataUrl">
+        <el-button
+          v-if="hasAddedToApprovalList"
+          type="danger"
+          @click="onClickUpdate(false)"
+        >
+          <BaseIcon name="minus" />
+          <span style="margin-left: 4px">Remove From Approval List</span>
+        </el-button>
+
+        <el-button
+          v-else
+          type="success"
+          @click="onClickUpdate(true)"
+        >
+          <BaseIcon name="plus" />
+          <span style="margin-left: 4px">Add To Approval List</span>
+        </el-button>
+      </template>
     </div>
 
     <ViewComparison
@@ -75,20 +87,23 @@
 </template>
 
 <script setup lang="ts">
+import { useMainStore } from '@/store'
 import { ViewComparisonMode } from '@/types'
 import { ResolvedTest } from '@commonTypes'
+import { SvgIcon } from '../shared/base-icon/types'
 
 interface TabItem {
   label: string
   value: ViewComparisonMode
-  icon: string
+  icon: SvgIcon
   disabled: boolean
 }
 
 const emit = defineEmits<{
-  updated: [testName: string, close: () => void]
+  selected: [testName: string, toAdd: boolean]
 }>()
 
+const mainStore = useMainStore()
 const isVisible = ref(false)
 const currentTest = ref<ResolvedTest | undefined>()
 const currentMode = ref<ViewComparisonMode>('carousel')
@@ -96,24 +111,30 @@ const tabItems: ComputedRef<TabItem[]> = computed(() => [
   {
     label: 'Carousel',
     value: 'carousel',
-    icon: 'settings',
+    icon: 'carousel',
     disabled: false
   },
   {
     label: 'Slider',
     value: 'slider',
-    icon: 'settings',
+    icon: 'slider',
     disabled:
-      !currentTest.value?.baselinePath || !currentTest.value?.comparisonPath
+      !currentTest.value?.baselineDataUrl ||
+      !currentTest.value?.comparisonDataUrl
   },
   {
     label: 'Mirror',
     value: 'mirror',
-    icon: 'settings',
+    icon: 'mirror',
     disabled:
-      !currentTest.value?.baselinePath || !currentTest.value?.comparisonPath
+      !currentTest.value?.baselineDataUrl ||
+      !currentTest.value?.comparisonDataUrl
   }
 ])
+
+const hasAddedToApprovalList = computed(() =>
+  mainStore.selectedTestsFlatten.find((s) => s === currentTest.value)
+)
 
 function open(test: ResolvedTest) {
   isVisible.value = true
@@ -121,10 +142,9 @@ function open(test: ResolvedTest) {
   currentMode.value = 'carousel'
 }
 
-function onClickUpdate() {
-  emit('updated', currentTest.value!.name, () => {
-    isVisible.value = false
-  })
+function onClickUpdate(toAdd: boolean) {
+  emit('selected', currentTest.value!.name, toAdd)
+  isVisible.value = false
 }
 
 defineExpose({
@@ -133,22 +153,15 @@ defineExpose({
 </script>
 
 <style scoped>
-:global(.dialog-screenshot-view) {
-  display: flex;
-  flex-direction: column;
-}
-
-:global(.dialog-screenshot-view > .el-dialog__body) {
-  flex: 1 1 auto;
-  padding: 0 2rem 2rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
 .action {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+:deep(.el-radio-button__inner) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 </style>

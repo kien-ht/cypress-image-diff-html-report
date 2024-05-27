@@ -1,92 +1,67 @@
 <template>
-  <header class="header">
+  <main class="main-wrapper">
     <img
-      style="height: 4rem"
+      style="height: 12rem"
       src="@/assets/images/cypress-image-diff-logo.png"
     />
 
     <h1 style="font-weight: bold">Cypress Image Diff HTML Report</h1>
 
-    <el-tooltip
-      v-if="mainStore.mode === 'static'"
-      placement="bottom"
-    >
-      <template #content>
-        <p style="max-width: 20rem">
-          Static mode supports report viewing only. Switch to serve mode from
-          your local server if you want to use all the features.
-        </p>
-      </template>
+    <p>
+      An intuitive HTML report that provides a comprehensive overview of visual
+      differences, empowering your team to quickly identify and resolve any UI
+      inconsistencies.
+    </p>
 
-      <el-tag type="warning">Static</el-tag>
-    </el-tooltip>
-  </header>
+    <p>
+      Take control of your web testing process and elevate your development
+      workflow with the
+      <a href="https://cypress.visual-image-diff.dev/getting-started">
+        cypress-image-diff</a
+      >.
+    </p>
 
-  <main class="main">
-    <el-tabs v-model="activeTab">
-      <!-- <el-tab-pane
-        label="Dashboard"
-        :name="TabValue.Dashboard"
-      >
-        <TabDashboard />
-      </el-tab-pane> -->
-
-      <el-tab-pane :name="TabValue.Details">
-        <template #label>
-          <span class="label-wrapper">
-            <BaseIcon
-              name="task"
-              style="margin: 0 -0.5rem"
-            />
-            <span>Details</span>
-          </span>
-        </template>
-
-        <TabDetails />
-      </el-tab-pane>
-
-      <el-tab-pane :name="TabValue.Settings">
-        <template #label>
-          <span class="label-wrapper">
-            <BaseIcon name="settings" />
-            <span>Settings</span>
-          </span>
-        </template>
-
-        <TabSettings />
-      </el-tab-pane>
-    </el-tabs>
+    <p>
+      If you encounter any problems, please report them
+      <a href="https://github.com/kien-ht/cypress-image-diff-html-report/issues"
+        >here</a
+      >.
+    </p>
   </main>
+
+  <footer class="footer">
+    <a href="https://github.com/uktrade/cypress-image-diff">
+      <img src="@/assets/images/github.png" />
+      <span>Github</span>
+    </a>
+  </footer>
 </template>
 
-<script lang="ts" setup>
-import { useMainStore } from '@/store'
-import { TabValue } from '@/types'
-import { useAppTheme } from '@/hooks'
-
-const mainStore = useMainStore()
-const { setTheme } = useAppTheme()
-const activeTab = ref<keyof typeof TabValue>('Details')
-
-setTheme()
-mainStore.fetchReport()
-</script>
+<script lang="ts" setup></script>
 
 <style scoped>
-.header {
-  padding: 2rem 2rem 0.5rem 2rem;
-
+.main-wrapper {
+  flex: 1 1 auto;
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 2rem;
   align-items: center;
+  justify-content: center;
+  margin: auto;
+  max-width: 60rem;
+  padding: 2rem;
+  text-align: center;
 }
 
-.main {
-  padding: 0 2rem;
-  flex: 1 1 0%;
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 2rem;
 }
 
-.label-wrapper {
+.footer > * {
   display: flex;
   align-items: center;
   gap: 0.5rem;
