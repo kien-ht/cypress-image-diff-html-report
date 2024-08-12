@@ -60,6 +60,12 @@ export class Controller {
   }
 
   private async updateScreenshots(test: Test) {
+    // allow for empty baseline
+    // TODO: implement better solution for this that doesn't rely on hardcoded string replacement of the current path
+    if (!test.baselinePath) {
+      test.baselinePath = test.comparisonPath.replace('/comparison/', '/baseline/')
+    }
+
     // copy comparison to baseline
     try {
       await fs.copyFile(
@@ -72,7 +78,9 @@ export class Controller {
 
     // remove diff screenshot
     try {
-      await fs.remove(path.join(process.cwd(), test.diffPath))
+      if (test.diffPath) {
+        await fs.remove(path.join(process.cwd(), test.diffPath))
+      }
     } catch {
       throw Error('Cannot remove diff screenshot')
     }
