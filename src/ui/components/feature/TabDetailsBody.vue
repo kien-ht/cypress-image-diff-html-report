@@ -1,12 +1,12 @@
 <template>
   <el-table
+    ref="tableRef"
     style="scroll-behavior: auto; height: auto"
     :data="suite?.tests ?? []"
     default-expand-all
     :row-key="(row) => row.name"
+    @header-click="onHeaderClick"
   >
-    <!-- <el-table-column type="selection" /> -->
-
     <el-table-column type="expand">
       <template #default="{ row }">
         <TabDetailsBodyExpand
@@ -86,6 +86,9 @@
     <el-table-column
       label="Actual"
       width="100"
+      sortable
+      property="percentage"
+      :sort-orders="['descending', 'ascending', null]"
     >
       <template #default="{ row }">
         <span>{{ (row.percentage * 100).toFixed(2) }}%</span>
@@ -94,7 +97,10 @@
 
     <el-table-column
       label="Failure Threshold"
-      width="140"
+      width="164"
+      sortable
+      property="failureThreshold"
+      :sort-orders="['descending', 'ascending', null]"
     >
       <template #default="{ row }">
         <span>{{ (row.failureThreshold * 100).toFixed(2) }}%</span>
@@ -143,8 +149,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ElMessage, ElMessageBox } from 'element-plus'
-import type { ElTable } from 'element-plus'
+import { ElMessage, ElMessageBox, type ElTable } from 'element-plus'
 import { useMainStore } from '@/store'
 import type { default as DialogViewComparison } from './DialogViewComparison.vue'
 import { DEFAULT_FITLER_STATUS } from '@/constants'
@@ -158,6 +163,7 @@ const mainStore = useMainStore()
 const dialogViewComparisonRef = ref<InstanceType<
   typeof DialogViewComparison
 > | null>()
+const tableRef = ref<InstanceType<typeof ElTable>>()
 
 const suite = computed(() => {
   return mainStore.displayReport.suites.find((s) => s.id === props.suiteId)
@@ -205,6 +211,13 @@ function onCommandFilterStatus(selected: TestStatus) {
     return
   }
   mainStore.filter.status.push(selected)
+}
+
+function onHeaderClick(column: any) {
+  if (!column.sortable) return
+
+  if (column.order === null) return tableRef.value?.clearSort()
+  tableRef.value?.sort(column.property, column.order)
 }
 </script>
 
