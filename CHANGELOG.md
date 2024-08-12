@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.1.2...v2.1.3) (2024-08-12)
+
+
+### Bug Fixes
+
+* allow adding screenshots without baseline ([af45409](https://github.com/kien-ht/cypress-image-diff-html-report/commit/af454094f1ddad506fbc138220808ede64599bf3))
+
 ## [2.1.2](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.1.1...v2.1.2) (2024-05-04)
 
 
