@@ -1,15 +1,11 @@
 import { defineStore } from 'pinia'
 import { getReports, updateTest } from '@/service'
 import { TestIdentity } from '@commonTypes'
-import { DEFAULT_FITLER_STATUS } from '@/constants'
 
 export const useMainStore = defineStore('main', {
   state: () => ({
     report: window.__injectedData__.report,
-    mode: window.__injectedData__.mode,
-    filter: {
-      status: DEFAULT_FITLER_STATUS
-    }
+    mode: window.__injectedData__.mode
   }),
 
   getters: {
@@ -17,10 +13,7 @@ export const useMainStore = defineStore('main', {
       ...state.report,
       suites:
         state.report?.suites.map((suite) => ({
-          ...suite,
-          tests: suite.tests.filter((test) =>
-            state.filter.status.includes(test.status)
-          )
+          ...suite
         })) ?? []
     })
   },

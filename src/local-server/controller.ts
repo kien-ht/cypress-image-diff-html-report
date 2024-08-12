@@ -63,7 +63,10 @@ export class Controller {
     // allow for empty baseline
     // TODO: implement better solution for this that doesn't rely on hardcoded string replacement of the current path
     if (!test.baselinePath) {
-      test.baselinePath = test.comparisonPath.replace('/comparison/', '/baseline/')
+      test.baselinePath = test.comparisonPath.replace(
+        '/comparison/',
+        '/baseline/'
+      )
     }
 
     // copy comparison to baseline

@@ -24,49 +24,11 @@
     <el-table-column
       label="Status"
       width="100"
+      :filters="fitlerStatuses"
+      :filter-method="
+        (value: TestStatus, row: ResolvedTest) => row.status === value
+      "
     >
-      <template #header>
-        <el-dropdown
-          :hide-on-click="false"
-          trigger="click"
-          @command="onCommandFilterStatus"
-        >
-          <div class="filter-header">
-            <span>Status</span>
-            <BaseIcon
-              name="filter"
-              :class="{
-                active:
-                  mainStore.filter.status.length !==
-                  DEFAULT_FITLER_STATUS.length
-              }"
-            />
-          </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item
-                v-for="item in DEFAULT_FITLER_STATUS"
-                :key="item"
-                :label="item"
-                :command="item"
-                :class="{
-                  'el-dropdown-item--active':
-                    mainStore.filter.status.includes(item)
-                }"
-              >
-                <span>{{ item }}</span>
-                <BaseIcon
-                  v-if="mainStore.filter.status.includes(item)"
-                  name="checkmark"
-                  width="16"
-                  height="16"
-                />
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </template>
-
       <template #default="{ row }">
         <el-tag
           v-if="row.failed"
@@ -152,8 +114,7 @@
 import { ElMessage, ElMessageBox, type ElTable } from 'element-plus'
 import { useMainStore } from '@/store'
 import type { default as DialogViewComparison } from './DialogViewComparison.vue'
-import { DEFAULT_FITLER_STATUS } from '@/constants'
-import { TestStatus } from '@commonTypes'
+import { TestStatus, ResolvedTest } from '@commonTypes'
 
 const props = defineProps<{
   suiteId?: string
@@ -164,6 +125,10 @@ const dialogViewComparisonRef = ref<InstanceType<
   typeof DialogViewComparison
 > | null>()
 const tableRef = ref<InstanceType<typeof ElTable>>()
+const fitlerStatuses: { text: string; value: TestStatus }[] = [
+  { text: 'Fail', value: 'fail' },
+  { text: 'Pass', value: 'pass' }
+]
 
 const suite = computed(() => {
   return mainStore.displayReport.suites.find((s) => s.id === props.suiteId)
@@ -201,16 +166,6 @@ async function doUpdated(testName: string, close: () => void) {
   } catch {
     /* empty */
   }
-}
-
-function onCommandFilterStatus(selected: TestStatus) {
-  if (mainStore.filter.status.includes(selected)) {
-    mainStore.filter.status = mainStore.filter.status.filter(
-      (s) => s !== selected
-    )
-    return
-  }
-  mainStore.filter.status.push(selected)
 }
 
 function onHeaderClick(column: any) {
