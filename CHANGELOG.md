@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.1.3...v2.2.0) (2024-08-12)
+
+
+### Features
+
+* ⭐ make actual and failure threshold columns sortable ([41f785f](https://github.com/kien-ht/cypress-image-diff-html-report/commit/41f785ffdee0073c9993ff45ef24a249e0bc0bda))
+
 ## [2.1.3](https://github.com/kien-ht/cypress-image-diff-html-report/compare/v2.1.2...v2.1.3) (2024-08-12)
 
 
