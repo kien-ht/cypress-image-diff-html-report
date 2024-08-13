@@ -4,6 +4,16 @@
 
 <h1 align="center">cypress-image-diff-html-report</h1>
 
+### 🎉 Introducing Our New GitHub App! 🎉
+
+🚀 Enhance Your CI Pipelines with our latest tool, featuring a wide range of advanced features.
+
+🔍 [Check it out here](https://github.com/kien-ht/cypress-image-diff-github-app)
+
+<img src="./assets/showcase-pipelines.gif"/>
+
+#### If you're only interested in the local npm package, please read on.
+
 ## Overview
 
 A HTML reporting module for Cypress-Image-Diff to parse the JSON output into a beautiful report
